@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   description: "Your personal flashcard learning app",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Flip & Flow" },
+  icons: {
+    apple: "/icons/apple-touch-icon.png",
+  },
 }
 
 export const viewport: Viewport = {

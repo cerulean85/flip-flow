@@ -1,0 +1,57 @@
+import sharp from "sharp"
+import { writeFileSync, mkdirSync } from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const iconsDir = path.join(__dirname, "../public/icons")
+mkdirSync(iconsDir, { recursive: true })
+
+// Standard icon SVG (original design, no extra padding)
+const iconSvg = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" rx="22" fill="#6366f1"/>
+  <rect x="9" y="20" width="58" height="44" rx="7" fill="#a5b4fc" transform="rotate(-12, 38, 42)"/>
+  <rect x="31" y="32" width="58" height="44" rx="7" fill="white"/>
+  <rect x="42" y="44" width="28" height="4" rx="2" fill="#6366f1" opacity="0.45"/>
+  <rect x="42" y="53" width="20" height="4" rx="2" fill="#6366f1" opacity="0.28"/>
+  <rect x="42" y="62" width="24" height="4" rx="2" fill="#6366f1" opacity="0.18"/>
+</svg>`
+
+// Maskable icon: safe zone is inner 80%, so we scale content to ~72% and add indigo bg
+const maskableSvg = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#6366f1"/>
+  <g transform="translate(14, 14) scale(0.72)">
+    <rect x="9" y="20" width="58" height="44" rx="7" fill="#a5b4fc" transform="rotate(-12, 38, 42)"/>
+    <rect x="31" y="32" width="58" height="44" rx="7" fill="white"/>
+    <rect x="42" y="44" width="28" height="4" rx="2" fill="#6366f1" opacity="0.45"/>
+    <rect x="42" y="53" width="20" height="4" rx="2" fill="#6366f1" opacity="0.28"/>
+    <rect x="42" y="62" width="24" height="4" rx="2" fill="#6366f1" opacity="0.18"/>
+  </g>
+</svg>`
+
+const sizes = [192, 512]
+
+async function generate() {
+  for (const size of sizes) {
+    await sharp(Buffer.from(iconSvg))
+      .resize(size, size)
+      .png()
+      .toFile(path.join(iconsDir, `icon-${size}.png`))
+    console.log(`✓ icon-${size}.png`)
+
+    await sharp(Buffer.from(maskableSvg))
+      .resize(size, size)
+      .png()
+      .toFile(path.join(iconsDir, `icon-${size}-maskable.png`))
+    console.log(`✓ icon-${size}-maskable.png`)
+  }
+
+  // Apple touch icon (180x180)
+  await sharp(Buffer.from(iconSvg))
+    .resize(180, 180)
+    .png()
+    .toFile(path.join(iconsDir, `apple-touch-icon.png`))
+  console.log("✓ apple-touch-icon.png")
+}
+
+generate().catch(console.error)
