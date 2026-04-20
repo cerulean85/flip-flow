@@ -19,14 +19,14 @@ export default function FlipCard({ front, back }: FlipCardProps) {
     >
       <motion.div
         className="relative w-full h-full"
-        style={{ transformStyle: "preserve-3d" }}
+        style={{ transformStyle: "preserve-3d", willChange: "transform" }}
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         {/* Front */}
         <div
           className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white shadow-md p-6 text-center"
-          style={{ backfaceVisibility: "hidden" }}
+          style={{ backfaceVisibility: "hidden", willChange: "transform" }}
         >
           <p className="text-xs uppercase tracking-widest text-indigo-400 mb-3 font-medium">
             앞면
@@ -38,7 +38,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
         {/* Back */}
         <div
           className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-indigo-50 shadow-md p-6 text-center"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", willChange: "transform" }}
         >
           <p className="text-xs uppercase tracking-widest text-indigo-400 mb-3 font-medium">
             뒷면

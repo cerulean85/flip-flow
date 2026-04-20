@@ -72,6 +72,7 @@ export default function CardSlider({ cards }: CardSliderProps) {
             animate="center"
             exit="exit"
             transition={{ type: "tween", duration: 0.22, ease: "easeInOut" }}
+            style={{ willChange: "transform, opacity" }}
           >
             <FlipCard key={card.id} front={card.front} back={card.back} />
           </motion.div>
