@@ -38,11 +38,12 @@ export default function CardForm({ deckId }: CardFormProps) {
         placeholder="앞면 (질문)"
         className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
       />
-      <input
+      <textarea
         name="back"
         required
         placeholder="뒷면 (답)"
-        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        rows={3}
+        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
       />
       <SubmitButton />
     </form>

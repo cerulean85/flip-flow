@@ -4,6 +4,7 @@ import { useState, useTransition } from "react"
 import { createPortal } from "react-dom"
 import { useFormStatus } from "react-dom"
 import { updateCard, deleteCard, moveCard } from "@/actions/card.actions"
+import FlipCard from "./FlipCard"
 
 interface TargetDeck {
   id: string
@@ -109,11 +110,51 @@ function MoveDeckModal({ decks, onSelect, onClose }: MoveDeckModalProps) {
   )
 }
 
+interface CardDetailModalProps {
+  front: string
+  back: string
+  isBookmark: boolean
+  onClose: () => void
+}
+
+function CardDetailModal({ front, back, isBookmark, onClose }: CardDetailModalProps) {
+  return createPortal(
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      <div
+        className="relative w-full sm:max-w-md bg-gray-50 rounded-t-2xl sm:rounded-2xl shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-5 pt-5 pb-3">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-semibold text-gray-800">카드 상세</p>
+            {isBookmark && <span className="text-yellow-400 text-sm">⭐</span>}
+          </div>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="px-5 pb-8">
+          <FlipCard front={front} back={back} />
+        </div>
+      </div>
+    </div>,
+    document.body
+  )
+}
+
 export default function CardListItem({
   index, cardId, deckId, front, back, isBookmark, otherDecks,
 }: Props) {
   const [isEditing, setIsEditing] = useState(false)
   const [moveOpen, setMoveOpen] = useState(false)
+  const [detailOpen, setDetailOpen] = useState(false)
   const [isDeleting, startDelete] = useTransition()
   const [isMoving, startMove] = useTransition()
 
@@ -134,12 +175,13 @@ export default function CardListItem({
             autoFocus
             className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
-          <input
+          <textarea
             name="back"
             defaultValue={back}
             required
             placeholder="뒷면 (답)"
-            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            rows={3}
+            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
           />
           <div className="flex gap-2 pt-1">
             <SaveButton />
@@ -158,10 +200,14 @@ export default function CardListItem({
             {index + 1}
           </span>
 
-          <div className="flex-1 min-w-0">
+          {/* 클릭 시 상세 모달 */}
+          <button
+            className="flex-1 min-w-0 text-left"
+            onClick={() => setDetailOpen(true)}
+          >
             <p className="text-sm font-medium text-gray-800 truncate">{front}</p>
             <p className="text-sm text-gray-400 truncate">{back}</p>
-          </div>
+          </button>
 
           <div className="flex items-center gap-0.5 shrink-0">
             {isBookmark && <span className="text-yellow-400 text-xs mr-1">⭐</span>}
@@ -216,6 +262,15 @@ export default function CardListItem({
             </IconButton>
           </div>
         </div>
+      )}
+
+      {detailOpen && (
+        <CardDetailModal
+          front={front}
+          back={back}
+          isBookmark={isBookmark}
+          onClose={() => setDetailOpen(false)}
+        />
       )}
     </div>
   )
