@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useTransition, useRef, useEffect } from "react"
+import { useState, useTransition } from "react"
+import { createPortal } from "react-dom"
 import { useFormStatus } from "react-dom"
 import { updateCard, deleteCard, moveCard } from "@/actions/card.actions"
 
@@ -63,6 +64,51 @@ function IconButton({
   )
 }
 
+interface MoveDeckModalProps {
+  decks: TargetDeck[]
+  onSelect: (deckId: string) => void
+  onClose: () => void
+}
+
+function MoveDeckModal({ decks, onSelect, onClose }: MoveDeckModalProps) {
+  return createPortal(
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+      <div
+        className="relative w-full sm:w-80 bg-white rounded-t-2xl sm:rounded-2xl shadow-xl pb-safe"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100">
+          <p className="text-sm font-semibold text-gray-800">이동할 덱 선택</p>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+        <ul className="py-2 max-h-72 overflow-y-auto">
+          {decks.map((deck) => (
+            <li key={deck.id}>
+              <button
+                onClick={() => onSelect(deck.id)}
+                className="w-full text-left px-5 py-3 text-sm text-gray-700 hover:bg-indigo-50 flex items-center gap-3 transition-colors"
+              >
+                <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: deck.color }} />
+                <span className="truncate">{deck.title}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>,
+    document.body
+  )
+}
+
 export default function CardListItem({
   index, cardId, deckId, front, back, isBookmark, otherDecks,
 }: Props) {
@@ -70,17 +116,6 @@ export default function CardListItem({
   const [moveOpen, setMoveOpen] = useState(false)
   const [isDeleting, startDelete] = useTransition()
   const [isMoving, startMove] = useTransition()
-  const moveRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    function onClickOutside(e: MouseEvent) {
-      if (moveRef.current && !moveRef.current.contains(e.target as Node)) {
-        setMoveOpen(false)
-      }
-    }
-    if (moveOpen) document.addEventListener("mousedown", onClickOutside)
-    return () => document.removeEventListener("mousedown", onClickOutside)
-  }, [moveOpen])
 
   async function handleSave(formData: FormData) {
     await updateCard(cardId, deckId, formData)
@@ -141,9 +176,9 @@ export default function CardListItem({
 
             {/* 덱 이동 */}
             {otherDecks.length > 0 && (
-              <div className="relative" ref={moveRef}>
+              <>
                 <IconButton
-                  onClick={() => setMoveOpen((v) => !v)}
+                  onClick={() => setMoveOpen(true)}
                   disabled={isMoving}
                   label="다른 덱으로 이동"
                 >
@@ -153,24 +188,16 @@ export default function CardListItem({
                 </IconButton>
 
                 {moveOpen && (
-                  <div className="absolute right-0 top-8 z-20 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 overflow-hidden">
-                    <p className="text-xs text-gray-400 px-3 py-1.5 border-b border-gray-100">덱으로 이동</p>
-                    {otherDecks.map((deck) => (
-                      <button
-                        key={deck.id}
-                        onClick={() => {
-                          setMoveOpen(false)
-                          startMove(() => moveCard(cardId, deckId, deck.id))
-                        }}
-                        className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 flex items-center gap-2 transition-colors"
-                      >
-                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: deck.color }} />
-                        <span className="truncate">{deck.title}</span>
-                      </button>
-                    ))}
-                  </div>
+                  <MoveDeckModal
+                    decks={otherDecks}
+                    onSelect={(targetDeckId) => {
+                      setMoveOpen(false)
+                      startMove(() => moveCard(cardId, deckId, targetDeckId))
+                    }}
+                    onClose={() => setMoveOpen(false)}
+                  />
                 )}
-              </div>
+              </>
             )}
 
             {/* 삭제 */}
