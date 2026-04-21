@@ -65,6 +65,22 @@ export async function deleteCard(cardId: string, deckId: string) {
   revalidatePath(`/decks/${deckId}`)
 }
 
+export async function moveCard(cardId: string, fromDeckId: string, toDeckId: string) {
+  const session = await auth()
+  if (!session?.user?.id) throw new Error("Unauthorized")
+
+  await verifyCardOwnership(cardId, session.user.id)
+  await verifyDeckOwnership(toDeckId, session.user.id)
+
+  await prisma.card.update({
+    where: { id: cardId },
+    data: { deckId: toDeckId },
+  })
+
+  revalidatePath(`/decks/${fromDeckId}`)
+  revalidatePath(`/decks/${toDeckId}`)
+}
+
 export async function toggleBookmark(cardId: string) {
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")

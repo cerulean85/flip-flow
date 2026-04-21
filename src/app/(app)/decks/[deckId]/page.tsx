@@ -4,9 +4,8 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import CardForm from "@/components/flashcard/CardForm"
 import DeleteDeckButton from "@/components/deck/DeleteDeckButton"
-import DeleteCardButton from "@/components/flashcard/DeleteCardButton"
-import EditCardButton from "@/components/flashcard/EditCardButton"
 import EditDeckSection from "@/components/deck/EditDeckSection"
+import CardListItem from "@/components/flashcard/CardListItem"
 
 interface Props {
   params: Promise<{ deckId: string }>
@@ -16,10 +15,17 @@ export default async function DeckDetailPage({ params }: Props) {
   const { deckId } = await params
   const session = await auth()
 
-  const deck = await prisma.deck.findFirst({
-    where: { id: deckId, userId: session!.user.id },
-    include: { cards: { orderBy: { order: "asc" } } },
-  })
+  const [deck, otherDecks] = await Promise.all([
+    prisma.deck.findFirst({
+      where: { id: deckId, userId: session!.user.id },
+      include: { cards: { orderBy: { order: "asc" } } },
+    }),
+    prisma.deck.findMany({
+      where: { userId: session!.user.id, NOT: { id: deckId } },
+      select: { id: true, title: true, color: true },
+      orderBy: { updatedAt: "desc" },
+    }),
+  ])
 
   if (!deck) notFound()
 
@@ -61,28 +67,16 @@ export default async function DeckDetailPage({ params }: Props) {
       ) : (
         <div className="flex flex-col gap-2 mt-4">
           {deck.cards.map((card, i) => (
-            <div
+            <CardListItem
               key={card.id}
-              className="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm"
-            >
-              <span className="text-xs text-gray-300 font-mono pt-0.5 min-w-[1.5rem]">
-                {i + 1}
-              </span>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-800 truncate">{card.front}</p>
-                <p className="text-sm text-gray-500 truncate">{card.back}</p>
-                <EditCardButton
-                  cardId={card.id}
-                  deckId={deckId}
-                  front={card.front}
-                  back={card.back}
-                />
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                {card.isBookmark && <span className="text-yellow-400 text-sm">⭐</span>}
-                <DeleteCardButton cardId={card.id} deckId={deckId} />
-              </div>
-            </div>
+              index={i}
+              cardId={card.id}
+              deckId={deckId}
+              front={card.front}
+              back={card.back}
+              isBookmark={card.isBookmark}
+              otherDecks={otherDecks}
+            />
           ))}
         </div>
       )}
