@@ -33,6 +33,7 @@ interface CardSliderProps {
 
 export default function CardSlider({ cards }: CardSliderProps) {
   const [shuffled, setShuffled] = useState(() => shuffle(cards))
+  const [reversed, setReversed] = useState<boolean[]>(() => cards.map(() => Math.random() < 0.5))
   const [[index, direction], setPage] = useState([0, 0])
 
   const paginate = (newDirection: number) => {
@@ -43,6 +44,7 @@ export default function CardSlider({ cards }: CardSliderProps) {
 
   const reshuffle = () => {
     setShuffled(shuffle(cards))
+    setReversed(cards.map(() => Math.random() < 0.5))
     setPage([0, 0])
   }
 
@@ -74,7 +76,11 @@ export default function CardSlider({ cards }: CardSliderProps) {
             transition={{ type: "tween", duration: 0.22, ease: "easeInOut" }}
             style={{ willChange: "transform, opacity" }}
           >
-            <FlipCard key={card.id} front={card.front} back={card.back} />
+            <FlipCard
+              key={card.id}
+              front={reversed[index] ? card.back : card.front}
+              back={reversed[index] ? card.front : card.back}
+            />
           </motion.div>
         </AnimatePresence>
       </div>

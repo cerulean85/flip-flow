@@ -47,25 +47,25 @@ export default function FlipCard({ front, back }: FlipCardProps) {
   return (
     <div className="flex flex-col gap-3">
       <div
-        className="relative w-full h-64 cursor-pointer select-none"
+        className="relative w-full cursor-pointer select-none"
         style={{ perspective: "1200px" }}
         onClick={() => setIsFlipped((f) => !f)}
       >
         <motion.div
-          className="relative w-full h-full"
+          className="grid w-full"
           style={{ transformStyle: "preserve-3d", willChange: "transform" }}
           animate={{ rotateY: isFlipped ? 180 : 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           {/* Front */}
           <div
-            className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white shadow-md p-6 text-center"
-            style={{ backfaceVisibility: "hidden", willChange: "transform" }}
+            className="flex flex-col items-center justify-center rounded-2xl bg-white shadow-md p-6 pb-10 text-center min-h-40"
+            style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", willChange: "transform" }}
           >
-            <p className="text-xs uppercase tracking-widest text-indigo-400 mb-3 font-medium">
-              앞면
+
+            <p className="text-xl font-semibold text-gray-800 leading-relaxed whitespace-pre-wrap w-full">
+              {front}
             </p>
-            <p className="text-xl font-semibold text-gray-800 leading-relaxed">{front}</p>
             <p className="text-xs text-gray-300 mt-4">탭하여 뒤집기</p>
 
             <button
@@ -84,13 +84,13 @@ export default function FlipCard({ front, back }: FlipCardProps) {
 
           {/* Back */}
           <div
-            className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-indigo-50 shadow-md p-6 text-center"
-            style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", willChange: "transform" }}
+            className="flex flex-col items-center justify-center rounded-2xl bg-indigo-50 shadow-md p-6 pb-10 text-center min-h-40"
+            style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", transform: "rotateY(180deg)", willChange: "transform" }}
           >
             <p className="text-xs uppercase tracking-widest text-indigo-400 mb-3 font-medium">
               뒷면
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap">{back}</p>
+            <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap w-full">{back}</p>
 
             <button
               onClick={searchMeaning}
@@ -108,7 +108,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
         </motion.div>
       </div>
 
-      {/* Gemini result panel */}
+      {/* AI result panel */}
       <AnimatePresence>
         {showResult && geminiResult && (
           <motion.div
