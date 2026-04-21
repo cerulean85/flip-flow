@@ -90,7 +90,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
             <p className="text-xs uppercase tracking-widest text-indigo-400 mb-3 font-medium">
               뒷면
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed">{back}</p>
+            <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap">{back}</p>
 
             <button
               onClick={searchMeaning}
