@@ -87,10 +87,9 @@ export default function FlipCard({ front, back }: FlipCardProps) {
             className="flex flex-col items-center justify-center rounded-2xl bg-indigo-50 shadow-md p-6 pb-10 text-center min-h-40"
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", transform: "rotateY(180deg)", willChange: "transform" }}
           >
-            <p className="text-xs uppercase tracking-widest text-indigo-400 mb-3 font-medium">
-              뒷면
-            </p>
+
             <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap w-full">{back}</p>
+            <p className="text-xs text-gray-300 mt-4">탭하여 뒤집기</p>
 
             <button
               onClick={searchMeaning}
