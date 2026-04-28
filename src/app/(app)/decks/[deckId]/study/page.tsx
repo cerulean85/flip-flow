@@ -21,12 +21,12 @@ export default async function StudyPage({ params }: Props) {
   if (deck.cards.length === 0) notFound()
 
   return (
-    <div>
+    <div className="mx-auto max-w-md">
       <div className="flex items-center gap-3 mb-6">
-        <Link href={`/decks/${deckId}`} className="text-gray-400 hover:text-gray-700">←</Link>
+        <Link href={`/decks/${deckId}`} className="text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-300">←</Link>
         <div>
-          <h1 className="text-lg font-bold text-gray-800">{deck.title}</h1>
-          <p className="text-xs text-gray-400">학습 모드</p>
+          <h1 className="text-lg font-bold text-gray-800 dark:text-gray-100">{deck.title}</h1>
+          <p className="text-xs text-gray-400 dark:text-gray-500">학습 모드</p>
         </div>
       </div>
       <CardSlider cards={deck.cards} />

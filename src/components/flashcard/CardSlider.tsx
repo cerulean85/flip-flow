@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import FlipCard from "./FlipCard"
 import BookmarkButton from "./BookmarkButton"
@@ -32,9 +32,14 @@ interface CardSliderProps {
 }
 
 export default function CardSlider({ cards }: CardSliderProps) {
-  const [shuffled, setShuffled] = useState(() => shuffle(cards))
-  const [reversed, setReversed] = useState<boolean[]>(() => cards.map(() => Math.random() < 0.5))
+  const [shuffled, setShuffled] = useState<Card[]>(cards)
+  const [reversed, setReversed] = useState<boolean[]>(() => cards.map(() => false))
   const [[index, direction], setPage] = useState([0, 0])
+
+  useEffect(() => {
+    setShuffled(shuffle(cards))
+    setReversed(cards.map(() => Math.random() < 0.5))
+  }, [cards])
 
   const paginate = (newDirection: number) => {
     const next = index + newDirection
@@ -53,12 +58,12 @@ export default function CardSlider({ cards }: CardSliderProps) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-400 font-medium">
+        <p className="text-sm text-gray-400 font-medium dark:text-gray-500">
           {index + 1} / {shuffled.length}
         </p>
         <button
           onClick={reshuffle}
-          className="text-xs text-indigo-400 hover:text-indigo-600 transition-colors"
+          className="text-xs text-indigo-400 hover:text-indigo-600 transition-colors dark:hover:text-indigo-300"
         >
           🔀 다시 섞기
         </button>
@@ -89,7 +94,7 @@ export default function CardSlider({ cards }: CardSliderProps) {
         <button
           onClick={() => paginate(-1)}
           disabled={index === 0}
-          className="flex items-center gap-1 text-sm font-medium text-indigo-600 disabled:text-gray-300 transition-colors"
+          className="flex items-center gap-1 text-sm font-medium text-indigo-600 disabled:text-gray-300 transition-colors dark:text-indigo-400 dark:disabled:text-gray-700"
         >
           ← 이전
         </button>
@@ -99,14 +104,14 @@ export default function CardSlider({ cards }: CardSliderProps) {
         <button
           onClick={() => paginate(1)}
           disabled={index === shuffled.length - 1}
-          className="flex items-center gap-1 text-sm font-medium text-indigo-600 disabled:text-gray-300 transition-colors"
+          className="flex items-center gap-1 text-sm font-medium text-indigo-600 disabled:text-gray-300 transition-colors dark:text-indigo-400 dark:disabled:text-gray-700"
         >
           다음 →
         </button>
       </div>
 
       {/* Progress bar */}
-      <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
+      <div className="h-1 bg-gray-100 rounded-full overflow-hidden dark:bg-gray-800">
         <div
           className="h-full bg-indigo-500 rounded-full transition-all duration-300"
           style={{ width: `${((index + 1) / shuffled.length) * 100}%` }}

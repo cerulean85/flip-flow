@@ -33,8 +33,8 @@ export default async function DeckDetailPage({ params }: Props) {
     <div>
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard" className="text-gray-400 hover:text-gray-700">←</Link>
-          <h1 className="text-xl font-bold text-gray-800">{deck.title}</h1>
+          <Link href="/dashboard" className="text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-300">←</Link>
+          <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">{deck.title}</h1>
           <EditDeckSection
             deckId={deckId}
             title={deck.title}
@@ -56,11 +56,11 @@ export default async function DeckDetailPage({ params }: Props) {
       </div>
 
       {deck.description && (
-        <p className="text-sm text-gray-500 mb-4 ml-8">{deck.description}</p>
+        <p className="text-sm text-gray-500 mb-4 ml-8 dark:text-gray-400">{deck.description}</p>
       )}
 
       {deck.cards.length === 0 ? (
-        <div className="text-center py-10 text-gray-400">
+        <div className="text-center py-10 text-gray-400 dark:text-gray-500">
           <p className="text-3xl mb-2">📭</p>
           <p className="text-sm">아직 카드가 없어요. 아래에서 추가해보세요!</p>
         </div>

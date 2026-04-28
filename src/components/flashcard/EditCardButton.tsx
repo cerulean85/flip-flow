@@ -32,7 +32,7 @@ export default function EditCardButton({ cardId, deckId, front, back }: Props) {
     return (
       <button
         onClick={() => setIsEditing(true)}
-        className="text-gray-300 hover:text-indigo-400 text-sm transition-colors"
+        className="text-gray-300 hover:text-indigo-400 text-sm transition-colors dark:text-gray-600"
         aria-label="카드 수정"
       >
         ✎
@@ -54,21 +54,21 @@ export default function EditCardButton({ cardId, deckId, front, back }: Props) {
         defaultValue={front}
         required
         placeholder="앞면 (질문)"
-        className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-indigo-900 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
       />
       <input
         name="back"
         defaultValue={back}
         required
         placeholder="뒷면 (답)"
-        className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-indigo-900 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
       />
       <div className="flex gap-2">
         <SaveButton />
         <button
           type="button"
           onClick={() => setIsEditing(false)}
-          className="text-xs text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors"
+          className="text-xs text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors dark:text-gray-500 dark:hover:text-gray-300 dark:border-gray-700"
         >
           취소
         </button>

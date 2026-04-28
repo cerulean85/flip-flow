@@ -34,27 +34,27 @@ export default function DeckForm({ deckId, defaultValues, onSuccess }: DeckFormP
   return (
     <form action={action} className="flex flex-col gap-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">제목 *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">제목 *</label>
         <input
           name="title"
           required
           defaultValue={defaultValues?.title}
           placeholder="덱 이름을 입력하세요"
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">설명</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">설명</label>
         <textarea
           name="description"
           defaultValue={defaultValues?.description}
           placeholder="덱에 대한 설명 (선택)"
           rows={3}
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">색상</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">색상</label>
         <div className="flex gap-2">
           {COLORS.map((color) => (
             <label key={color} className="cursor-pointer">

@@ -12,11 +12,11 @@ export default function DeckCard({ deck }: DeckCardProps) {
       className="block rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow"
       style={{ backgroundColor: deck.color + "15", borderLeft: `4px solid ${deck.color}` }}
     >
-      <h3 className="font-semibold text-gray-800 text-base truncate">{deck.title}</h3>
+      <h3 className="font-semibold text-gray-800 text-base truncate dark:text-gray-100">{deck.title}</h3>
       {deck.description && (
-        <p className="text-sm text-gray-500 mt-1 line-clamp-2">{deck.description}</p>
+        <p className="text-sm text-gray-500 mt-1 line-clamp-2 dark:text-gray-400">{deck.description}</p>
       )}
-      <p className="text-xs text-gray-400 mt-3">{deck._count.cards}장</p>
+      <p className="text-xs text-gray-400 mt-3 dark:text-gray-500">{deck._count.cards}장</p>
     </Link>
   )
 }

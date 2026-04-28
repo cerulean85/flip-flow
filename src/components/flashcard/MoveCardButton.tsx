@@ -42,7 +42,7 @@ export default function MoveCardButton({ cardId, fromDeckId, decks }: Props) {
       <button
         onClick={() => setOpen((v) => !v)}
         disabled={isPending}
-        className="text-gray-300 hover:text-indigo-400 disabled:opacity-50 text-sm transition-colors"
+        className="text-gray-300 hover:text-indigo-400 disabled:opacity-50 text-sm transition-colors dark:text-gray-600"
         aria-label="다른 덱으로 이동"
         title="다른 덱으로 이동"
       >
@@ -50,13 +50,13 @@ export default function MoveCardButton({ cardId, fromDeckId, decks }: Props) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-6 z-20 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 overflow-hidden">
-          <p className="text-xs text-gray-400 px-3 py-1.5 border-b border-gray-50">덱으로 이동</p>
+        <div className="absolute right-0 top-6 z-20 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 overflow-hidden dark:bg-gray-900 dark:border-gray-800">
+          <p className="text-xs text-gray-400 px-3 py-1.5 border-b border-gray-50 dark:border-gray-800 dark:text-gray-500">덱으로 이동</p>
           {decks.map((deck) => (
             <button
               key={deck.id}
               onClick={() => handleMove(deck.id)}
-              className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 flex items-center gap-2 transition-colors"
+              className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 flex items-center gap-2 transition-colors dark:text-gray-300 dark:hover:bg-indigo-950"
             >
               <span
                 className="w-2 h-2 rounded-full shrink-0"

@@ -56,8 +56,8 @@ function IconButton({
       title={label}
       className={`w-7 h-7 flex items-center justify-center rounded-lg transition-colors disabled:opacity-40
         ${danger
-          ? "text-gray-400 hover:text-red-500 hover:bg-red-50"
-          : "text-gray-400 hover:text-indigo-600 hover:bg-indigo-50"
+          ? "text-gray-400 hover:text-red-500 hover:bg-red-50 dark:text-gray-500 dark:hover:bg-red-950"
+          : "text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:text-gray-500 dark:hover:text-indigo-400 dark:hover:bg-indigo-950"
         }`}
     >
       {children}
@@ -79,14 +79,14 @@ function MoveDeckModal({ decks, onSelect, onClose }: MoveDeckModalProps) {
     >
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
       <div
-        className="relative w-full sm:w-80 bg-white rounded-t-2xl sm:rounded-2xl shadow-xl pb-safe"
+        className="relative w-full sm:w-80 bg-white rounded-t-2xl sm:rounded-2xl shadow-xl pb-safe dark:bg-gray-900 dark:border dark:border-gray-800"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100">
-          <p className="text-sm font-semibold text-gray-800">이동할 덱 선택</p>
+        <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100 dark:border-gray-800">
+          <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">이동할 덱 선택</p>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-gray-800"
           >
             ✕
           </button>
@@ -96,7 +96,7 @@ function MoveDeckModal({ decks, onSelect, onClose }: MoveDeckModalProps) {
             <li key={deck.id}>
               <button
                 onClick={() => onSelect(deck.id)}
-                className="w-full text-left px-5 py-3 text-sm text-gray-700 hover:bg-indigo-50 flex items-center gap-3 transition-colors"
+                className="w-full text-left px-5 py-3 text-sm text-gray-700 hover:bg-indigo-50 flex items-center gap-3 transition-colors dark:text-gray-300 dark:hover:bg-indigo-950"
               >
                 <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: deck.color }} />
                 <span className="truncate">{deck.title}</span>
@@ -125,17 +125,17 @@ function CardDetailModal({ front, back, isBookmark, onClose }: CardDetailModalPr
     >
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
       <div
-        className="relative w-full sm:max-w-md bg-gray-50 rounded-t-2xl sm:rounded-2xl shadow-xl"
+        className="relative w-full sm:max-w-md bg-gray-50 rounded-t-2xl sm:rounded-2xl shadow-xl dark:bg-gray-950"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold text-gray-800">카드 상세</p>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">카드 상세</p>
             {isBookmark && <span className="text-yellow-400 text-sm">⭐</span>}
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-gray-800"
           >
             ✕
           </button>
@@ -164,7 +164,7 @@ export default function CardListItem({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-900 dark:border dark:border-gray-800">
       {isEditing ? (
         <form action={handleSave} className="p-4 flex flex-col gap-2">
           <textarea
@@ -174,7 +174,7 @@ export default function CardListItem({
             placeholder="앞면 (질문)"
             autoFocus
             rows={2}
-            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none dark:border-indigo-900 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
           />
           <textarea
             name="back"
@@ -182,14 +182,14 @@ export default function CardListItem({
             required
             placeholder="뒷면 (답)"
             rows={3}
-            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none dark:border-indigo-900 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
           />
           <div className="flex gap-2 pt-1">
             <SaveButton />
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="text-xs text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors"
+              className="text-xs text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors dark:text-gray-500 dark:hover:text-gray-300 dark:border-gray-700"
             >
               취소
             </button>
@@ -197,7 +197,7 @@ export default function CardListItem({
         </form>
       ) : (
         <div className="flex items-center gap-3 px-4 py-3">
-          <span className="text-xs text-gray-300 font-mono min-w-[1.25rem] shrink-0">
+          <span className="text-xs text-gray-300 font-mono min-w-[1.25rem] shrink-0 dark:text-gray-600">
             {index + 1}
           </span>
 
@@ -206,8 +206,8 @@ export default function CardListItem({
             className="flex-1 min-w-0 text-left"
             onClick={() => setDetailOpen(true)}
           >
-            <p className="text-sm font-medium text-gray-800 truncate">{front}</p>
-            <p className="text-sm text-gray-400 truncate">{back}</p>
+            <p className="text-sm font-medium text-gray-800 truncate dark:text-gray-100">{front}</p>
+            <p className="text-sm text-gray-400 truncate dark:text-gray-500">{back}</p>
           </button>
 
           <div className="flex items-center gap-0.5 shrink-0">
