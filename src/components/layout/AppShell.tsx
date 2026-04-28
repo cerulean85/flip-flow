@@ -23,6 +23,8 @@ export default function AppShell({ user, signOutAction, children }: Props) {
   const pathname = usePathname()
 
   useEffect(() => {
+    // close drawer on route change (back/forward, programmatic navigation)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOpen(false)
   }, [pathname])
 

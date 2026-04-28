@@ -37,7 +37,10 @@ export default function CardSlider({ cards }: CardSliderProps) {
   const [[index, direction], setPage] = useState([0, 0])
 
   useEffect(() => {
+    // shuffle/reverse on mount only — Math.random would mismatch between SSR and CSR
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setShuffled(shuffle(cards))
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setReversed(cards.map(() => Math.random() < 0.5))
   }, [cards])
 
