@@ -167,13 +167,14 @@ export default function CardListItem({
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       {isEditing ? (
         <form action={handleSave} className="p-4 flex flex-col gap-2">
-          <input
+          <textarea
             name="front"
             defaultValue={front}
             required
             placeholder="앞면 (질문)"
             autoFocus
-            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            rows={2}
+            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
           />
           <textarea
             name="back"

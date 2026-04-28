@@ -32,11 +32,12 @@ export default function CardForm({ deckId }: CardFormProps) {
   return (
     <form ref={formRef} action={clientAction} className="flex flex-col gap-3 mt-6">
       <h2 className="font-semibold text-gray-700 text-sm">카드 추가</h2>
-      <input
+      <textarea
         name="front"
         required
         placeholder="앞면 (질문)"
-        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        rows={2}
+        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
       />
       <textarea
         name="back"
