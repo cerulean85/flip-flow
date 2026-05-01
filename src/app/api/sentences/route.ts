@@ -11,10 +11,13 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "카드 내용이 비어 있습니다." }, { status: 400 })
   }
 
-  const prompt = `다음 단어/표현을 활용한 한국어 회화 예문 3개와 각각의 자연스러운 영어 번역을 만들어주세요.
+  const frontTerm = front?.trim() ?? ""
+  const backTerm = back?.trim() ?? ""
 
-앞면: ${front?.trim() ?? ""}
-뒷면: ${back?.trim() ?? ""}
+  const prompt = `다음 카드의 영어 단어/표현을 활용한 한국어 회화 예문 3개와 각각의 자연스러운 영어 번역을 만들어주세요.
+
+앞면(영어 단어/표현): ${frontTerm}
+뒷면(한국어 뜻): ${backTerm}
 
 응답은 다음 JSON 형식으로만 작성하세요:
 {
@@ -25,8 +28,8 @@ export async function POST(request: NextRequest) {
 
 요구사항:
 - sentences 배열에 정확히 3개의 객체
-- ko: 일상에서 쓰일 만한 자연스러운 한국어 회화 표현
-- en: 직역이 아닌, 자연스러운 영어 표현
+- ko: 한국어 회화 문장 안에 앞면의 영어 단어/표현 "${frontTerm}"을 영어 표기 그대로(한글 음역 금지) 반드시 1회 이상 포함시킬 것
+- en: 직역이 아닌 자연스러운 영어 표현이며, 동일하게 "${frontTerm}"을 그대로 포함할 것
 - 다양한 상황(일상, 직장, 가족, 친구 등)
 - JSON 외에 설명, 마크다운, 코드 펜스 등 일체 포함하지 말 것`
 
