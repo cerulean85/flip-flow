@@ -25,7 +25,7 @@ export default async function BookmarksPage() {
           <p className="text-sm">학습 중 별표를 눌러 저장해보세요!</p>
         </div>
       ) : (
-        <CardSlider cards={cards} />
+        <CardSlider cards={cards} controlsPosition="top" />
       )}
     </div>
   )

@@ -6,8 +6,9 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
-import { Search, Sparkles, X, Loader2, MessageSquareText } from "lucide-react"
+import { Search, Sparkles, X, Loader2, MessageSquareText, Volume2 } from "lucide-react"
 import SentenceFlip from "./SentenceFlip"
+import { speak } from "@/lib/speech"
 
 type Sentence = { ko: string; en: string }
 
@@ -108,6 +109,18 @@ export default function FlipCard({ front, back }: FlipCardProps) {
             className="flex flex-col items-center justify-center rounded-2xl bg-white shadow-md p-6 pb-12 text-center min-h-40 dark:bg-zinc-900 dark:border dark:border-zinc-800"
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", willChange: "transform" }}
           >
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                speak(front)
+              }}
+              aria-label="앞면 읽기"
+              title="앞면 읽기"
+              className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+            >
+              <Volume2 size={14} aria-hidden="true" />
+            </button>
 
             <p className="text-xl font-semibold text-gray-800 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">
               {front}
@@ -147,6 +160,18 @@ export default function FlipCard({ front, back }: FlipCardProps) {
             className="flex flex-col items-center justify-center rounded-2xl bg-blue-50 shadow-md p-6 pb-12 text-center min-h-40 dark:bg-blue-950"
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", transform: "rotateY(180deg)", willChange: "transform" }}
           >
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                speak(back)
+              }}
+              aria-label="뒷면 읽기"
+              title="뒷면 읽기"
+              className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+            >
+              <Volume2 size={14} aria-hidden="true" />
+            </button>
 
             <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">{back}</p>
             <p className="text-xs text-gray-300 mt-4 dark:text-zinc-500">탭하여 뒤집기</p>

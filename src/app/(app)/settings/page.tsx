@@ -1,4 +1,5 @@
 import ThemeToggle from "@/components/settings/ThemeToggle"
+import SpeechVoiceSettings from "@/components/settings/SpeechVoiceSettings"
 
 export default function SettingsPage() {
   return (
@@ -9,6 +10,12 @@ export default function SettingsPage() {
         <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">테마</h2>
         <p className="mb-4 text-xs text-gray-500">앱 전체에 적용될 색 테마를 선택하세요.</p>
         <ThemeToggle />
+      </section>
+
+      <section className="mt-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">음성</h2>
+        <p className="mb-4 text-xs text-gray-500">카드 읽기에 사용할 목소리를 선택하세요.</p>
+        <SpeechVoiceSettings />
       </section>
     </div>
   )

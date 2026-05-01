@@ -18,5 +18,5 @@ export default function StudyAll({ cards }: Props) {
     )
   }
 
-  return <CardSlider cards={cards} />
+  return <CardSlider cards={cards} controlsPosition="top" />
 }
