@@ -20,6 +20,7 @@ interface Props {
 
 export default function AppShell({ user, signOutAction, children }: Props) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -33,6 +34,8 @@ export default function AppShell({ user, signOutAction, children }: Props) {
       <Sidebar
         user={user}
         signOutAction={signOutAction}
+        collapsed={isCollapsed}
+        onToggleCollapse={() => setIsCollapsed((v) => !v)}
         className="hidden md:flex"
       />
       <DrawerOverlay

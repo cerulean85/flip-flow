@@ -2,15 +2,17 @@
 
 import { useState } from "react"
 import { LogOut } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface Props {
   signOutAction: () => Promise<void>
   image?: string | null
   name?: string | null
   compact?: boolean
+  collapsed?: boolean
 }
 
-export default function SignOutButton({ signOutAction, image, name, compact = false }: Props) {
+export default function SignOutButton({ signOutAction, image, name, compact = false, collapsed = false }: Props) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -18,10 +20,15 @@ export default function SignOutButton({ signOutAction, image, name, compact = fa
       {compact ? (
         <button
           onClick={() => setOpen(true)}
-          className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+          title={collapsed ? "로그아웃" : undefined}
+          aria-label={collapsed ? "로그아웃" : undefined}
+          className={cn(
+            "flex w-full items-center rounded-xl py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800",
+            collapsed ? "justify-center px-2" : "gap-2 px-3"
+          )}
         >
           <LogOut size={18} aria-hidden="true" />
-          로그아웃
+          {!collapsed && "로그아웃"}
         </button>
       ) : (
         <button
