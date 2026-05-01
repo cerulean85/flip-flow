@@ -159,7 +159,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
                 ) : (
                   <MessageSquareText size={12} aria-hidden="true" />
                 )}
-                예문 10
+                연습하기
               </button>
               <button
                 onClick={searchMeaning}
