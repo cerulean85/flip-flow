@@ -1,5 +1,5 @@
 import sharp from "sharp"
-import { writeFileSync, mkdirSync } from "fs"
+import { mkdirSync } from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 
@@ -7,25 +7,31 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const iconsDir = path.join(__dirname, "../public/icons")
 mkdirSync(iconsDir, { recursive: true })
 
-// Standard icon SVG (original design, no extra padding)
+// Standard icon SVG — gradient background + two layered cards (matches Logo.tsx)
 const iconSvg = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100" height="100" rx="22" fill="#6366f1"/>
-  <rect x="9" y="20" width="58" height="44" rx="7" fill="#a5b4fc" transform="rotate(-12, 38, 42)"/>
-  <rect x="31" y="32" width="58" height="44" rx="7" fill="white"/>
-  <rect x="42" y="44" width="28" height="4" rx="2" fill="#6366f1" opacity="0.45"/>
-  <rect x="42" y="53" width="20" height="4" rx="2" fill="#6366f1" opacity="0.28"/>
-  <rect x="42" y="62" width="24" height="4" rx="2" fill="#6366f1" opacity="0.18"/>
+  <defs>
+    <linearGradient id="ff-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="24" fill="url(#ff-bg)"/>
+  <rect x="22" y="28" width="56" height="44" rx="8" fill="white" fill-opacity="0.35" transform="rotate(-12 50 50)"/>
+  <rect x="22" y="28" width="56" height="44" rx="8" fill="white" transform="rotate(8 50 50)"/>
 </svg>`
 
-// Maskable icon: safe zone is inner 80%, so we scale content to ~72% and add indigo bg
+// Maskable icon: safe zone is inner 80%, scale content to ~72% and fill the entire square
 const maskableSvg = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100" height="100" fill="#6366f1"/>
-  <g transform="translate(14, 14) scale(0.72)">
-    <rect x="9" y="20" width="58" height="44" rx="7" fill="#a5b4fc" transform="rotate(-12, 38, 42)"/>
-    <rect x="31" y="32" width="58" height="44" rx="7" fill="white"/>
-    <rect x="42" y="44" width="28" height="4" rx="2" fill="#6366f1" opacity="0.45"/>
-    <rect x="42" y="53" width="20" height="4" rx="2" fill="#6366f1" opacity="0.28"/>
-    <rect x="42" y="62" width="24" height="4" rx="2" fill="#6366f1" opacity="0.18"/>
+  <defs>
+    <linearGradient id="ff-bg-mask" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" fill="url(#ff-bg-mask)"/>
+  <g transform="translate(14 14) scale(0.72)">
+    <rect x="22" y="28" width="56" height="44" rx="8" fill="white" fill-opacity="0.35" transform="rotate(-12 50 50)"/>
+    <rect x="22" y="28" width="56" height="44" rx="8" fill="white" transform="rotate(8 50 50)"/>
   </g>
 </svg>`
 
