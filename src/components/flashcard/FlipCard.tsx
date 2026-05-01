@@ -3,7 +3,10 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import ReactMarkdown from "react-markdown"
-import { Search, Sparkles, X, Loader2 } from "lucide-react"
+import { Search, Sparkles, X, Loader2, MessageSquareText } from "lucide-react"
+import SentenceFlip from "./SentenceFlip"
+
+type Sentence = { ko: string; en: string }
 
 interface FlipCardProps {
   front: string
@@ -15,6 +18,11 @@ export default function FlipCard({ front, back }: FlipCardProps) {
   const [geminiResult, setGeminiResult] = useState<string | null>(null)
   const [isSearching, setIsSearching] = useState(false)
   const [showResult, setShowResult] = useState(false)
+
+  const [sentences, setSentences] = useState<Sentence[] | null>(null)
+  const [sentencesError, setSentencesError] = useState<string | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [showSentences, setShowSentences] = useState(false)
 
   const searchMeaning = async (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -45,6 +53,40 @@ export default function FlipCard({ front, back }: FlipCardProps) {
     }
   }
 
+  const generateSentences = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (isGenerating) return
+
+    if (showSentences && (sentences || sentencesError)) {
+      setShowSentences(false)
+      return
+    }
+
+    setIsGenerating(true)
+    setShowSentences(false)
+    setSentences(null)
+    setSentencesError(null)
+
+    try {
+      const res = await fetch("/api/sentences", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ front, back }),
+      })
+      const data = await res.json()
+      if (Array.isArray(data.sentences) && data.sentences.length > 0) {
+        setSentences(data.sentences)
+      } else {
+        setSentencesError(data.error ?? "예문을 생성하지 못했습니다.")
+      }
+    } catch {
+      setSentencesError("네트워크 오류가 발생했습니다.")
+    } finally {
+      setIsGenerating(false)
+      setShowSentences(true)
+    }
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div
@@ -60,7 +102,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
         >
           {/* Front */}
           <div
-            className="flex flex-col items-center justify-center rounded-2xl bg-white shadow-md p-6 pb-10 text-center min-h-40 dark:bg-zinc-900 dark:border dark:border-zinc-800"
+            className="flex flex-col items-center justify-center rounded-2xl bg-white shadow-md p-6 pb-12 text-center min-h-40 dark:bg-zinc-900 dark:border dark:border-zinc-800"
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", willChange: "transform" }}
           >
 
@@ -69,41 +111,69 @@ export default function FlipCard({ front, back }: FlipCardProps) {
             </p>
             <p className="text-xs text-gray-300 mt-4 dark:text-zinc-600">탭하여 뒤집기</p>
 
-            <button
-              onClick={searchMeaning}
-              disabled={isSearching}
-              className="absolute bottom-3 right-3 flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50 dark:hover:text-blue-300 dark:hover:bg-blue-950"
-            >
-              {isSearching ? (
-                <Loader2 size={12} className="animate-spin" aria-hidden="true" />
-              ) : (
-                <Search size={12} aria-hidden="true" />
-              )}
-              뜻 검색
-            </button>
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+              <button
+                onClick={generateSentences}
+                disabled={isGenerating}
+                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50 dark:hover:text-blue-300 dark:hover:bg-blue-950"
+              >
+                {isGenerating ? (
+                  <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+                ) : (
+                  <MessageSquareText size={12} aria-hidden="true" />
+                )}
+                예문
+              </button>
+              <button
+                onClick={searchMeaning}
+                disabled={isSearching}
+                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50 dark:hover:text-blue-300 dark:hover:bg-blue-950"
+              >
+                {isSearching ? (
+                  <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+                ) : (
+                  <Search size={12} aria-hidden="true" />
+                )}
+                뜻 검색
+              </button>
+            </div>
           </div>
 
           {/* Back */}
           <div
-            className="flex flex-col items-center justify-center rounded-2xl bg-blue-50 shadow-md p-6 pb-10 text-center min-h-40 dark:bg-blue-950"
+            className="flex flex-col items-center justify-center rounded-2xl bg-blue-50 shadow-md p-6 pb-12 text-center min-h-40 dark:bg-blue-950"
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", transform: "rotateY(180deg)", willChange: "transform" }}
           >
 
             <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">{back}</p>
             <p className="text-xs text-gray-300 mt-4 dark:text-zinc-500">탭하여 뒤집기</p>
 
-            <button
-              onClick={searchMeaning}
-              disabled={isSearching}
-              className="absolute bottom-3 right-3 flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-100 dark:hover:text-blue-300 dark:hover:bg-blue-900"
-            >
-              {isSearching ? (
-                <Loader2 size={12} className="animate-spin" aria-hidden="true" />
-              ) : (
-                <Search size={12} aria-hidden="true" />
-              )}
-              뜻 검색
-            </button>
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+              <button
+                onClick={generateSentences}
+                disabled={isGenerating}
+                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-100 dark:hover:text-blue-300 dark:hover:bg-blue-900"
+              >
+                {isGenerating ? (
+                  <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+                ) : (
+                  <MessageSquareText size={12} aria-hidden="true" />
+                )}
+                예문 10
+              </button>
+              <button
+                onClick={searchMeaning}
+                disabled={isSearching}
+                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-100 dark:hover:text-blue-300 dark:hover:bg-blue-900"
+              >
+                {isSearching ? (
+                  <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+                ) : (
+                  <Search size={12} aria-hidden="true" />
+                )}
+                뜻 검색
+              </button>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -150,6 +220,51 @@ export default function FlipCard({ front, back }: FlipCardProps) {
                 {geminiResult}
               </ReactMarkdown>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Korean sentences panel */}
+      <AnimatePresence>
+        {showSentences && (sentences || sentencesError) && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="rounded-2xl bg-white border border-gray-200 p-4 dark:bg-zinc-900 dark:border-zinc-800"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <p className="inline-flex items-center gap-1 text-xs font-semibold text-blue-500 uppercase tracking-widest dark:text-blue-400">
+                <MessageSquareText size={12} aria-hidden="true" />
+                예문 연습하기
+              </p>
+              <button
+                onClick={() => setShowSentences(false)}
+                aria-label="닫기"
+                className="text-gray-300 hover:text-gray-500 transition-colors dark:text-zinc-600 dark:hover:text-zinc-400"
+              >
+                <X size={14} aria-hidden="true" />
+              </button>
+            </div>
+            {sentencesError ? (
+              <p className="text-sm text-red-500 dark:text-red-400">{sentencesError}</p>
+            ) : (
+              <>
+                <p className="mb-2 text-xs text-gray-400 dark:text-zinc-500">
+                  문장을 탭하면 영어 번역을 볼 수 있어요
+                </p>
+                <ol className="list-decimal list-inside space-y-1">
+                  {sentences!.map((s, i) => (
+                    <li key={i} className="text-sm text-gray-400 dark:text-zinc-600">
+                      <span className="inline-block w-[calc(100%-1.5rem)] align-top">
+                        <SentenceFlip ko={s.ko} en={s.en} />
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
