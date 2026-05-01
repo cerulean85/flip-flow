@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Shuffle, ChevronLeft, ChevronRight } from "lucide-react"
 import FlipCard from "./FlipCard"
@@ -37,10 +37,14 @@ export default function CardSlider({ cards }: CardSliderProps) {
   const [[index, direction], setPage] = useState([0, 0])
 
   useEffect(() => {
-    // shuffle on mount only — Math.random would mismatch between SSR and CSR
+    // shuffle only when the set of cards changes (mount, add/remove) —
+    // ignore cards reference changes from server revalidation (e.g. bookmark toggle)
+    // so the deck doesn't reshuffle and skip mid-session.
+    // Math.random would mismatch between SSR and CSR, so this stays in an effect.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setShuffled(shuffle(cards))
-  }, [cards])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards.length])
 
   const paginate = (newDirection: number) => {
     const next = index + newDirection
@@ -53,7 +57,11 @@ export default function CardSlider({ cards }: CardSliderProps) {
     setPage([0, 0])
   }
 
-  const card = shuffled[index]
+  // Look up the latest card object by id so server revalidations
+  // (e.g. bookmark toggle) propagate without breaking the shuffled order.
+  const cardById = useMemo(() => new Map(cards.map((c) => [c.id, c])), [cards])
+  const shuffledCard = shuffled[index]
+  const card = (shuffledCard && cardById.get(shuffledCard.id)) ?? shuffledCard
 
   return (
     <div className="flex flex-col gap-5">
