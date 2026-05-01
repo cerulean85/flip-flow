@@ -122,7 +122,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
                 ) : (
                   <MessageSquareText size={12} aria-hidden="true" />
                 )}
-                예문
+                연습하기
               </button>
               <button
                 onClick={searchMeaning}
@@ -237,7 +237,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
             <div className="flex items-center justify-between mb-3">
               <p className="inline-flex items-center gap-1 text-xs font-semibold text-blue-500 uppercase tracking-widest dark:text-blue-400">
                 <MessageSquareText size={12} aria-hidden="true" />
-                예문 연습하기
+                연습하기
               </p>
               <button
                 onClick={() => setShowSentences(false)}
