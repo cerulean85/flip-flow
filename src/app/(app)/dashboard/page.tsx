@@ -4,11 +4,26 @@ import DeckList from "@/components/deck/DeckList"
 
 export default async function DashboardPage() {
   const session = await auth()
-  const decks = await prisma.deck.findMany({
-    where: { userId: session!.user.id },
-    include: { _count: { select: { cards: true } } },
-    orderBy: { updatedAt: "desc" },
-  })
+  const userId = session!.user.id
 
-  return <DeckList decks={decks} />
+  const [decks, cards] = await Promise.all([
+    prisma.deck.findMany({
+      where: { userId },
+      include: { _count: { select: { cards: true } } },
+      orderBy: { updatedAt: "desc" },
+    }),
+    prisma.card.findMany({
+      where: { deck: { userId } },
+      select: {
+        id: true,
+        front: true,
+        back: true,
+        deckId: true,
+        deck: { select: { id: true, title: true, color: true } },
+      },
+      orderBy: { updatedAt: "desc" },
+    }),
+  ])
+
+  return <DeckList decks={decks} cards={cards} />
 }

@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma"
 import CardForm from "@/components/flashcard/CardForm"
 import DeleteDeckButton from "@/components/deck/DeleteDeckButton"
 import EditDeckSection from "@/components/deck/EditDeckSection"
-import CardListItem from "@/components/flashcard/CardListItem"
+import DeckCardList from "@/components/flashcard/DeckCardList"
 
 interface Props {
   params: Promise<{ deckId: string }>
@@ -66,20 +66,7 @@ export default async function DeckDetailPage({ params }: Props) {
           <p className="text-sm">아직 카드가 없어요. 아래에서 추가해보세요!</p>
         </div>
       ) : (
-        <div className="flex flex-col gap-2 mt-4">
-          {deck.cards.map((card, i) => (
-            <CardListItem
-              key={card.id}
-              index={i}
-              cardId={card.id}
-              deckId={deckId}
-              front={card.front}
-              back={card.back}
-              isBookmark={card.isBookmark}
-              otherDecks={otherDecks}
-            />
-          ))}
-        </div>
+        <DeckCardList cards={deck.cards} deckId={deckId} otherDecks={otherDecks} />
       )}
 
       <CardForm deckId={deckId} />
