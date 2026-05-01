@@ -34,17 +34,12 @@ interface CardSliderProps {
 
 export default function CardSlider({ cards }: CardSliderProps) {
   const [shuffled, setShuffled] = useState<Card[]>(cards)
-  const [reversedMap, setReversedMap] = useState<Record<string, boolean>>({})
   const [[index, direction], setPage] = useState([0, 0])
 
   useEffect(() => {
-    // shuffle/reverse on mount only — Math.random would mismatch between SSR and CSR
+    // shuffle on mount only — Math.random would mismatch between SSR and CSR
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setShuffled(shuffle(cards))
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setReversedMap(
-      Object.fromEntries(cards.map((c) => [c.id, Math.random() < 0.5]))
-    )
   }, [cards])
 
   const paginate = (newDirection: number) => {
@@ -55,14 +50,10 @@ export default function CardSlider({ cards }: CardSliderProps) {
 
   const reshuffle = () => {
     setShuffled(shuffle(cards))
-    setReversedMap(
-      Object.fromEntries(cards.map((c) => [c.id, Math.random() < 0.5]))
-    )
     setPage([0, 0])
   }
 
   const card = shuffled[index]
-  const isReversed = reversedMap[card.id] ?? false
 
   return (
     <div className="flex flex-col gap-5">
@@ -93,8 +84,8 @@ export default function CardSlider({ cards }: CardSliderProps) {
           >
             <FlipCard
               key={card.id}
-              front={isReversed ? card.back : card.front}
-              back={isReversed ? card.front : card.back}
+              front={card.front}
+              back={card.back}
             />
           </motion.div>
         </AnimatePresence>
