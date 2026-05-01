@@ -2,13 +2,15 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { Layers, BookOpen, Star, NotebookPen, Settings, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-const links = [
-  { href: "/dashboard", label: "Decks", icon: "🗂" },
-  { href: "/study", label: "전체 학습", icon: "📖" },
-  { href: "/bookmarks", label: "Bookmarks", icon: "⭐" },
-  { href: "/settings", label: "설정", icon: "⚙️" },
+const links: { href: string; label: string; Icon: LucideIcon }[] = [
+  { href: "/dashboard", label: "덱", Icon: Layers },
+  { href: "/study", label: "전체 학습", Icon: BookOpen },
+  { href: "/bookmarks", label: "북마크", Icon: Star },
+  { href: "/essays", label: "에세이", Icon: NotebookPen },
+  { href: "/settings", label: "설정", Icon: Settings },
 ]
 
 interface Props {
@@ -20,7 +22,7 @@ export default function NavLinks({ onNavigate }: Props) {
 
   return (
     <nav className="flex flex-col gap-1">
-      {links.map(({ href, label, icon }) => {
+      {links.map(({ href, label, Icon }) => {
         const isActive = pathname === href || pathname.startsWith(href + "/")
         return (
           <Link
@@ -30,11 +32,11 @@ export default function NavLinks({ onNavigate }: Props) {
             className={cn(
               "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
               isActive
-                ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400"
+                : "text-gray-600 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
             )}
           >
-            <span className="text-lg leading-none">{icon}</span>
+            <Icon size={18} aria-hidden="true" />
             {label}
           </Link>
         )

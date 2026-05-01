@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react"
 import { createPortal } from "react-dom"
 import { useFormStatus } from "react-dom"
+import { Star, X, Pencil, ArrowRight, Trash2 } from "lucide-react"
 import { updateCard, deleteCard, moveCard } from "@/actions/card.actions"
 import FlipCard from "./FlipCard"
 
@@ -28,7 +29,7 @@ function SaveButton() {
     <button
       type="submit"
       disabled={pending}
-      className="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+      className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
     >
       {pending ? "저장 중..." : "저장"}
     </button>
@@ -56,8 +57,8 @@ function IconButton({
       title={label}
       className={`w-7 h-7 flex items-center justify-center rounded-lg transition-colors disabled:opacity-40
         ${danger
-          ? "text-gray-400 hover:text-red-500 hover:bg-red-50 dark:text-gray-500 dark:hover:bg-red-950"
-          : "text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:text-gray-500 dark:hover:text-indigo-400 dark:hover:bg-indigo-950"
+          ? "text-gray-400 hover:text-red-500 hover:bg-red-50 dark:text-zinc-500 dark:hover:bg-red-950"
+          : "text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:text-zinc-500 dark:hover:text-blue-400 dark:hover:bg-blue-950"
         }`}
     >
       {children}
@@ -79,16 +80,17 @@ function MoveDeckModal({ decks, onSelect, onClose }: MoveDeckModalProps) {
     >
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
       <div
-        className="relative w-full sm:w-80 bg-white rounded-t-2xl sm:rounded-2xl shadow-xl pb-safe dark:bg-gray-900 dark:border dark:border-gray-800"
+        className="relative w-full sm:w-80 bg-white rounded-t-2xl sm:rounded-2xl shadow-xl pb-safe dark:bg-zinc-900 dark:border dark:border-zinc-800"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100 dark:border-gray-800">
-          <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">이동할 덱 선택</p>
+        <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100 dark:border-zinc-800">
+          <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">이동할 덱 선택</p>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-gray-800"
+            aria-label="닫기"
+            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors dark:text-zinc-500 dark:hover:text-zinc-300 dark:hover:bg-zinc-800"
           >
-            ✕
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
         <ul className="py-2 max-h-72 overflow-y-auto">
@@ -96,7 +98,7 @@ function MoveDeckModal({ decks, onSelect, onClose }: MoveDeckModalProps) {
             <li key={deck.id}>
               <button
                 onClick={() => onSelect(deck.id)}
-                className="w-full text-left px-5 py-3 text-sm text-gray-700 hover:bg-indigo-50 flex items-center gap-3 transition-colors dark:text-gray-300 dark:hover:bg-indigo-950"
+                className="w-full text-left px-5 py-3 text-sm text-gray-700 hover:bg-blue-50 flex items-center gap-3 transition-colors dark:text-zinc-300 dark:hover:bg-blue-950"
               >
                 <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: deck.color }} />
                 <span className="truncate">{deck.title}</span>
@@ -125,19 +127,20 @@ function CardDetailModal({ front, back, isBookmark, onClose }: CardDetailModalPr
     >
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
       <div
-        className="relative w-full sm:max-w-md bg-gray-50 rounded-t-2xl sm:rounded-2xl shadow-xl dark:bg-gray-950"
+        className="relative w-full sm:max-w-md bg-gray-50 rounded-t-2xl sm:rounded-2xl shadow-xl dark:bg-zinc-950"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">카드 상세</p>
-            {isBookmark && <span className="text-yellow-400 text-sm">⭐</span>}
+            <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">카드 상세</p>
+            {isBookmark && <Star size={14} className="fill-yellow-400 text-yellow-400" aria-hidden="true" />}
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-gray-800"
+            aria-label="닫기"
+            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors dark:text-zinc-500 dark:hover:text-zinc-300 dark:hover:bg-zinc-800"
           >
-            ✕
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
         <div className="px-5 pb-8">
@@ -164,7 +167,7 @@ export default function CardListItem({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-900 dark:border dark:border-gray-800">
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden dark:bg-zinc-900 dark:border dark:border-zinc-800">
       {isEditing ? (
         <form action={handleSave} className="p-4 flex flex-col gap-2">
           <textarea
@@ -174,7 +177,7 @@ export default function CardListItem({
             placeholder="앞면 (질문)"
             autoFocus
             rows={2}
-            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none dark:border-indigo-900 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
+            className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none dark:border-blue-900 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
           />
           <textarea
             name="back"
@@ -182,14 +185,14 @@ export default function CardListItem({
             required
             placeholder="뒷면 (답)"
             rows={3}
-            className="w-full border border-indigo-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none dark:border-indigo-900 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
+            className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none dark:border-blue-900 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
           />
           <div className="flex gap-2 pt-1">
             <SaveButton />
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="text-xs text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors dark:text-gray-500 dark:hover:text-gray-300 dark:border-gray-700"
+              className="text-xs text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors dark:text-zinc-500 dark:hover:text-zinc-300 dark:border-zinc-700"
             >
               취소
             </button>
@@ -197,7 +200,7 @@ export default function CardListItem({
         </form>
       ) : (
         <div className="flex items-center gap-3 px-4 py-3">
-          <span className="text-xs text-gray-300 font-mono min-w-[1.25rem] shrink-0 dark:text-gray-600">
+          <span className="text-xs text-gray-300 font-mono min-w-[1.25rem] shrink-0 dark:text-zinc-600">
             {index + 1}
           </span>
 
@@ -206,19 +209,18 @@ export default function CardListItem({
             className="flex-1 min-w-0 text-left"
             onClick={() => setDetailOpen(true)}
           >
-            <p className="text-sm font-medium text-gray-800 truncate dark:text-gray-100">{front}</p>
-            <p className="text-sm text-gray-400 truncate dark:text-gray-500">{back}</p>
+            <p className="text-sm font-medium text-gray-800 truncate dark:text-zinc-100">{front}</p>
+            <p className="text-sm text-gray-400 truncate dark:text-zinc-500">{back}</p>
           </button>
 
           <div className="flex items-center gap-0.5 shrink-0">
-            {isBookmark && <span className="text-yellow-400 text-xs mr-1">⭐</span>}
+            {isBookmark && (
+              <Star size={14} className="mr-1 fill-yellow-400 text-yellow-400" aria-hidden="true" />
+            )}
 
             {/* 수정 */}
             <IconButton onClick={() => setIsEditing(true)} label="카드 수정">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-              </svg>
+              <Pencil size={14} aria-hidden="true" />
             </IconButton>
 
             {/* 덱 이동 */}
@@ -229,9 +231,7 @@ export default function CardListItem({
                   disabled={isMoving}
                   label="다른 덱으로 이동"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
+                  <ArrowRight size={14} aria-hidden="true" />
                 </IconButton>
 
                 {moveOpen && (
@@ -254,12 +254,7 @@ export default function CardListItem({
               label="카드 삭제"
               danger
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                <path d="M10 11v6M14 11v6"/>
-                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-              </svg>
+              <Trash2 size={14} aria-hidden="true" />
             </IconButton>
           </div>
         </div>

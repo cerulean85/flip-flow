@@ -13,7 +13,7 @@ export async function createDeck(formData: FormData) {
   if (!title) throw new Error("Title is required")
 
   const description = formData.get("description") as string | null
-  const color = (formData.get("color") as string) || "#6366f1"
+  const color = (formData.get("color") as string) || "#3b82f6"
 
   const deck = await prisma.deck.create({
     data: { title, description: description || null, color, userId: session.user.id },

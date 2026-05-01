@@ -9,12 +9,12 @@ interface Props {
 
 export default function TopBar({ onToggle }: Props) {
   return (
-    <header className="flex h-14 items-center gap-3 border-b border-gray-200 bg-white px-4 dark:border-gray-800 dark:bg-gray-950 md:hidden">
+    <header className="flex h-14 items-center gap-3 border-b border-gray-200 bg-white px-4 dark:border-zinc-800 dark:bg-zinc-950 md:hidden">
       <button
         type="button"
         onClick={onToggle}
         aria-label="메뉴 열기"
-        className="-ml-2 inline-flex h-10 w-10 items-center justify-center rounded-xl text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-800"
+        className="-ml-2 inline-flex h-10 w-10 items-center justify-center rounded-xl text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 dark:text-zinc-300 dark:hover:bg-zinc-800"
       >
         <svg
           width="22"

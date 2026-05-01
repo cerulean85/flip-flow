@@ -1,7 +1,9 @@
 "use client"
 
 import { useOptimistic, useTransition } from "react"
+import { Star } from "lucide-react"
 import { toggleBookmark } from "@/actions/card.actions"
+import { cn } from "@/lib/utils"
 
 interface BookmarkButtonProps {
   cardId: string
@@ -23,9 +25,17 @@ export default function BookmarkButton({ cardId, isBookmark }: BookmarkButtonPro
     <button
       onClick={handleToggle}
       aria-label={optimisticBookmark ? "북마크 해제" : "북마크 추가"}
-      className="text-2xl transition-transform active:scale-125"
+      className="transition-transform active:scale-125"
     >
-      {optimisticBookmark ? "⭐" : "☆"}
+      <Star
+        size={28}
+        className={cn(
+          "transition-colors",
+          optimisticBookmark
+            ? "fill-yellow-400 text-yellow-400"
+            : "text-gray-300 dark:text-zinc-600"
+        )}
+      />
     </button>
   )
 }

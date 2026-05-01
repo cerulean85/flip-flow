@@ -17,11 +17,11 @@ export default function Sidebar({ user, signOutAction, onNavigate, className }: 
   return (
     <aside
       className={cn(
-        "h-full w-64 flex-col border-r border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950",
+        "h-full w-64 flex-col border-r border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-950",
         className
       )}
     >
-      <div className="flex h-14 items-center border-b border-gray-200 px-4 dark:border-gray-800">
+      <div className="flex h-14 items-center border-b border-gray-200 px-4 dark:border-zinc-800">
         <Link href="/dashboard" onClick={onNavigate}>
           <Logo size={26} showText={true} className="text-base" />
         </Link>
@@ -29,7 +29,7 @@ export default function Sidebar({ user, signOutAction, onNavigate, className }: 
 
       <div className="flex-1 overflow-y-auto p-4">
         {(user.name || user.image) && (
-          <div className="mb-6 flex items-center gap-3 rounded-xl bg-gray-50 px-3 py-3 dark:bg-gray-900">
+          <div className="mb-6 flex items-center gap-3 rounded-xl bg-gray-50 px-3 py-3 dark:bg-zinc-900">
             {user.image && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -40,7 +40,7 @@ export default function Sidebar({ user, signOutAction, onNavigate, className }: 
             )}
             <div className="min-w-0 flex-1">
               {user.name && (
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{user.name}</p>
+                <p className="truncate text-sm font-medium text-gray-900 dark:text-zinc-100">{user.name}</p>
               )}
               {user.email && (
                 <p className="truncate text-xs text-gray-500">{user.email}</p>
@@ -52,7 +52,7 @@ export default function Sidebar({ user, signOutAction, onNavigate, className }: 
         <NavLinks onNavigate={onNavigate} />
       </div>
 
-      <div className="border-t border-gray-200 p-4 dark:border-gray-800">
+      <div className="border-t border-gray-200 p-4 dark:border-zinc-800">
         <SignOutButton
           signOutAction={signOutAction}
           image={user.image}

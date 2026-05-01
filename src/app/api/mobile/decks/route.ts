@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       data: {
         title: title.trim(),
         description: description || null,
-        color: color || "#6366f1",
+        color: color || "#3b82f6",
         userId,
       },
     })

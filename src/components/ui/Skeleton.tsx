@@ -1,5 +1,5 @@
 export default function Skeleton({ className = "" }: { className?: string }) {
   return (
-    <div className={`animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800 ${className}`} />
+    <div className={`animate-pulse rounded-lg bg-gray-200 dark:bg-zinc-800 ${className}`} />
   )
 }

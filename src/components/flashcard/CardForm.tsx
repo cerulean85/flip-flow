@@ -10,7 +10,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full bg-indigo-600 text-white font-medium py-3 rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 text-sm"
+      className="w-full bg-blue-600 text-white font-medium py-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 text-sm"
     >
       {pending ? "추가 중..." : "+ 카드 추가"}
     </button>
@@ -31,20 +31,20 @@ export default function CardForm({ deckId }: CardFormProps) {
 
   return (
     <form ref={formRef} action={clientAction} className="flex flex-col gap-3 mt-6">
-      <h2 className="font-semibold text-gray-700 text-sm dark:text-gray-300">카드 추가</h2>
+      <h2 className="font-semibold text-gray-700 text-sm dark:text-zinc-300">카드 추가</h2>
       <textarea
         name="front"
         required
         placeholder="앞면 (질문)"
         rows={2}
-        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
+        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
       />
       <textarea
         name="back"
         required
         placeholder="뒷면 (답)"
         rows={3}
-        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
+        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
       />
       <SubmitButton />
     </form>
