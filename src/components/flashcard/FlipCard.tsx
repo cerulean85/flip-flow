@@ -3,6 +3,9 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import remarkMath from "remark-math"
+import rehypeKatex from "rehype-katex"
 import { Search, Sparkles, X, Loader2, MessageSquareText } from "lucide-react"
 import SentenceFlip from "./SentenceFlip"
 
@@ -203,6 +206,8 @@ export default function FlipCard({ front, back }: FlipCardProps) {
             </div>
             <div className="text-sm text-gray-700 leading-relaxed dark:text-zinc-300">
               <ReactMarkdown
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeKatex]}
                 components={{
                   p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
                   strong: ({ children }) => <strong className="font-semibold text-gray-900 dark:text-zinc-100">{children}</strong>,

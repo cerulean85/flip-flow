@@ -1,4 +1,7 @@
 import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import remarkMath from "remark-math"
+import rehypeKatex from "rehype-katex"
 
 interface Props {
   markdown: string
@@ -17,6 +20,8 @@ export default function EssayContent({ markdown, className = "" }: Props) {
   return (
     <div className={`text-base leading-relaxed text-gray-800 dark:text-zinc-200 ${className}`}>
       <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[rehypeKatex]}
         components={{
           h1: ({ children }) => (
             <h1 className="mt-6 mb-3 text-2xl font-bold text-gray-900 dark:text-zinc-100">{children}</h1>
@@ -61,6 +66,25 @@ export default function EssayContent({ markdown, className = "" }: Props) {
             </a>
           ),
           hr: () => <hr className="my-6 border-gray-200 dark:border-zinc-800" />,
+          del: ({ children }) => (
+            <del className="text-gray-400 dark:text-zinc-500">{children}</del>
+          ),
+          table: ({ children }) => (
+            <div className="mb-4 overflow-x-auto">
+              <table className="min-w-full border-collapse text-sm">{children}</table>
+            </div>
+          ),
+          thead: ({ children }) => (
+            <thead className="border-b border-gray-200 dark:border-zinc-800">{children}</thead>
+          ),
+          th: ({ children }) => (
+            <th className="px-3 py-2 text-left font-semibold text-gray-900 dark:text-zinc-100">
+              {children}
+            </th>
+          ),
+          td: ({ children }) => (
+            <td className="border-t border-gray-100 px-3 py-2 dark:border-zinc-800">{children}</td>
+          ),
         }}
       >
         {markdown}

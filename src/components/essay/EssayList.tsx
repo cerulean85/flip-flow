@@ -1,6 +1,6 @@
-import Link from "next/link"
 import { NotebookPen } from "lucide-react"
 import EssayCard from "./EssayCard"
+import NewEssayButton from "./NewEssayButton"
 
 interface Props {
   essays: { id: string; title: string; content: string; updatedAt: Date }[]
@@ -11,12 +11,7 @@ export default function EssayList({ essays }: Props) {
     <div>
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-800 dark:text-zinc-100">에세이</h1>
-        <Link
-          href="/essays/new"
-          className="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
-        >
-          + 새 에세이
-        </Link>
+        <NewEssayButton />
       </div>
 
       {essays.length === 0 ? (

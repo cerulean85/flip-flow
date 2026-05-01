@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import EssayContent from "@/components/essay/EssayContent"
 import DeleteEssayButton from "@/components/essay/DeleteEssayButton"
+import EditEssayButton from "@/components/essay/EditEssayButton"
 
 interface Props {
   params: Promise<{ essayId: string }>
@@ -40,12 +41,11 @@ export default async function EssayDetailPage({ params }: Props) {
             {formatDate(essay.updatedAt)}
           </p>
         </div>
-        <Link
-          href={`/essays/${essay.id}/edit`}
-          className="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
-        >
-          수정
-        </Link>
+        <EditEssayButton
+          essayId={essay.id}
+          title={essay.title}
+          content={essay.content}
+        />
         <DeleteEssayButton essayId={essay.id} />
       </div>
 

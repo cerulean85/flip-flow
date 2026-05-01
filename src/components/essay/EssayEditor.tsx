@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 interface Props {
   essayId?: string
   defaultValues?: { title: string; content: string }
+  onCancel?: () => void
 }
 
 function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: string }) {
@@ -25,7 +26,7 @@ function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: st
   )
 }
 
-export default function EssayEditor({ essayId, defaultValues }: Props) {
+export default function EssayEditor({ essayId, defaultValues, onCancel }: Props) {
   const [content, setContent] = useState(defaultValues?.content ?? "")
   const [mobileMode, setMobileMode] = useState<"edit" | "preview">("edit")
 
@@ -34,6 +35,9 @@ export default function EssayEditor({ essayId, defaultValues }: Props) {
     : createEssay
 
   const cancelHref = essayId ? `/essays/${essayId}` : "/essays"
+
+  const cancelClassName =
+    "rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
 
   return (
     <form action={action} className="flex flex-col gap-4">
@@ -73,24 +77,27 @@ export default function EssayEditor({ essayId, defaultValues }: Props) {
             onChange={(e) => setContent(e.target.value)}
             placeholder="마크다운으로 작성하세요...&#10;&#10;예) # 제목&#10;**굵게** *기울임*&#10;- 리스트&#10;`코드`"
             rows={20}
-            className="h-[60vh] w-full resize-none rounded-xl border border-gray-200 bg-white p-4 font-mono text-sm leading-relaxed text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+            className="h-[65vh] w-full resize-none rounded-xl border border-gray-200 bg-white p-4 font-mono text-sm leading-relaxed text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
           />
         </div>
 
         <div className={cn("md:block", mobileMode === "preview" ? "block" : "hidden")}>
-          <div className="h-[60vh] overflow-y-auto rounded-xl border border-gray-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="h-[65vh] overflow-y-auto rounded-xl border border-gray-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
             <EssayContent markdown={content} />
           </div>
         </div>
       </div>
 
       <div className="flex items-center justify-end gap-2">
-        <Link
-          href={cancelHref}
-          className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
-        >
-          취소
-        </Link>
+        {onCancel ? (
+          <button type="button" onClick={onCancel} className={cancelClassName}>
+            취소
+          </button>
+        ) : (
+          <Link href={cancelHref} className={cancelClassName}>
+            취소
+          </Link>
+        )}
         <SubmitButton
           label={essayId ? "저장" : "발행"}
           pendingLabel="저장 중..."
