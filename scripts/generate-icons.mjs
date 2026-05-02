@@ -51,9 +51,22 @@ const mobileIconSvg = `<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/200
   <rect x="236" y="300" width="552" height="424" rx="88" fill="white" transform="rotate(8 512 512)"/>
 </svg>`
 
-const splashSvg = `<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-  <rect x="236" y="300" width="552" height="424" rx="88" fill="white" fill-opacity="0.35" transform="rotate(-12 512 512)"/>
-  <rect x="236" y="300" width="552" height="424" rx="88" fill="white" transform="rotate(8 512 512)"/>
+// Splash icon — full-screen canvas (1242x2688, iPhone Pro Max @3x) with
+// background painted in and the card mark sized small at screen center. Native
+// splash composers (Expo / iOS storyboard) display this image at screen size,
+// so the content size is fixed regardless of imageWidth/resizeMode quirks.
+const SPLASH_W = 1242
+const SPLASH_H = 2688
+const CARD_W = 420
+const CARD_H = 320
+const CARD_X = (SPLASH_W - CARD_W) / 2
+const CARD_Y = (SPLASH_H - CARD_H) / 2
+const CARD_CX = SPLASH_W / 2
+const CARD_CY = SPLASH_H / 2
+const splashSvg = `<svg viewBox="0 0 ${SPLASH_W} ${SPLASH_H}" xmlns="http://www.w3.org/2000/svg">
+  <rect width="${SPLASH_W}" height="${SPLASH_H}" fill="#3b82f6"/>
+  <rect x="${CARD_X}" y="${CARD_Y}" width="${CARD_W}" height="${CARD_H}" rx="60" fill="white" fill-opacity="0.35" transform="rotate(-12 ${CARD_CX} ${CARD_CY})"/>
+  <rect x="${CARD_X}" y="${CARD_Y}" width="${CARD_W}" height="${CARD_H}" rx="60" fill="white" transform="rotate(8 ${CARD_CX} ${CARD_CY})"/>
 </svg>`
 
 async function generate() {
@@ -95,7 +108,7 @@ async function generate() {
   console.log("✓ mobile adaptive-icon.png")
 
   await sharp(Buffer.from(splashSvg))
-    .resize(1024, 1024)
+    .resize(SPLASH_W, SPLASH_H)
     .png()
     .toFile(path.join(mobileAssetsDir, "splash-icon.png"))
   console.log("✓ mobile splash-icon.png")

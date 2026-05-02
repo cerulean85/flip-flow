@@ -1,4 +1,5 @@
 import SignInButton from "@/components/auth/SignInButton"
+import AppleSignInButton from "@/components/auth/AppleSignInButton"
 import Logo from "@/components/ui/Logo"
 
 export default function LoginPage() {
@@ -12,7 +13,10 @@ export default function LoginPage() {
             <p className="text-gray-500 text-sm">복잡함은 덜어내고, 암기의 흐름만 남기다.</p>
           </div>
         </div>
-        <SignInButton />
+        <div className="flex flex-col gap-3">
+          <SignInButton />
+          <AppleSignInButton />
+        </div>
       </div>
     </main>
   )
