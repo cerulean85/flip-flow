@@ -20,12 +20,9 @@ export default function SupportPage() {
         <section className="rounded-lg border border-zinc-200 p-5 dark:border-zinc-800">
           <h2 className="text-xl font-semibold">지원 이메일</h2>
           <p className="mt-3 text-zinc-700 dark:text-zinc-300">
-            <a className="font-semibold text-blue-600 dark:text-blue-400" href="mailto:support@flipflow.app">
-              support@flipflow.app
+            <a className="font-semibold text-blue-600 dark:text-blue-400" href="mailto:zhwan85@dycdyp.com">
+              zhwan85@dycdyp.com
             </a>
-          </p>
-          <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-            실제 운영 이메일이 다르면 App Store 제출 전 이 주소를 교체해주세요.
           </p>
         </section>
       </article>
