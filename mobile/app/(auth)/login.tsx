@@ -1,4 +1,5 @@
-import { Platform, Pressable, Text, View } from "react-native"
+import { useRef, useState } from "react"
+import { Platform, Pressable, Text, TextInput, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -10,12 +11,43 @@ export default function LoginScreen() {
   const {
     isAppleSignInAvailable,
     isAppleSignInChecked,
+    signInAsReviewer,
     signInWithApple,
     signInWithGoogle,
   } = useAuth()
   const { colors } = useTheme()
+  const [showReviewerLogin, setShowReviewerLogin] = useState(false)
+  const [reviewerEmail, setReviewerEmail] = useState("")
+  const [reviewerToken, setReviewerToken] = useState("")
+  const logoTapCount = useRef(0)
+  const logoTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const showAppleSignIn = !isAppleSignInChecked || isAppleSignInAvailable
   const showAppleFallback = isAppleSignInChecked && !isAppleSignInAvailable
+
+  const revealReviewerLogin = () => {
+    logoTapCount.current += 1
+
+    if (logoTapTimer.current) {
+      clearTimeout(logoTapTimer.current)
+    }
+
+    logoTapTimer.current = setTimeout(() => {
+      logoTapCount.current = 0
+    }, 2500)
+
+    if (logoTapCount.current >= 5) {
+      logoTapCount.current = 0
+      setShowReviewerLogin(true)
+      if (logoTapTimer.current) {
+        clearTimeout(logoTapTimer.current)
+        logoTapTimer.current = null
+      }
+    }
+  }
+
+  const submitReviewerLogin = async () => {
+    await signInAsReviewer(reviewerEmail, reviewerToken)
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
@@ -37,7 +69,9 @@ export default function LoginScreen() {
             borderColor: colors.border,
           }}
         >
-          <Logo size={64} />
+          <Pressable onPress={revealReviewerLogin} hitSlop={16}>
+            <Logo size={64} />
+          </Pressable>
           <Text style={{ marginTop: 16, fontSize: 26, fontWeight: "700", color: colors.primarySoftText }}>
             Flip & Flow
           </Text>
@@ -97,6 +131,66 @@ export default function LoginScreen() {
             <Ionicons name="logo-google" size={18} color={colors.text} />
             <Text style={{ color: colors.text, fontWeight: "600" }}>Google로 로그인</Text>
           </Pressable>
+
+          {showReviewerLogin && (
+            <View style={{ alignSelf: "stretch", marginTop: 18, gap: 10 }}>
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                onChangeText={setReviewerEmail}
+                placeholder="Reviewer email"
+                placeholderTextColor={colors.textMuted}
+                returnKeyType="next"
+                style={{
+                  height: 46,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  color: colors.text,
+                  paddingHorizontal: 14,
+                }}
+                textContentType="username"
+                value={reviewerEmail}
+              />
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={setReviewerToken}
+                onSubmitEditing={submitReviewerLogin}
+                placeholder="Reviewer token"
+                placeholderTextColor={colors.textMuted}
+                returnKeyType="done"
+                secureTextEntry
+                style={{
+                  height: 46,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  color: colors.text,
+                  paddingHorizontal: 14,
+                }}
+                textContentType="password"
+                value={reviewerToken}
+              />
+              <Pressable
+                onPress={submitReviewerLogin}
+                style={({ pressed }) => ({
+                  height: 46,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  borderRadius: 14,
+                  backgroundColor: colors.primary,
+                  opacity: pressed ? 0.75 : 1,
+                })}
+              >
+                <Ionicons name="key-outline" size={18} color={colors.bg} />
+                <Text style={{ color: colors.bg, fontWeight: "700" }}>Reviewer Login</Text>
+              </Pressable>
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>

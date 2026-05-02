@@ -73,6 +73,12 @@ export const api = {
       body: { identityToken, fullName },
       auth: false,
     }),
+  loginAsReviewer: (email: string, token: string) =>
+    request<{ token: string; user: User }>("/api/mobile/auth/reviewer", {
+      method: "POST",
+      body: { email, token },
+      auth: false,
+    }),
   deleteAccount: () =>
     request<{ ok: true }>("/api/mobile/account", {
       method: "DELETE",

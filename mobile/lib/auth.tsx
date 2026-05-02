@@ -15,6 +15,7 @@ interface AuthContextValue {
   isAppleSignInChecked: boolean
   signInWithGoogle: () => Promise<void>
   signInWithApple: () => Promise<void>
+  signInAsReviewer: (email: string, reviewerToken: string) => Promise<void>
   signOut: () => Promise<void>
   deleteAccount: () => Promise<void>
 }
@@ -26,6 +27,7 @@ const AuthContext = createContext<AuthContextValue>({
   isAppleSignInChecked: false,
   signInWithGoogle: async () => {},
   signInWithApple: async () => {},
+  signInAsReviewer: async () => {},
   signOut: async () => {},
   deleteAccount: async () => {},
 })
@@ -143,6 +145,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const signInAsReviewer = async (email: string, reviewerToken: string) => {
+    const normalizedEmail = email.trim()
+    if (!normalizedEmail || !reviewerToken) {
+      Alert.alert("로그인 실패", "이메일과 토큰을 입력해주세요.")
+      return
+    }
+
+    try {
+      const { token, user: u } = await api.loginAsReviewer(normalizedEmail, reviewerToken)
+      await setStoredToken(token)
+      setUser(u)
+    } catch (err) {
+      Alert.alert("로그인 실패", err instanceof Error ? err.message : "리뷰어 로그인에 실패했습니다.")
+    }
+  }
+
   const signOut = async () => {
     await setStoredToken(null)
     setUser(null)
@@ -163,6 +181,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAppleSignInChecked,
         signInWithGoogle,
         signInWithApple,
+        signInAsReviewer,
         signOut,
         deleteAccount,
       }}
