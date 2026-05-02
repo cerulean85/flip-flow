@@ -1,61 +1,57 @@
 import { Tabs } from "expo-router"
-import { Text } from "react-native"
-import { COLORS } from "../../lib/constants"
+import { Ionicons } from "@expo/vector-icons"
+import { useTheme } from "@/lib/theme"
 
-export default function TabLayout() {
+export default function TabsLayout() {
+  const { colors } = useTheme()
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: COLORS.primary,
-        tabBarInactiveTintColor: COLORS.textMuted,
-        tabBarStyle: {
-          backgroundColor: COLORS.white,
-          borderTopColor: COLORS.border,
-          borderTopWidth: 1,
-          paddingBottom: 4,
-          paddingTop: 4,
-          height: 56,
-        },
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: "500",
-        },
-        headerStyle: {
-          backgroundColor: COLORS.white,
-        },
-        headerTintColor: COLORS.textPrimary,
+        headerStyle: { backgroundColor: colors.bg },
+        headerTitleStyle: { color: colors.text, fontWeight: "700" },
         headerShadowVisible: false,
-        headerTitleStyle: {
-          fontWeight: "600",
-          fontSize: 17,
+        tabBarStyle: {
+          backgroundColor: colors.card,
+          borderTopColor: colors.border,
         },
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSubtle,
+        tabBarLabelStyle: { fontSize: 11 },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Decks",
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🗂</Text>,
-          headerTitle: "Flip & Flow",
-          headerTitleStyle: {
-            color: COLORS.primary,
-            fontWeight: "700",
-            fontSize: 20,
-          },
+          title: "덱",
+          tabBarIcon: ({ color, size }) => <Ionicons name="albums-outline" color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="study"
         options={{
           title: "전체 학습",
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📖</Text>,
+          tabBarIcon: ({ color, size }) => <Ionicons name="book-outline" color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="bookmarks"
         options={{
-          title: "Bookmarks",
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>⭐</Text>,
+          title: "북마크",
+          tabBarIcon: ({ color, size }) => <Ionicons name="star-outline" color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="essays"
+        options={{
+          title: "에세이",
+          tabBarIcon: ({ color, size }) => <Ionicons name="create-outline" color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "설정",
+          tabBarIcon: ({ color, size }) => <Ionicons name="settings-outline" color={color} size={size} />,
         }}
       />
     </Tabs>

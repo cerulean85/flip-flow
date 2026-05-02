@@ -16,7 +16,8 @@ export default function EssayEditorModal({ open, onClose, essayId, defaultValues
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
+    const timeout = window.setTimeout(() => setMounted(true), 0)
+    return () => window.clearTimeout(timeout)
   }, [])
 
   useEffect(() => {

@@ -1,3 +1,10 @@
+export interface User {
+  id: string
+  email: string
+  name: string | null
+  image: string | null
+}
+
 export interface Deck {
   id: string
   title: string
@@ -5,7 +12,6 @@ export interface Deck {
   color: string
   createdAt: string
   updatedAt: string
-  userId: string
   _count?: { cards: number }
 }
 
@@ -20,9 +26,15 @@ export interface Card {
   updatedAt: string
 }
 
-export interface AuthUser {
+export interface Essay {
   id: string
-  email: string
-  name: string
-  image: string | null
+  title: string
+  content: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Sentence {
+  ko: string
+  en: string
 }

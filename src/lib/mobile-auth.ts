@@ -31,3 +31,17 @@ export async function verifyMobileToken(request: NextRequest) {
 
   return { userId: payload.userId as string }
 }
+
+export function mobileUserPayload(user: {
+  id: string
+  email: string | null
+  name: string | null
+  image: string | null
+}) {
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    image: user.image,
+  }
+}

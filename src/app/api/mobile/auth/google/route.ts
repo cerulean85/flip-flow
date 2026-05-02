@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { signMobileToken } from "@/lib/mobile-auth"
+import { mobileUserPayload, signMobileToken } from "@/lib/mobile-auth"
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     return Response.json({
       token,
-      user: { id: user.id, email: user.email, name: user.name, image: user.image },
+      user: mobileUserPayload(user),
     })
   } catch (error) {
     console.error("Mobile auth error:", error)

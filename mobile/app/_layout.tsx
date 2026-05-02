@@ -1,58 +1,58 @@
+import { Stack, useRouter, useSegments } from "expo-router"
 import { useEffect } from "react"
-import { Slot, useRouter, useSegments } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { View, ActivityIndicator, StyleSheet } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { AuthProvider, useAuth } from "../lib/auth"
-import { COLORS } from "../lib/constants"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { AuthProvider, useAuth } from "@/lib/auth"
+import { ThemeProvider, useTheme } from "@/lib/theme"
 
-function RootLayoutNav() {
+function ProtectedNavigator() {
   const { user, isLoading } = useAuth()
   const segments = useSegments()
   const router = useRouter()
 
   useEffect(() => {
     if (isLoading) return
-
     const inAuthGroup = segments[0] === "(auth)"
-
     if (!user && !inAuthGroup) {
       router.replace("/(auth)/login")
     } else if (user && inAuthGroup) {
       router.replace("/(tabs)")
     }
-  }, [user, isLoading, segments])
+  }, [user, isLoading, segments, router])
 
-  if (isLoading) {
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    )
-  }
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: true,
+        fullScreenGestureEnabled: true,
+        animation: "slide_from_right",
+      }}
+    />
+  )
+}
 
-  return <Slot />
+function ThemedShell() {
+  const { resolved, colors } = useTheme()
+  return (
+    <>
+      <StatusBar style={resolved === "dark" ? "light" : "dark"} backgroundColor={colors.bg} />
+      <ProtectedNavigator />
+    </>
+  )
 }
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={styles.flex}>
-      <AuthProvider>
-        <StatusBar style="dark" />
-        <RootLayoutNav />
-      </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <ThemedShell />
+          </AuthProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   )
 }
-
-const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
-  loading: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: COLORS.background,
-  },
-})

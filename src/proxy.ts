@@ -3,8 +3,11 @@ import { auth } from "@/lib/auth"
 export default auth((req) => {
   const isLoggedIn = !!req.auth
   const isAuthPage = req.nextUrl.pathname.startsWith("/login")
+  const isPublicPage = ["/privacy", "/terms", "/support"].some((path) =>
+    req.nextUrl.pathname.startsWith(path)
+  )
 
-  if (!isLoggedIn && !isAuthPage) {
+  if (!isLoggedIn && !isAuthPage && !isPublicPage) {
     return Response.redirect(new URL("/login", req.url))
   }
   if (isLoggedIn && isAuthPage) {

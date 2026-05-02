@@ -1,221 +1,245 @@
-import { useState, useCallback } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
-  View,
-  Text,
-  FlatList,
-  Pressable,
-  StyleSheet,
   ActivityIndicator,
   Alert,
-  RefreshControl,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
 } from "react-native"
-import { useLocalSearchParams, useRouter, useFocusEffect } from "expo-router"
-import * as api from "../../../lib/api"
-import { COLORS } from "../../../lib/constants"
-import CardListItem from "../../../components/CardListItem"
-import CardForm from "../../../components/CardForm"
-import EmptyState from "../../../components/EmptyState"
-import type { Deck, Card } from "../../../lib/types"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router"
+import { Ionicons } from "@expo/vector-icons"
+import CardForm from "@/components/flashcard/CardForm"
+import CardListItem from "@/components/flashcard/CardListItem"
+import DeckForm from "@/components/deck/DeckForm"
+import EmptyState from "@/components/ui/EmptyState"
+import ScreenHeader from "@/components/ui/ScreenHeader"
+import { api } from "@/lib/api"
+import { useTheme } from "@/lib/theme"
+import type { Card, Deck } from "@/lib/types"
 
 export default function DeckDetailScreen() {
-  const { deckId } = useLocalSearchParams<{ deckId: string }>()
+  const { colors } = useTheme()
   const router = useRouter()
-  const [deck, setDeck] = useState<Deck | null>(null)
-  const [cards, setCards] = useState<Card[]>([])
+  const { deckId } = useLocalSearchParams<{ deckId: string }>()
+  const [deck, setDeck] = useState<(Deck & { cards: Card[] }) | null>(null)
   const [otherDecks, setOtherDecks] = useState<Deck[]>([])
   const [loading, setLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
+  const [editDeckOpen, setEditDeckOpen] = useState(false)
+  const [addCardOpen, setAddCardOpen] = useState(false)
 
-  const fetchData = useCallback(async () => {
+  const load = useCallback(async () => {
+    if (!deckId) return
     try {
-      const [deckData, cardsData, allDecks] = await Promise.all([
-        api.getDeck(deckId),
-        api.getDeckCards(deckId),
-        api.getDecks(),
-      ])
-      setDeck(deckData)
-      setCards(cardsData)
-      setOtherDecks(allDecks.filter((d) => d.id !== deckId))
-    } catch {
-      Alert.alert("오류", "덱을 불러올 수 없습니다.")
-    } finally {
-      setLoading(false)
-      setRefreshing(false)
+      const { deck, otherDecks } = await api.getDeck(deckId)
+      setDeck(deck)
+      setOtherDecks(otherDecks)
+    } catch (err) {
+      console.warn("[deck] load", err)
     }
   }, [deckId])
 
+  useEffect(() => {
+    load().finally(() => setLoading(false))
+  }, [load])
+
   useFocusEffect(
     useCallback(() => {
-      fetchData()
-    }, [fetchData])
+      load()
+    }, [load])
   )
 
-  const handleAddCard = async (data: { front: string; back: string }) => {
-    await api.createCard(deckId, data)
-    fetchData()
-  }
-
-  const handleDeleteDeck = () => {
+  const onDelete = () => {
+    if (!deck) return
     Alert.alert("덱 삭제", "이 덱과 모든 카드를 삭제할까요?", [
       { text: "취소", style: "cancel" },
       {
         text: "삭제",
         style: "destructive",
         onPress: async () => {
-          await api.deleteDeck(deckId)
+          await api.deleteDeck(deck.id)
           router.replace("/(tabs)")
         },
       },
     ])
   }
 
-  if (loading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    )
-  }
-
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={cards}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); fetchData() }} tintColor={COLORS.primary} />
-        }
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
-              <Text style={styles.backText}>← 뒤로</Text>
-            </Pressable>
-
-            <View style={styles.titleRow}>
-              <View style={styles.titleSection}>
-                <Text style={styles.title}>{deck?.title}</Text>
-                {deck?.description ? (
-                  <Text style={styles.description}>{deck.description}</Text>
-                ) : null}
-              </View>
-              <Pressable onPress={handleDeleteDeck}>
-                <Text style={styles.deleteIcon}>🗑</Text>
+    <SafeAreaView edges={["top"]} style={{ flex: 1, backgroundColor: colors.bg }}>
+      <ScreenHeader
+        title={deck?.title ?? "덱"}
+        fallback="/(tabs)"
+        right={
+          deck ? (
+            <View style={{ flexDirection: "row", gap: 4 }}>
+              <Pressable
+                onPress={() => setAddCardOpen(true)}
+                hitSlop={8}
+                style={{ padding: 6 }}
+                accessibilityLabel="카드 추가"
+              >
+                <Ionicons name="add" size={24} color={colors.primary} />
+              </Pressable>
+              <Pressable
+                onPress={() => setEditDeckOpen(true)}
+                hitSlop={8}
+                style={{ padding: 6 }}
+                accessibilityLabel="덱 수정"
+              >
+                <Ionicons name="pencil" size={20} color={colors.textMuted} />
+              </Pressable>
+              <Pressable
+                onPress={onDelete}
+                hitSlop={8}
+                style={{ padding: 6 }}
+                accessibilityLabel="덱 삭제"
+              >
+                <Ionicons name="trash" size={20} color={colors.danger} />
               </Pressable>
             </View>
-
-            {cards.length > 0 && (
-              <Pressable
-                onPress={() => router.push(`/decks/${deckId}/study`)}
-                style={styles.studyButton}
-              >
-                <Text style={styles.studyButtonText}>학습 시작</Text>
-              </Pressable>
-            )}
-
-            <Text style={styles.sectionTitle}>
-              카드 ({cards.length})
-            </Text>
-          </View>
-        }
-        renderItem={({ item, index }) => (
-          <CardListItem
-            card={item}
-            index={index}
-            otherDecks={otherDecks}
-            onUpdated={fetchData}
-          />
-        )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        ListEmptyComponent={
-          <EmptyState
-            emoji="📭"
-            title="아직 카드가 없어요."
-            subtitle="아래에서 추가해보세요!"
-          />
-        }
-        ListFooterComponent={
-          <View style={styles.footer}>
-            <CardForm onSubmit={handleAddCard} />
-          </View>
+          ) : null
         }
       />
-    </View>
+
+      {loading ? (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <ActivityIndicator color={colors.primary} />
+        </View>
+      ) : !deck ? (
+        <EmptyState icon="alert-circle-outline" title="덱을 찾을 수 없습니다." />
+      ) : (
+        <ScrollView contentContainerStyle={{ padding: 16 }}>
+          {deck.description ? (
+            <Text style={{ color: colors.textMuted }}>{deck.description}</Text>
+          ) : null}
+
+          {deck.cards.length > 0 && (
+            <Pressable
+              onPress={() => router.push(`/decks/${deck.id}/study`)}
+              style={({ pressed }) => ({
+                marginTop: 16,
+                paddingVertical: 14,
+                borderRadius: 14,
+                backgroundColor: pressed ? colors.accent : colors.primary,
+                alignItems: "center",
+              })}
+            >
+              <Text style={{ color: colors.primaryFg, fontWeight: "700" }}>학습 시작</Text>
+            </Pressable>
+          )}
+
+          <View style={{ marginTop: 18, gap: 8 }}>
+            {deck.cards.length === 0 ? (
+              <EmptyState
+                icon="file-tray-outline"
+                title="아직 카드가 없어요."
+                description="우측 상단 + 버튼으로 추가해보세요!"
+              />
+            ) : (
+              deck.cards.map((c, i) => (
+                <CardListItem
+                  key={c.id}
+                  index={i}
+                  card={c}
+                  otherDecks={otherDecks}
+                  onChanged={load}
+                />
+              ))
+            )}
+          </View>
+        </ScrollView>
+      )}
+
+      {deck && (
+        <FormModal
+          visible={editDeckOpen}
+          title="덱 수정"
+          onClose={() => setEditDeckOpen(false)}
+        >
+          <DeckForm
+            initial={{ title: deck.title, description: deck.description ?? "", color: deck.color }}
+            submitLabel="저장"
+            onSubmit={async (data) => {
+              await api.updateDeck(deck.id, data)
+              setEditDeckOpen(false)
+              load()
+            }}
+            onCancel={() => setEditDeckOpen(false)}
+          />
+        </FormModal>
+      )}
+
+      {deck && (
+        <FormModal
+          visible={addCardOpen}
+          title="카드 추가"
+          onClose={() => setAddCardOpen(false)}
+        >
+          <CardForm
+            deckId={deck.id}
+            onCreated={() => {
+              setAddCardOpen(false)
+              load()
+            }}
+          />
+        </FormModal>
+      )}
+    </SafeAreaView>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: COLORS.background,
-  },
-  list: {
-    padding: 16,
-    paddingTop: 60,
-    paddingBottom: 40,
-  },
-  header: {
-    marginBottom: 12,
-  },
-  backButton: {
-    marginBottom: 16,
-  },
-  backText: {
-    fontSize: 15,
-    color: COLORS.primary,
-    fontWeight: "500",
-  },
-  titleRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-  },
-  titleSection: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: COLORS.textPrimary,
-  },
-  description: {
-    fontSize: 13,
-    color: COLORS.textSecondary,
-    marginTop: 4,
-  },
-  deleteIcon: {
-    fontSize: 18,
-    padding: 4,
-  },
-  studyButton: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 12,
-    paddingVertical: 12,
-    alignItems: "center",
-    marginTop: 16,
-  },
-  studyButtonText: {
-    color: COLORS.white,
-    fontSize: 15,
-    fontWeight: "600",
-  },
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: COLORS.textSecondary,
-    marginTop: 24,
-    marginBottom: 4,
-  },
-  separator: {
-    height: 8,
-  },
-  footer: {
-    marginTop: 20,
-  },
-})
+function FormModal({
+  visible,
+  title,
+  onClose,
+  children,
+}: {
+  visible: boolean
+  title: string
+  onClose: () => void
+  children: React.ReactNode
+}) {
+  const { colors } = useTheme()
+  return (
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle={Platform.OS === "ios" ? "pageSheet" : "overFullScreen"}
+      transparent={Platform.OS !== "ios"}
+      onRequestClose={onClose}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={{ flex: 1, backgroundColor: colors.bg }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingTop: 12,
+            paddingBottom: 12,
+            paddingHorizontal: 16,
+            borderBottomWidth: 1,
+            borderColor: colors.border,
+          }}
+        >
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: "700" }}>{title}</Text>
+          <Pressable onPress={onClose} hitSlop={10} style={{ padding: 4 }} accessibilityLabel="닫기">
+            <Ionicons name="close" size={24} color={colors.textMuted} />
+          </Pressable>
+        </View>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ padding: 16, paddingBottom: 48 }}
+        >
+          {children}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </Modal>
+  )
+}

@@ -1,75 +1,170 @@
 import * as SecureStore from "expo-secure-store"
 import { API_URL } from "./constants"
-import type { Deck, Card } from "./types"
+import type { Card, Deck, Essay, Sentence, User } from "./types"
 
-let onUnauthorized: (() => void) | null = null
+const TOKEN_KEY = "flipflow_token"
 
-export function setOnUnauthorized(callback: () => void) {
-  onUnauthorized = callback
+export async function getStoredToken(): Promise<string | null> {
+  try {
+    return await SecureStore.getItemAsync(TOKEN_KEY)
+  } catch {
+    return null
+  }
 }
 
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = await SecureStore.getItemAsync("auth_token")
+export async function setStoredToken(token: string | null) {
+  if (token) {
+    await SecureStore.setItemAsync(TOKEN_KEY, token)
+  } else {
+    await SecureStore.deleteItemAsync(TOKEN_KEY)
+  }
+}
 
+async function request<T>(
+  path: string,
+  options: { method?: string; body?: unknown; auth?: boolean } = {}
+): Promise<T> {
+  const { method = "GET", body, auth = true } = options
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  }
+  if (auth) {
+    const token = await getStoredToken()
+    if (token) headers.Authorization = `Bearer ${token}`
+  }
   const res = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...options?.headers,
-    },
+    method,
+    headers,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
   })
-
-  if (res.status === 401) {
-    onUnauthorized?.()
-    throw new Error("Unauthorized")
-  }
-
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ error: "Request failed" }))
-    throw new Error(error.error || "Request failed")
+    const text = await res.text()
+    let message = `요청에 실패했습니다. (${res.status})`
+    try {
+      const parsed = JSON.parse(text)
+      if (parsed?.error) message = parsed.error
+    } catch {
+      const contentType = res.headers.get("content-type") ?? ""
+      if (contentType.includes("text/html") || text.trimStart().startsWith("<!DOCTYPE")) {
+        message = `서버 API를 찾을 수 없습니다. (${res.status})\n${API_URL}${path}`
+      } else if (text) {
+        message = text.slice(0, 300)
+      }
+    }
+    throw new Error(message)
   }
-
-  return res.json()
+  if (res.status === 204) return undefined as T
+  return (await res.json()) as T
 }
 
-// Decks
-export const getDecks = () => request<Deck[]>("/api/mobile/decks")
+type DeckWithCount = Deck & { _count: { cards: number } }
 
-export const getDeck = (id: string) => request<Deck>(`/api/mobile/decks/${id}`)
+export const api = {
+  // ---- Auth ----
+  loginWithGoogle: (idToken: string) =>
+    request<{ token: string; user: User }>("/api/mobile/auth/google", {
+      method: "POST",
+      body: { idToken },
+      auth: false,
+    }),
+  loginWithApple: (identityToken: string, fullName?: unknown) =>
+    request<{ token: string; user: User }>("/api/mobile/auth/apple", {
+      method: "POST",
+      body: { identityToken, fullName },
+      auth: false,
+    }),
+  deleteAccount: () =>
+    request<{ ok: true }>("/api/mobile/account", {
+      method: "DELETE",
+    }),
 
-export const createDeck = (data: { title: string; description?: string; color?: string }) =>
-  request<Deck>("/api/mobile/decks", { method: "POST", body: JSON.stringify(data) })
+  // ---- Decks ----
+  listDecks: async () => {
+    const decks = await request<DeckWithCount[]>("/api/mobile/decks")
+    return { decks }
+  },
+  getDeck: async (id: string) => {
+    const [deckRaw, cards, allDecks] = await Promise.all([
+      request<Deck>(`/api/mobile/decks/${id}`),
+      request<Card[]>(`/api/mobile/decks/${id}/cards`),
+      request<Deck[]>("/api/mobile/decks"),
+    ])
+    return {
+      deck: { ...deckRaw, cards },
+      otherDecks: allDecks.filter((d) => d.id !== id),
+    }
+  },
+  createDeck: async (data: { title: string; description?: string; color?: string }) => {
+    const deck = await request<Deck>("/api/mobile/decks", { method: "POST", body: data })
+    return { deck }
+  },
+  updateDeck: async (
+    id: string,
+    data: { title?: string; description?: string | null; color?: string }
+  ) => {
+    const deck = await request<Deck>(`/api/mobile/decks/${id}`, { method: "PUT", body: data })
+    return { deck }
+  },
+  deleteDeck: async (id: string) => {
+    await request<unknown>(`/api/mobile/decks/${id}`, { method: "DELETE" })
+    return { ok: true as const }
+  },
 
-export const updateDeck = (id: string, data: { title?: string; description?: string; color?: string }) =>
-  request<Deck>(`/api/mobile/decks/${id}`, { method: "PUT", body: JSON.stringify(data) })
+  // ---- Cards ----
+  listAllCards: async () => {
+    const cards = await request<Card[]>("/api/mobile/cards/all")
+    return { cards }
+  },
+  listBookmarks: async () => {
+    const cards = await request<Card[]>("/api/mobile/cards/bookmarks")
+    return { cards }
+  },
+  createCard: async (deckId: string, data: { front: string; back: string }) => {
+    const card = await request<Card>(`/api/mobile/decks/${deckId}/cards`, {
+      method: "POST",
+      body: data,
+    })
+    return { card }
+  },
+  updateCard: async (id: string, data: { front?: string; back?: string }) => {
+    const card = await request<Card>(`/api/mobile/cards/${id}`, { method: "PUT", body: data })
+    return { card }
+  },
+  deleteCard: async (id: string) => {
+    await request<unknown>(`/api/mobile/cards/${id}`, { method: "DELETE" })
+    return { ok: true as const }
+  },
+  toggleBookmark: async (id: string) => {
+    const card = await request<Card>(`/api/mobile/cards/${id}/bookmark`, { method: "POST" })
+    return { card }
+  },
+  moveCard: async (id: string, toDeckId: string) => {
+    const card = await request<Card>(`/api/mobile/cards/${id}/move`, {
+      method: "POST",
+      body: { toDeckId },
+    })
+    return { card }
+  },
 
-export const deleteDeck = (id: string) =>
-  request<{ success: boolean }>(`/api/mobile/decks/${id}`, { method: "DELETE" })
+  // ---- AI ----
+  searchDefinition: (word: string) =>
+    request<{ result: string }>("/api/mobile/ai/definition", {
+      method: "POST",
+      body: { word },
+    }),
+  generateSentences: (front: string, back: string) =>
+    request<{ sentences: Sentence[] }>("/api/mobile/sentences", {
+      method: "POST",
+      body: { front, back },
+    }),
 
-// Cards
-export const getDeckCards = (deckId: string) =>
-  request<Card[]>(`/api/mobile/decks/${deckId}/cards`)
-
-export const createCard = (deckId: string, data: { front: string; back: string }) =>
-  request<Card>(`/api/mobile/decks/${deckId}/cards`, { method: "POST", body: JSON.stringify(data) })
-
-export const updateCard = (id: string, data: { front?: string; back?: string }) =>
-  request<Card>(`/api/mobile/cards/${id}`, { method: "PUT", body: JSON.stringify(data) })
-
-export const deleteCard = (id: string) =>
-  request<{ success: boolean }>(`/api/mobile/cards/${id}`, { method: "DELETE" })
-
-export const toggleBookmark = (id: string) =>
-  request<Card>(`/api/mobile/cards/${id}/bookmark`, { method: "POST" })
-
-export const moveCard = (id: string, toDeckId: string) =>
-  request<Card>(`/api/mobile/cards/${id}/move`, { method: "POST", body: JSON.stringify({ toDeckId }) })
-
-export const getAllCards = () => request<Card[]>("/api/mobile/cards/all")
-
-export const getBookmarkedCards = () => request<Card[]>("/api/mobile/cards/bookmarks")
-
-// AI
-export const searchDefinition = (word: string) =>
-  request<{ result: string }>("/api/mobile/ai/definition", { method: "POST", body: JSON.stringify({ word }) })
+  // ---- Essays ----
+  listEssays: () => request<{ essays: Essay[] }>("/api/mobile/essays"),
+  getEssay: (id: string) => request<{ essay: Essay }>(`/api/mobile/essays/${id}`),
+  createEssay: (data: { title: string; content: string }) =>
+    request<{ essay: Essay }>("/api/mobile/essays", { method: "POST", body: data }),
+  updateEssay: (id: string, data: { title: string; content: string }) =>
+    request<{ essay: Essay }>(`/api/mobile/essays/${id}`, { method: "PATCH", body: data }),
+  deleteEssay: (id: string) =>
+    request<{ ok: true }>(`/api/mobile/essays/${id}`, { method: "DELETE" }),
+}

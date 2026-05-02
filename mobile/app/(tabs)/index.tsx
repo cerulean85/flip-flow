@@ -1,172 +1,91 @@
-import { useState, useCallback } from "react"
-import {
-  View,
-  FlatList,
-  Pressable,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  RefreshControl,
-} from "react-native"
-import { useRouter, useFocusEffect } from "expo-router"
-import { getDecks } from "../../lib/api"
-import { useAuth } from "../../lib/auth"
-import { COLORS } from "../../lib/constants"
-import DeckCard from "../../components/DeckCard"
-import EmptyState from "../../components/EmptyState"
-import type { Deck } from "../../lib/types"
+import { useCallback, useEffect, useState } from "react"
+import { ActivityIndicator, FlatList, Pressable, RefreshControl, Text, View } from "react-native"
+import { useFocusEffect, useRouter } from "expo-router"
+import { Ionicons } from "@expo/vector-icons"
+import DeckCard from "@/components/deck/DeckCard"
+import EmptyState from "@/components/ui/EmptyState"
+import { api } from "@/lib/api"
+import { useTheme } from "@/lib/theme"
+import type { Deck } from "@/lib/types"
 
-export default function DecksTab() {
+export default function DecksScreen() {
+  const { colors } = useTheme()
   const router = useRouter()
-  const { signOut, user } = useAuth()
-  const [decks, setDecks] = useState<Deck[]>([])
+  const [decks, setDecks] = useState<(Deck & { _count: { cards: number } })[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
-  const fetchDecks = useCallback(async () => {
+  const load = useCallback(async () => {
     try {
-      const data = await getDecks()
-      setDecks(data)
-    } catch {
-      // ignore
-    } finally {
-      setLoading(false)
-      setRefreshing(false)
+      const { decks } = await api.listDecks()
+      setDecks(decks)
+    } catch (err) {
+      console.warn("[decks] load", err)
     }
   }, [])
 
+  useEffect(() => {
+    load().finally(() => setLoading(false))
+  }, [load])
+
   useFocusEffect(
     useCallback(() => {
-      fetchDecks()
-    }, [fetchDecks])
+      load()
+    }, [load])
   )
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true)
-    fetchDecks()
-  }
-
-  if (loading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    )
+    await load()
+    setRefreshing(false)
   }
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={decks}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={COLORS.primary} />
-        }
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <View>
-              <Text style={styles.greeting}>안녕하세요{user?.name ? `, ${user.name}` : ""} 👋</Text>
-              <Text style={styles.deckCount}>{decks.length}개의 덱</Text>
-            </View>
-            <Pressable onPress={signOut} style={styles.signOutButton}>
-              <Text style={styles.signOutText}>로그아웃</Text>
-            </Pressable>
-          </View>
-        }
-        renderItem={({ item }) => (
-          <DeckCard
-            deck={item}
-            onPress={() => router.push(`/decks/${item.id}`)}
-          />
-        )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        ListEmptyComponent={
-          <EmptyState
-            emoji="📭"
-            title="아직 덱이 없어요."
-            subtitle="새 덱을 만들어 카드를 추가해보세요!"
-          />
-        }
-      />
-
-      {/* Floating create button */}
-      <Pressable
-        onPress={() => router.push("/decks/new")}
-        style={styles.fab}
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+        }}
       >
-        <Text style={styles.fabText}>+</Text>
-      </Pressable>
+        <Text style={{ color: colors.text, fontSize: 18, fontWeight: "700" }}>내 덱</Text>
+        <Pressable
+          onPress={() => router.push("/decks/new")}
+          style={({ pressed }) => ({
+            backgroundColor: pressed ? colors.accent : colors.primary,
+            paddingHorizontal: 14,
+            paddingVertical: 8,
+            borderRadius: 12,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 4,
+          })}
+        >
+          <Ionicons name="add" size={16} color={colors.primaryFg} />
+          <Text style={{ color: colors.primaryFg, fontWeight: "600", fontSize: 13 }}>새 덱</Text>
+        </Pressable>
+      </View>
+
+      {loading ? (
+        <ActivityIndicator style={{ marginTop: 40 }} color={colors.primary} />
+      ) : decks.length === 0 ? (
+        <EmptyState
+          icon="albums-outline"
+          title="아직 덱이 없어요."
+          description="첫 번째 덱을 만들어보세요!"
+        />
+      ) : (
+        <FlatList
+          data={decks}
+          keyExtractor={(d) => d.id}
+          contentContainerStyle={{ padding: 16, gap: 12 }}
+          renderItem={({ item }) => <DeckCard deck={item} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
+        />
+      )}
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: COLORS.background,
-  },
-  list: {
-    padding: 16,
-    paddingBottom: 80,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  greeting: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: COLORS.textPrimary,
-  },
-  deckCount: {
-    fontSize: 13,
-    color: COLORS.textMuted,
-    marginTop: 2,
-  },
-  signOutButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.borderMedium,
-  },
-  signOutText: {
-    fontSize: 12,
-    color: COLORS.textSecondary,
-  },
-  separator: {
-    height: 10,
-  },
-  fab: {
-    position: "absolute",
-    right: 20,
-    bottom: 20,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: COLORS.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  fabText: {
-    fontSize: 28,
-    color: COLORS.white,
-    fontWeight: "300",
-    marginTop: -2,
-  },
-})
