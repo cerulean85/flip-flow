@@ -254,7 +254,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
         )}
       </AnimatePresence>
 
-      {/* Korean sentences panel */}
+      {/* Practice sentences panel */}
       <AnimatePresence>
         {showSentences && (sentences || sentencesError) && (
           <motion.div
@@ -282,7 +282,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
             ) : (
               <>
                 <p className="mb-2 text-xs text-gray-400 dark:text-zinc-500">
-                  문장을 탭하면 영어 번역을 볼 수 있어요
+                  문장을 탭하면 한국어 뜻을 볼 수 있어요
                 </p>
                 <ol className="list-decimal list-inside space-y-1">
                   {sentences!.map((s, i) => (

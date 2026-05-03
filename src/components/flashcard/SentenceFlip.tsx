@@ -15,7 +15,7 @@ export default function SentenceFlip({ ko, en }: Props) {
 
   const handleSpeak = (e: React.MouseEvent) => {
     e.stopPropagation()
-    speak(flipped ? en : ko, flipped ? "en-US" : "ko-KR")
+    speak(flipped ? ko : en, flipped ? "ko-KR" : "en-US")
   }
 
   const toggle = () => setFlipped((f) => !f)
@@ -43,15 +43,15 @@ export default function SentenceFlip({ ko, en }: Props) {
       >
         <span
           style={{ gridArea: "1 / 1", backfaceVisibility: "hidden" }}
-          className="text-left text-gray-800 dark:text-zinc-200"
-        >
-          {ko}
-        </span>
-        <span
-          style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
           className="text-left text-blue-700 dark:text-blue-300"
         >
           {en}
+        </span>
+        <span
+          style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+          className="text-left text-gray-800 dark:text-zinc-200"
+        >
+          {ko}
         </span>
       </motion.div>
 
