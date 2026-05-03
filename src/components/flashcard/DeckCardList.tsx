@@ -1,7 +1,8 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { Search, X } from "lucide-react"
+import { Inbox, Search, X } from "lucide-react"
+import CardForm from "./CardForm"
 import CardListItem from "./CardListItem"
 import type { Card } from "@/generated/prisma/client"
 
@@ -58,6 +59,8 @@ export default function DeckCardList({ cards, deckId, otherDecks }: Props) {
         )}
       </div>
 
+      <CardForm deckId={deckId} className="mt-1" />
+
       {q && (
         <p className="text-xs text-gray-400 dark:text-zinc-500">
           {filtered.length}개 일치
@@ -65,9 +68,16 @@ export default function DeckCardList({ cards, deckId, otherDecks }: Props) {
       )}
 
       {filtered.length === 0 ? (
-        <p className="py-8 text-center text-sm text-gray-400 dark:text-zinc-500">
-          &quot;{query}&quot;와 일치하는 카드가 없어요.
-        </p>
+        q ? (
+          <p className="py-8 text-center text-sm text-gray-400 dark:text-zinc-500">
+            &quot;{query}&quot;와 일치하는 카드가 없어요.
+          </p>
+        ) : (
+          <div className="py-8 text-center text-gray-400 dark:text-zinc-500">
+            <Inbox size={40} strokeWidth={1.5} className="mx-auto mb-2" aria-hidden="true" />
+            <p className="text-sm">아직 카드가 없어요. 위에서 추가해보세요!</p>
+          </div>
+        )
       ) : (
         <div className="flex flex-col gap-2">
           {filtered.map(({ card, index }) => (

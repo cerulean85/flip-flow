@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef } from "react"
+import type { KeyboardEvent } from "react"
 import { useFormStatus } from "react-dom"
 import { createCard } from "@/actions/card.actions"
 
@@ -19,18 +20,39 @@ function SubmitButton() {
 
 interface CardFormProps {
   deckId: string
+  className?: string
 }
 
-export default function CardForm({ deckId }: CardFormProps) {
+export default function CardForm({ deckId, className = "mt-6" }: CardFormProps) {
   const formRef = useRef<HTMLFormElement>(null)
+  const submittingRef = useRef(false)
 
   async function clientAction(formData: FormData) {
-    await createCard(deckId, formData)
-    formRef.current?.reset()
+    if (submittingRef.current) return
+
+    submittingRef.current = true
+    try {
+      await createCard(deckId, formData)
+      formRef.current?.reset()
+    } finally {
+      submittingRef.current = false
+    }
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLFormElement>) {
+    if (event.key !== "Enter" || !event.shiftKey) return
+
+    event.preventDefault()
+    formRef.current?.requestSubmit()
   }
 
   return (
-    <form ref={formRef} action={clientAction} className="flex flex-col gap-3 mt-6">
+    <form
+      ref={formRef}
+      action={clientAction}
+      onKeyDown={handleKeyDown}
+      className={`flex flex-col gap-3 ${className}`}
+    >
       <h2 className="font-semibold text-gray-700 text-sm dark:text-zinc-300">카드 추가</h2>
       <textarea
         name="front"

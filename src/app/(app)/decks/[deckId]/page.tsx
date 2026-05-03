@@ -1,9 +1,7 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { Inbox } from "lucide-react"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import CardForm from "@/components/flashcard/CardForm"
 import DeleteDeckButton from "@/components/deck/DeleteDeckButton"
 import EditDeckSection from "@/components/deck/EditDeckSection"
 import DeckCardList from "@/components/flashcard/DeckCardList"
@@ -60,16 +58,7 @@ export default async function DeckDetailPage({ params }: Props) {
         <p className="text-sm text-gray-500 mb-4 ml-8 dark:text-zinc-400">{deck.description}</p>
       )}
 
-      {deck.cards.length === 0 ? (
-        <div className="text-center py-10 text-gray-400 dark:text-zinc-500">
-          <Inbox size={40} strokeWidth={1.5} className="mx-auto mb-2" aria-hidden="true" />
-          <p className="text-sm">아직 카드가 없어요. 아래에서 추가해보세요!</p>
-        </div>
-      ) : (
-        <DeckCardList cards={deck.cards} deckId={deckId} otherDecks={otherDecks} />
-      )}
-
-      <CardForm deckId={deckId} />
+      <DeckCardList cards={deck.cards} deckId={deckId} otherDecks={otherDecks} />
     </div>
   )
 }
