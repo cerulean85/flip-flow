@@ -1,5 +1,6 @@
 import { Text } from "react-native"
 import Markdown, { type RenderRules } from "react-native-markdown-display"
+import { normalizeEssayMarkdown } from "@/lib/markdown"
 import type { ThemeColors } from "@/lib/theme"
 
 interface Props {
@@ -16,6 +17,8 @@ const rules: RenderRules = {
 }
 
 export default function EssayMarkdown({ children, colors }: Props) {
+  const normalizedMarkdown = normalizeEssayMarkdown(children)
+
   return (
     <Markdown
       rules={rules}
@@ -59,7 +62,7 @@ export default function EssayMarkdown({ children, colors }: Props) {
         list_item: { color: colors.text },
       }}
     >
-      {children}
+      {normalizedMarkdown}
     </Markdown>
   )
 }

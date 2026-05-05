@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
+import { normalizeEssayMarkdown } from "@/lib/markdown"
 
 interface Props {
   markdown: string
@@ -9,7 +10,9 @@ interface Props {
 }
 
 export default function EssayContent({ markdown, className = "" }: Props) {
-  if (!markdown.trim()) {
+  const normalizedMarkdown = normalizeEssayMarkdown(markdown)
+
+  if (!normalizedMarkdown.trim()) {
     return (
       <p className={`text-sm text-gray-400 italic dark:text-zinc-500 ${className}`}>
         내용이 비어 있습니다.
@@ -87,7 +90,7 @@ export default function EssayContent({ markdown, className = "" }: Props) {
           ),
         }}
       >
-        {markdown}
+        {normalizedMarkdown}
       </ReactMarkdown>
     </div>
   )
