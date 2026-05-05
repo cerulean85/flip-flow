@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Pressable, ScrollView, Text, TextInput, View } from "react-native"
-import Markdown from "react-native-markdown-display"
+import EssayMarkdown from "@/components/essay/EssayMarkdown"
 import PrimaryButton from "@/components/ui/PrimaryButton"
 import { useTheme } from "@/lib/theme"
 
@@ -106,49 +106,7 @@ export default function EssayEditor({ initial, submitLabel, onSubmit, onCancel }
           }}
         >
           {content.trim() ? (
-            <Markdown
-              style={{
-                body: { color: colors.text, fontSize: 15, lineHeight: 22 },
-                heading1: { color: colors.text, fontSize: 22, fontWeight: "700", marginTop: 12 },
-                heading2: { color: colors.text, fontSize: 18, fontWeight: "700", marginTop: 10 },
-                heading3: { color: colors.text, fontSize: 16, fontWeight: "600", marginTop: 8 },
-                strong: { color: colors.text, fontWeight: "700" },
-                em: { color: colors.textMuted, fontStyle: "italic" },
-                blockquote: {
-                  borderLeftColor: colors.primary,
-                  borderLeftWidth: 3,
-                  paddingLeft: 10,
-                  color: colors.textMuted,
-                  fontStyle: "italic",
-                },
-                code_inline: {
-                  backgroundColor: colors.cardAlt,
-                  color: colors.primarySoftText,
-                  paddingHorizontal: 4,
-                  borderRadius: 4,
-                  fontFamily: "Menlo",
-                },
-                code_block: {
-                  backgroundColor: colors.cardAlt,
-                  color: colors.text,
-                  padding: 10,
-                  borderRadius: 8,
-                  fontFamily: "Menlo",
-                },
-                fence: {
-                  backgroundColor: colors.cardAlt,
-                  color: colors.text,
-                  padding: 10,
-                  borderRadius: 8,
-                  fontFamily: "Menlo",
-                },
-                link: { color: colors.primary },
-                hr: { backgroundColor: colors.border, marginVertical: 12 },
-                list_item: { color: colors.text },
-              }}
-            >
-              {content}
-            </Markdown>
+            <EssayMarkdown colors={colors}>{content}</EssayMarkdown>
           ) : (
             <Text style={{ color: colors.textSubtle, fontSize: 13, fontStyle: "italic" }}>
               내용이 비어 있습니다.

@@ -62,7 +62,7 @@ export default function SettingsScreen() {
           {
             text: "삭제",
             style: "destructive",
-            onPress: (input) => {
+            onPress: (input?: string) => {
               if ((input ?? "").trim() !== "삭제") {
                 Alert.alert("취소됨", "입력한 문구가 일치하지 않아 삭제가 취소되었습니다.")
                 return

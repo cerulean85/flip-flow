@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import Markdown from "react-native-markdown-display"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
+import EssayMarkdown from "@/components/essay/EssayMarkdown"
 import EmptyState from "@/components/ui/EmptyState"
 import ScreenHeader from "@/components/ui/ScreenHeader"
 import { api } from "@/lib/api"
@@ -90,62 +90,21 @@ export default function EssayDetailScreen() {
         </Text>
 
         <View
-        style={{
-          marginTop: 18,
-          padding: 16,
-          borderRadius: 18,
-          backgroundColor: colors.card,
-          borderWidth: 1,
-          borderColor: colors.border,
-        }}
-      >
-        {essay.content.trim() ? (
-          <Markdown
-            style={{
-              body: { color: colors.text, fontSize: 15, lineHeight: 22 },
-              heading1: { color: colors.text, fontSize: 22, fontWeight: "700", marginTop: 12 },
-              heading2: { color: colors.text, fontSize: 18, fontWeight: "700", marginTop: 10 },
-              heading3: { color: colors.text, fontSize: 16, fontWeight: "600", marginTop: 8 },
-              strong: { color: colors.text, fontWeight: "700" },
-              em: { color: colors.textMuted, fontStyle: "italic" },
-              blockquote: {
-                borderLeftColor: colors.primary,
-                borderLeftWidth: 3,
-                paddingLeft: 10,
-                color: colors.textMuted,
-                fontStyle: "italic",
-              },
-              code_inline: {
-                backgroundColor: colors.cardAlt,
-                color: colors.primarySoftText,
-                paddingHorizontal: 4,
-                borderRadius: 4,
-                fontFamily: "Menlo",
-              },
-              code_block: {
-                backgroundColor: colors.cardAlt,
-                color: colors.text,
-                padding: 10,
-                borderRadius: 8,
-                fontFamily: "Menlo",
-              },
-              fence: {
-                backgroundColor: colors.cardAlt,
-                color: colors.text,
-                padding: 10,
-                borderRadius: 8,
-                fontFamily: "Menlo",
-              },
-              link: { color: colors.primary },
-              hr: { backgroundColor: colors.border, marginVertical: 12 },
-            }}
-          >
-            {essay.content}
-          </Markdown>
-        ) : (
-          <Text style={{ color: colors.textSubtle, fontStyle: "italic" }}>내용이 비어 있습니다.</Text>
-        )}
-      </View>
+          style={{
+            marginTop: 18,
+            padding: 16,
+            borderRadius: 18,
+            backgroundColor: colors.card,
+            borderWidth: 1,
+            borderColor: colors.border,
+          }}
+        >
+          {essay.content.trim() ? (
+            <EssayMarkdown colors={colors}>{essay.content}</EssayMarkdown>
+          ) : (
+            <Text style={{ color: colors.textSubtle, fontStyle: "italic" }}>내용이 비어 있습니다.</Text>
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   )
