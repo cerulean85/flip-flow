@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server"
 import { verifyMobileToken } from "@/lib/mobile-auth"
+import { OPENAI_TEXT_MODEL } from "@/lib/openai"
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: "gpt-4.1-nano",
+      model: OPENAI_TEXT_MODEL,
       messages: [
         {
           role: "user",
