@@ -1,5 +1,3 @@
-import type { LucideIcon } from "lucide-react"
-import { Bookmark, Layers, Smartphone, Wand2 } from "lucide-react"
 import type { Locale } from "@/lib/i18n"
 
 export type LandingCard = {
@@ -37,7 +35,7 @@ export type LandingContent = {
     description: string
   }
   features: Array<{
-    Icon: LucideIcon
+    icon: "bookmark" | "layers" | "smartphone" | "wand"
     title: string
     body: string
   }>
@@ -118,22 +116,22 @@ export const landingContent: Record<Locale, LandingContent> = {
     },
     features: [
       {
-        Icon: Layers,
+        icon: "layers",
         title: "3D 카드 플립",
         body: "탭 한 번이면 카드가 부드럽게 회전합니다. 앞뒤를 바로 오가며 흐름을 끊지 않고 복습하세요.",
       },
       {
-        Icon: Wand2,
+        icon: "wand",
         title: "AI 예문 생성",
         body: "단어마다 자연스러운 예문 3개를 즉시 만들어 드려요. 문맥 안에서 외우면 더 오래 기억에 남습니다.",
       },
       {
-        Icon: Bookmark,
+        icon: "bookmark",
         title: "북마크 & 에세이",
         body: "어려운 카드는 별표로 모아 집중 복습하고, 짧은 에세이로 묶어 장기 기억으로 옮깁니다.",
       },
       {
-        Icon: Smartphone,
+        icon: "smartphone",
         title: "PWA로 가볍게 설치",
         body: "브라우저에서 바로 시작하고, 원하면 홈 화면에 앱처럼 설치해 모바일에서도 빠르게 이어갈 수 있습니다.",
       },
@@ -254,22 +252,22 @@ export const landingContent: Record<Locale, LandingContent> = {
     },
     features: [
       {
-        Icon: Layers,
+        icon: "layers",
         title: "3D card flips",
         body: "A single tap smoothly turns the card. Move between front and back without breaking your review rhythm.",
       },
       {
-        Icon: Wand2,
+        icon: "wand",
         title: "AI example sentences",
         body: "Generate three natural examples for each word. Learning in context makes the memory last longer.",
       },
       {
-        Icon: Bookmark,
+        icon: "bookmark",
         title: "Bookmarks & essays",
         body: "Star difficult cards for focused review, then turn expressions into short essays for deeper retention.",
       },
       {
-        Icon: Smartphone,
+        icon: "smartphone",
         title: "Lightweight PWA",
         body: "Start in the browser and install it on your home screen when you want a faster mobile workflow.",
       },

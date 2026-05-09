@@ -4,16 +4,7 @@ import { notFound, redirect } from "next/navigation"
 import LandingHome from "@/components/landing/LandingHome"
 import { isLocale } from "@/lib/i18n"
 import { landingContent } from "@/lib/landing"
-
-const appHosts = new Set(["flip-flow.dycdyp.com", "www.flip-flow.dycdyp.com"])
-
-function getAppBaseUrl(host: string | undefined) {
-  if (!host) return "https://flip-flow.dycdyp.com"
-
-  return host === "localhost" || host === "127.0.0.1"
-    ? ""
-    : "https://flip-flow.dycdyp.com"
-}
+import { getAppBaseUrl, isAppHost } from "@/lib/site"
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -42,9 +33,9 @@ export default async function LocalizedHomePage({ params }: Props) {
     notFound()
   }
 
-  const host = headersList.get("host")?.split(":")[0].toLowerCase()
+  const host = headersList.get("host")
 
-  if (host && appHosts.has(host)) {
+  if (isAppHost(host)) {
     redirect("/dashboard")
   }
 

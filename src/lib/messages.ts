@@ -1,7 +1,6 @@
 import type { Locale } from "@/lib/i18n"
 
-export const messages = {
-  ko: {
+const ko = {
     nav: {
       decks: "덱",
       study: "전체 학습",
@@ -166,8 +165,9 @@ export const messages = {
       content: "광고",
       study: "광고",
     },
-  },
-  en: {
+}
+
+const en = {
     nav: {
       decks: "Decks",
       study: "Study all",
@@ -332,7 +332,11 @@ export const messages = {
       content: "Ad",
       study: "Ad",
     },
-  },
-} satisfies Record<Locale, object>
+} satisfies typeof ko
+
+export const messages: Record<Locale, typeof ko> = {
+  ko,
+  en,
+}
 
 export type Messages = typeof messages.ko

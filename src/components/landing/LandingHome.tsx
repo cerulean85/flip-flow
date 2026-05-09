@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { ArrowRight, Bookmark, Layers, Smartphone, Sparkles, Wand2 } from "lucide-react"
 import LandingFlipCard from "@/components/landing/LandingFlipCard"
 import LandingLanguageLinks from "@/components/landing/LandingLanguageLinks"
 import LandingThemeButton from "@/components/settings/LandingThemeButton"
@@ -11,6 +11,13 @@ import { landingContent } from "@/lib/landing"
 type Props = {
   locale: Locale
   appBaseUrl?: string
+}
+
+const featureIcons = {
+  bookmark: Bookmark,
+  layers: Layers,
+  smartphone: Smartphone,
+  wand: Wand2,
 }
 
 export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dycdyp.com" }: Props) {
@@ -129,20 +136,23 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
             </p>
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {content.features.map(({ Icon, title, body }) => (
-              <article
-                key={title}
-                className="group rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-900"
-              >
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-fuchsia-500 text-white shadow-lg shadow-blue-500/20 transition group-hover:scale-110">
-                  <Icon size={22} aria-hidden="true" />
-                </span>
-                <h3 className="mt-5 text-lg font-black">{title}</h3>
-                <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
-                  {body}
-                </p>
-              </article>
-            ))}
+            {content.features.map(({ icon, title, body }) => {
+              const Icon = featureIcons[icon]
+              return (
+                <article
+                  key={title}
+                  className="group rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-900"
+                >
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-fuchsia-500 text-white shadow-lg shadow-blue-500/20 transition group-hover:scale-110">
+                    <Icon size={22} aria-hidden="true" />
+                  </span>
+                  <h3 className="mt-5 text-lg font-black">{title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
+                    {body}
+                  </p>
+                </article>
+              )
+            })}
           </div>
         </div>
       </section>
