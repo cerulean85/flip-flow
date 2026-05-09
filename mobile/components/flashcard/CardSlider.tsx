@@ -121,7 +121,7 @@ export default function CardSlider({ cards }: Props) {
         />
       </View>
 
-      <FlipCard key={card.id} front={front} back={back} />
+      <FlipCard key={card.id} deckId={card.deckId} front={front} back={back} />
     </View>
   )
 }

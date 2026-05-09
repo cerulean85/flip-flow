@@ -37,6 +37,28 @@ export async function createCard(deckId: string, formData: FormData) {
   revalidatePath(`/decks/${deckId}`)
 }
 
+export async function createCardFromSentence(
+  deckId: string,
+  sentence: { en: string; ko: string }
+) {
+  const session = await auth()
+  if (!session?.user?.id) throw new Error("Unauthorized")
+
+  const deck = await verifyDeckOwnership(deckId, session.user.id)
+
+  const front = sentence.en.trim()
+  const back = sentence.ko.trim()
+  if (!front || !back) throw new Error("Front and back are required")
+
+  await prisma.card.create({
+    data: { front, back, deckId },
+  })
+
+  revalidatePath(`/decks/${deckId}`)
+
+  return { deckTitle: deck.title }
+}
+
 export async function updateCard(cardId: string, deckId: string, formData: FormData) {
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")

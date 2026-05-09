@@ -13,11 +13,12 @@ import { speak } from "@/lib/speech"
 type Sentence = { ko: string; en: string }
 
 interface FlipCardProps {
+  deckId: string
   front: string
   back: string
 }
 
-export default function FlipCard({ front, back }: FlipCardProps) {
+export default function FlipCard({ deckId, front, back }: FlipCardProps) {
   const [isFlipped, setIsFlipped] = useState(false)
   const [geminiResult, setGeminiResult] = useState<string | null>(null)
   const [isSearching, setIsSearching] = useState(false)
@@ -288,7 +289,7 @@ export default function FlipCard({ front, back }: FlipCardProps) {
                   {sentences!.map((s, i) => (
                     <li key={i} className="text-sm text-gray-400 dark:text-zinc-600">
                       <span className="inline-block w-[calc(100%-1.5rem)] align-top">
-                        <SentenceFlip ko={s.ko} en={s.en} />
+                        <SentenceFlip deckId={deckId} ko={s.ko} en={s.en} />
                       </span>
                     </li>
                   ))}
