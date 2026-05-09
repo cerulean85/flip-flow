@@ -44,6 +44,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
     // Math.random would mismatch between SSR and CSR, so this stays in an effect.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setShuffled(shuffle(cards))
+    setPage([0, 0])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards.length])
 

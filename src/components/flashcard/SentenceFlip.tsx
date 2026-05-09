@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { Volume2 } from "lucide-react"
+import { Check, Copy, Volume2 } from "lucide-react"
 import { speak } from "@/lib/speech"
 
 interface Props {
@@ -12,10 +12,30 @@ interface Props {
 
 export default function SentenceFlip({ ko, en }: Props) {
   const [flipped, setFlipped] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const visibleSentence = flipped ? ko : en
+  const visibleLocale = flipped ? "ko-KR" : "en-US"
+
+  useEffect(() => {
+    if (!copied) return
+    const timeout = window.setTimeout(() => setCopied(false), 1400)
+    return () => window.clearTimeout(timeout)
+  }, [copied])
 
   const handleSpeak = (e: React.MouseEvent) => {
     e.stopPropagation()
-    speak(flipped ? ko : en, flipped ? "ko-KR" : "en-US")
+    speak(visibleSentence, visibleLocale)
+  }
+
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      await navigator.clipboard.writeText(visibleSentence)
+      setCopied(true)
+    } catch {
+      setCopied(false)
+    }
   }
 
   const toggle = () => setFlipped((f) => !f)
@@ -55,15 +75,26 @@ export default function SentenceFlip({ ko, en }: Props) {
         </span>
       </motion.div>
 
-      <button
-        type="button"
-        onClick={handleSpeak}
-        aria-label="읽기"
-        title="읽기"
-        className="shrink-0 inline-flex h-6 w-6 items-center justify-center rounded text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
-      >
-        <Volume2 size={12} aria-hidden="true" />
-      </button>
+      <div className="flex shrink-0 items-center gap-1">
+        <button
+          type="button"
+          onClick={handleCopy}
+          aria-label={copied ? "복사됨" : "문장 복사"}
+          title={copied ? "복사됨" : "문장 복사"}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+        >
+          {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
+        </button>
+        <button
+          type="button"
+          onClick={handleSpeak}
+          aria-label="읽기"
+          title="읽기"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+        >
+          <Volume2 size={16} aria-hidden="true" />
+        </button>
+      </div>
     </div>
   )
 }
