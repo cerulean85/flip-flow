@@ -6,7 +6,25 @@ import { useTheme } from "next-themes"
 
 const themes = ["light", "dark", "system"] as const
 
-export default function LandingThemeButton() {
+type Props = {
+  labels?: {
+    change: string
+    system: string
+    dark: string
+    light: string
+    ariaTemplate: string
+  }
+}
+
+const defaultLabels: Required<Props>["labels"] = {
+  change: "테마 변경",
+  system: "시스템 테마",
+  dark: "다크 테마",
+  light: "라이트 테마",
+  ariaTemplate: "{label}. 클릭하면 {nextTheme} 테마로 변경됩니다.",
+}
+
+export default function LandingThemeButton({ labels = defaultLabels }: Props) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -21,17 +39,19 @@ export default function LandingThemeButton() {
 
   const Icon = !mounted || currentTheme === "system" ? Monitor : currentTheme === "dark" ? Moon : Sun
   const label = !mounted
-    ? "테마 변경"
+    ? labels.change
     : currentTheme === "system"
-      ? "시스템 테마"
+      ? labels.system
       : currentTheme === "dark"
-        ? "다크 테마"
-        : "라이트 테마"
+        ? labels.dark
+        : labels.light
 
   return (
     <button
       type="button"
-      aria-label={`${label}. 클릭하면 ${nextTheme} 테마로 변경됩니다.`}
+      aria-label={labels.ariaTemplate
+        .replace("{label}", label)
+        .replace("{nextTheme}", nextTheme)}
       title={label}
       onClick={() => setTheme(nextTheme)}
       className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/70 bg-white/70 text-zinc-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white dark:border-white/10 dark:bg-zinc-950/45 dark:text-zinc-100 dark:hover:bg-zinc-900"

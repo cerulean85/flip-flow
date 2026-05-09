@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface Props {
   signOutAction: () => Promise<void>
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export default function SignOutButton({ signOutAction, image, name, compact = false, collapsed = false }: Props) {
+  const { messages } = useLocale()
   const [open, setOpen] = useState(false)
 
   return (
@@ -20,15 +22,15 @@ export default function SignOutButton({ signOutAction, image, name, compact = fa
       {compact ? (
         <button
           onClick={() => setOpen(true)}
-          title={collapsed ? "로그아웃" : undefined}
-          aria-label={collapsed ? "로그아웃" : undefined}
+          title={collapsed ? messages.auth.signOut : undefined}
+          aria-label={collapsed ? messages.auth.signOut : undefined}
           className={cn(
             "flex w-full items-center rounded-xl py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800",
             collapsed ? "justify-center px-2" : "gap-2 px-3"
           )}
         >
           <LogOut size={18} aria-hidden="true" />
-          {!collapsed && "로그아웃"}
+          {!collapsed && messages.auth.signOut}
         </button>
       ) : (
         <button
@@ -54,22 +56,26 @@ export default function SignOutButton({ signOutAction, image, name, compact = fa
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-center">
-              <p className="font-semibold text-gray-800 dark:text-zinc-100">로그아웃</p>
-              <p className="text-sm text-gray-500 mt-1 dark:text-zinc-400">정말 로그아웃 하시겠어요?</p>
+              <p className="font-semibold text-gray-800 dark:text-zinc-100">
+                {messages.auth.signOutConfirmTitle}
+              </p>
+              <p className="text-sm text-gray-500 mt-1 dark:text-zinc-400">
+                {messages.auth.signOutConfirmBody}
+              </p>
             </div>
             <div className="flex gap-2">
               <button
                 onClick={() => setOpen(false)}
                 className="flex-1 py-2.5 rounded-xl text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
               >
-                취소
+                {messages.auth.cancel}
               </button>
               <form action={signOutAction} className="flex-1">
                 <button
                   type="submit"
                   className="w-full py-2.5 rounded-xl text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition-colors"
                 >
-                  로그아웃
+                  {messages.auth.signOut}
                 </button>
               </form>
             </div>

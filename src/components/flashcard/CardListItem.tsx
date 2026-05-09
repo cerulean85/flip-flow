@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom"
 import { Star, X, Pencil, ArrowRight, Trash2 } from "lucide-react"
 import { updateCard, deleteCard, moveCard } from "@/actions/card.actions"
 import FlipCard from "./FlipCard"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface TargetDeck {
   id: string
@@ -23,7 +24,7 @@ interface Props {
   otherDecks: TargetDeck[]
 }
 
-function SaveButton() {
+function SaveButton({ label, pendingLabel }: { label: string; pendingLabel: string }) {
   const { pending } = useFormStatus()
   return (
     <button
@@ -31,7 +32,7 @@ function SaveButton() {
       disabled={pending}
       className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
     >
-      {pending ? "저장 중..." : "저장"}
+      {pending ? pendingLabel : label}
     </button>
   )
 }
@@ -70,9 +71,11 @@ interface MoveDeckModalProps {
   decks: TargetDeck[]
   onSelect: (deckId: string) => void
   onClose: () => void
+  title: string
+  closeLabel: string
 }
 
-function MoveDeckModal({ decks, onSelect, onClose }: MoveDeckModalProps) {
+function MoveDeckModal({ decks, onSelect, onClose, title, closeLabel }: MoveDeckModalProps) {
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
@@ -84,10 +87,10 @@ function MoveDeckModal({ decks, onSelect, onClose }: MoveDeckModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100 dark:border-zinc-800">
-          <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">이동할 덱 선택</p>
+          <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">{title}</p>
           <button
             onClick={onClose}
-            aria-label="닫기"
+            aria-label={closeLabel}
             className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors dark:text-zinc-500 dark:hover:text-zinc-300 dark:hover:bg-zinc-800"
           >
             <X size={16} aria-hidden="true" />
@@ -118,9 +121,11 @@ interface CardDetailModalProps {
   back: string
   isBookmark: boolean
   onClose: () => void
+  title: string
+  closeLabel: string
 }
 
-function CardDetailModal({ deckId, front, back, isBookmark, onClose }: CardDetailModalProps) {
+function CardDetailModal({ deckId, front, back, isBookmark, onClose, title, closeLabel }: CardDetailModalProps) {
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
@@ -133,12 +138,12 @@ function CardDetailModal({ deckId, front, back, isBookmark, onClose }: CardDetai
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">카드 상세</p>
+            <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">{title}</p>
             {isBookmark && <Star size={14} className="fill-yellow-400 text-yellow-400" aria-hidden="true" />}
           </div>
           <button
             onClick={onClose}
-            aria-label="닫기"
+            aria-label={closeLabel}
             className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors dark:text-zinc-500 dark:hover:text-zinc-300 dark:hover:bg-zinc-800"
           >
             <X size={16} aria-hidden="true" />
@@ -156,6 +161,7 @@ function CardDetailModal({ deckId, front, back, isBookmark, onClose }: CardDetai
 export default function CardListItem({
   index, cardId, deckId, front, back, isBookmark, otherDecks,
 }: Props) {
+  const { messages } = useLocale()
   const [isEditing, setIsEditing] = useState(false)
   const [moveOpen, setMoveOpen] = useState(false)
   const [detailOpen, setDetailOpen] = useState(false)
@@ -175,7 +181,7 @@ export default function CardListItem({
             name="front"
             defaultValue={front}
             required
-            placeholder="앞면 (질문)"
+            placeholder={messages.card.frontPlaceholder}
             autoFocus
             rows={2}
             className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none dark:border-blue-900 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
@@ -184,18 +190,18 @@ export default function CardListItem({
             name="back"
             defaultValue={back}
             required
-            placeholder="뒷면 (답)"
+            placeholder={messages.card.backPlaceholder}
             rows={3}
             className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none dark:border-blue-900 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
           />
           <div className="flex gap-2 pt-1">
-            <SaveButton />
+            <SaveButton label={messages.deck.save} pendingLabel={messages.deck.saving} />
             <button
               type="button"
               onClick={() => setIsEditing(false)}
               className="text-xs text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors dark:text-zinc-500 dark:hover:text-zinc-300 dark:border-zinc-700"
             >
-              취소
+              {messages.essay.cancel}
             </button>
           </div>
         </form>
@@ -220,7 +226,7 @@ export default function CardListItem({
             )}
 
             {/* 수정 */}
-            <IconButton onClick={() => setIsEditing(true)} label="카드 수정">
+            <IconButton onClick={() => setIsEditing(true)} label={messages.card.edit}>
               <Pencil size={14} aria-hidden="true" />
             </IconButton>
 
@@ -230,7 +236,7 @@ export default function CardListItem({
                 <IconButton
                   onClick={() => setMoveOpen(true)}
                   disabled={isMoving}
-                  label="다른 덱으로 이동"
+                  label={messages.card.move}
                 >
                   <ArrowRight size={14} aria-hidden="true" />
                 </IconButton>
@@ -238,6 +244,8 @@ export default function CardListItem({
                 {moveOpen && (
                   <MoveDeckModal
                     decks={otherDecks}
+                    title={messages.card.selectDeck}
+                    closeLabel={messages.card.close}
                     onSelect={(targetDeckId) => {
                       setMoveOpen(false)
                       startMove(() => moveCard(cardId, deckId, targetDeckId))
@@ -252,7 +260,7 @@ export default function CardListItem({
             <IconButton
               onClick={() => startDelete(() => deleteCard(cardId, deckId))}
               disabled={isDeleting}
-              label="카드 삭제"
+              label={messages.card.delete}
               danger
             >
               <Trash2 size={14} aria-hidden="true" />
@@ -267,6 +275,8 @@ export default function CardListItem({
           front={front}
           back={back}
           isBookmark={isBookmark}
+          title={messages.card.detail}
+          closeLabel={messages.card.close}
           onClose={() => setDetailOpen(false)}
         />
       )}

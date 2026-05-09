@@ -4,13 +4,14 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Layers, BookOpen, Star, NotebookPen, Settings, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/LocaleProvider"
 
-const links: { href: string; label: string; Icon: LucideIcon }[] = [
-  { href: "/dashboard", label: "덱", Icon: Layers },
-  { href: "/study", label: "전체 학습", Icon: BookOpen },
-  { href: "/bookmarks", label: "북마크", Icon: Star },
-  { href: "/essays", label: "에세이", Icon: NotebookPen },
-  { href: "/settings", label: "설정", Icon: Settings },
+const links: { href: string; key: keyof ReturnType<typeof useLocale>["messages"]["nav"]; Icon: LucideIcon }[] = [
+  { href: "/dashboard", key: "decks", Icon: Layers },
+  { href: "/study", key: "study", Icon: BookOpen },
+  { href: "/bookmarks", key: "bookmarks", Icon: Star },
+  { href: "/essays", key: "essays", Icon: NotebookPen },
+  { href: "/settings", key: "settings", Icon: Settings },
 ]
 
 interface Props {
@@ -20,10 +21,12 @@ interface Props {
 
 export default function NavLinks({ onNavigate, collapsed = false }: Props) {
   const pathname = usePathname()
+  const { messages } = useLocale()
 
   return (
     <nav className="flex flex-col gap-1">
-      {links.map(({ href, label, Icon }) => {
+      {links.map(({ href, key, Icon }) => {
+        const label = messages.nav[key]
         const isActive = pathname === href || pathname.startsWith(href + "/")
         return (
           <Link

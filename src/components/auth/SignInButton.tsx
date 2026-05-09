@@ -2,7 +2,11 @@
 
 import { signIn } from "next-auth/react"
 
-export default function SignInButton() {
+type Props = {
+  label?: string
+}
+
+export default function SignInButton({ label = "Google로 로그인" }: Props) {
   return (
     <button
       onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
@@ -26,7 +30,7 @@ export default function SignInButton() {
           fill="#EA4335"
         />
       </svg>
-      Google로 로그인
+      {label}
     </button>
   )
 }

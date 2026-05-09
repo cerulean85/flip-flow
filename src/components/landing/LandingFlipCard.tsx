@@ -3,16 +3,9 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { MessageSquareText, Search, Sparkles } from "lucide-react"
+import type { LandingCard } from "@/lib/landing"
 
-type Card = {
-  front: string
-  pos: string
-  example: string
-  back: string
-  note: string
-}
-
-const cards: Card[] = [
+const defaultCards: LandingCard[] = [
   {
     front: "resilient",
     pos: "adj.",
@@ -43,17 +36,32 @@ const cards: Card[] = [
   },
 ]
 
-export default function LandingFlipCard() {
+type Props = {
+  cards?: LandingCard[]
+  hint?: string
+  ariaLabel?: string
+  practiceLabel?: string
+  definitionLabel?: string
+}
+
+export default function LandingFlipCard({
+  cards = defaultCards,
+  hint = "탭하면 뒤집혀요",
+  ariaLabel = "카드 뒤집기",
+  practiceLabel = "연습하기",
+  definitionLabel = "뜻 검색",
+}: Props) {
   const [index, setIndex] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)
   const [paused, setPaused] = useState(false)
+  const cardCount = cards.length
 
   useEffect(() => {
     if (paused) return
     const flip = window.setTimeout(() => setIsFlipped(true), 2400)
     const reset = window.setTimeout(() => setIsFlipped(false), 4800)
     const advance = window.setTimeout(
-      () => setIndex((i) => (i + 1) % cards.length),
+      () => setIndex((i) => (i + 1) % cardCount),
       5400
     )
     return () => {
@@ -61,7 +69,7 @@ export default function LandingFlipCard() {
       clearTimeout(reset)
       clearTimeout(advance)
     }
-  }, [index, paused])
+  }, [cardCount, index, paused])
 
   useEffect(() => {
     if (!paused) return
@@ -80,11 +88,11 @@ export default function LandingFlipCard() {
     <div className="relative w-full max-w-sm">
       <span className="absolute -top-11 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/70 bg-white/85 px-3 py-1.5 text-xs font-semibold text-zinc-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-zinc-950/60 dark:text-zinc-200">
         <Sparkles size={12} aria-hidden="true" />
-        탭하면 뒤집혀요
+        {hint}
       </span>
       <button
         type="button"
-        aria-label="카드 뒤집기"
+        aria-label={ariaLabel}
         className="relative block w-full select-none rounded-[1.75rem] text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/40"
         style={{ perspective: "1400px" }}
         onClick={handleClick}
@@ -123,11 +131,11 @@ export default function LandingFlipCard() {
             <div className="flex items-center justify-between text-xs font-semibold text-zinc-500 dark:text-zinc-400">
               <span className="inline-flex items-center gap-1.5">
                 <MessageSquareText size={14} aria-hidden="true" />
-                연습하기
+                {practiceLabel}
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <Search size={14} aria-hidden="true" />
-                뜻 검색
+                {definitionLabel}
               </span>
             </div>
           </div>

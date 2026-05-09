@@ -2,6 +2,7 @@
 
 import { useFormStatus } from "react-dom"
 import { createDeck, updateDeck } from "@/actions/deck.actions"
+import { useLocale } from "@/components/LocaleProvider"
 
 const COLORS = [
   "#3b82f6", "#ec4899", "#f59e0b", "#10b981", "#06b6d4", "#8b5cf6",
@@ -27,6 +28,7 @@ interface DeckFormProps {
 }
 
 export default function DeckForm({ deckId, defaultValues, onSuccess }: DeckFormProps) {
+  const { messages } = useLocale()
   const action = deckId
     ? async (formData: FormData) => { await updateDeck(deckId, formData); onSuccess?.() }
     : createDeck
@@ -34,27 +36,33 @@ export default function DeckForm({ deckId, defaultValues, onSuccess }: DeckFormP
   return (
     <form action={action} className="flex flex-col gap-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-zinc-300">제목 *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-zinc-300">
+          {messages.deck.titleLabel}
+        </label>
         <input
           name="title"
           required
           defaultValue={defaultValues?.title}
-          placeholder="덱 이름을 입력하세요"
+          placeholder={messages.deck.titlePlaceholder}
           className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-zinc-300">설명</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-zinc-300">
+          {messages.deck.descriptionLabel}
+        </label>
         <textarea
           name="description"
           defaultValue={defaultValues?.description}
-          placeholder="덱에 대한 설명 (선택)"
+          placeholder={messages.deck.descriptionPlaceholder}
           rows={3}
           className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-zinc-300">색상</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-zinc-300">
+          {messages.deck.colorLabel}
+        </label>
         <div className="flex gap-2">
           {COLORS.map((color) => (
             <label key={color} className="cursor-pointer">
@@ -74,8 +82,8 @@ export default function DeckForm({ deckId, defaultValues, onSuccess }: DeckFormP
         </div>
       </div>
       <SubmitButton
-        label={deckId ? "저장" : "덱 만들기"}
-        pendingLabel="저장 중..."
+        label={deckId ? messages.deck.save : messages.deck.create}
+        pendingLabel={messages.deck.saving}
       />
     </form>
   )

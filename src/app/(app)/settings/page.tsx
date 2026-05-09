@@ -10,54 +10,64 @@ import {
 import ThemeToggle from "@/components/settings/ThemeToggle"
 import SpeechVoiceSettings from "@/components/settings/SpeechVoiceSettings"
 import DeleteAccountButton from "@/components/settings/DeleteAccountButton"
+import LanguageToggle from "@/components/settings/LanguageToggle"
+import { headers } from "next/headers"
+import { getRequestLocale } from "@/lib/i18n"
+import { messages } from "@/lib/messages"
 
-const supportLinks: { href: string; label: string; description: string; Icon: LucideIcon }[] = [
+const supportLinks: { href: string; key: "terms" | "privacy" | "support"; Icon: LucideIcon }[] = [
   {
     href: "/terms",
-    label: "이용약관",
-    description: "서비스 이용 조건과 계정 관련 안내를 확인합니다.",
+    key: "terms",
     Icon: FileText,
   },
   {
     href: "/privacy",
-    label: "개인정보처리방침",
-    description: "수집 정보, 보관, 삭제 및 AI 기능 데이터 처리를 확인합니다.",
+    key: "privacy",
     Icon: ShieldCheck,
   },
   {
     href: "/support",
-    label: "지원",
-    description: "로그인, 계정 삭제, 학습 데이터 관련 문의 방법을 확인합니다.",
+    key: "support",
     Icon: Headphones,
   },
 ]
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const locale = getRequestLocale(await headers())
+  const t = messages[locale]
+
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-6 text-xl font-bold text-gray-900 dark:text-zinc-100">설정</h1>
+      <h1 className="mb-6 text-xl font-bold text-gray-900 dark:text-zinc-100">{t.settings.title}</h1>
 
       <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">테마</h2>
-        <p className="mb-4 text-xs text-gray-500">앱 전체에 적용될 색 테마를 선택하세요.</p>
+        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">{t.settings.themeTitle}</h2>
+        <p className="mb-4 text-xs text-gray-500">{t.settings.themeDescription}</p>
         <ThemeToggle />
       </section>
 
       <section className="mt-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">음성</h2>
-        <p className="mb-4 text-xs text-gray-500">카드 읽기에 사용할 목소리를 선택하세요.</p>
+        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">{t.settings.languageTitle}</h2>
+        <p className="mb-4 text-xs text-gray-500">{t.settings.languageDescription}</p>
+        <LanguageToggle labels={t.settings.languages} />
+      </section>
+
+      <section className="mt-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">{t.settings.voiceTitle}</h2>
+        <p className="mb-4 text-xs text-gray-500">{t.settings.voiceDescription}</p>
         <SpeechVoiceSettings />
       </section>
 
       <section className="mt-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">
-          도움말 및 정책
+          {t.settings.helpTitle}
         </h2>
         <p className="mb-4 text-xs text-gray-500 dark:text-zinc-400">
-          서비스 이용과 개인정보, 문의 안내를 확인하세요.
+          {t.settings.helpDescription}
         </p>
         <div className="divide-y divide-gray-100 rounded-xl border border-gray-100 dark:divide-zinc-800 dark:border-zinc-800">
-          {supportLinks.map(({ href, label, description, Icon }) => (
+          {supportLinks.map(({ href, key, Icon }) => (
             <Link
               key={href}
               href={href}
@@ -68,10 +78,10 @@ export default function SettingsPage() {
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-semibold text-gray-900 dark:text-zinc-100">
-                  {label}
+                  {t.settings.supportLinks[key].label}
                 </span>
                 <span className="mt-0.5 block text-xs leading-5 text-gray-500 dark:text-zinc-400">
-                  {description}
+                  {t.settings.supportLinks[key].description}
                 </span>
               </span>
               <ChevronRight
@@ -87,7 +97,7 @@ export default function SettingsPage() {
             </span>
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-semibold text-gray-900 dark:text-zinc-100">
-                저작권
+                {t.settings.copyright}
               </span>
               <span className="mt-0.5 block text-xs leading-5 text-gray-500 dark:text-zinc-400">
                 © 2026 Flip &amp; Flow. All rights reserved.
@@ -98,9 +108,9 @@ export default function SettingsPage() {
       </section>
 
       <section className="mt-4 rounded-2xl border border-red-200 bg-white p-5 shadow-sm dark:border-red-900 dark:bg-zinc-900">
-        <h2 className="mb-1 text-sm font-semibold text-red-600 dark:text-red-400">계정 삭제</h2>
+        <h2 className="mb-1 text-sm font-semibold text-red-600 dark:text-red-400">{t.settings.deleteTitle}</h2>
         <p className="mb-4 text-xs text-gray-500 dark:text-zinc-400">
-          계정과 함께 저장된 모든 덱, 카드, 에세이가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.
+          {t.settings.deleteDescription}
         </p>
         <DeleteAccountButton />
       </section>

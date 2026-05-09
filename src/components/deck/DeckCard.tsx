@@ -1,11 +1,14 @@
 import Link from "next/link"
 import type { Deck } from "@/generated/prisma/client"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface DeckCardProps {
   deck: Deck & { _count: { cards: number } }
 }
 
 export default function DeckCard({ deck }: DeckCardProps) {
+  const { messages } = useLocale()
+
   return (
     <Link
       href={`/decks/${deck.id}`}
@@ -16,7 +19,9 @@ export default function DeckCard({ deck }: DeckCardProps) {
       {deck.description && (
         <p className="text-sm text-gray-500 mt-1 line-clamp-2 dark:text-zinc-400">{deck.description}</p>
       )}
-      <p className="text-xs text-gray-400 mt-3 dark:text-zinc-500">{deck._count.cards}장</p>
+      <p className="text-xs text-gray-400 mt-3 dark:text-zinc-500">
+        {messages.deck.cardCount(deck._count.cards)}
+      </p>
     </Link>
   )
 }

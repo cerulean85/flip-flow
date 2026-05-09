@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { Check, Copy, Loader2, Plus, Volume2 } from "lucide-react"
 import { createCardFromSentence } from "@/actions/card.actions"
 import { speak } from "@/lib/speech"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface Props {
   deckId: string
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export default function SentenceFlip({ deckId, ko, en }: Props) {
+  const { messages } = useLocale()
   const [flipped, setFlipped] = useState(false)
   const [copied, setCopied] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -63,7 +65,7 @@ export default function SentenceFlip({ deckId, ko, en }: Props) {
     try {
       const result = await createCardFromSentence(deckId, { en, ko })
       setSaved(true)
-      setToastMessage(`"${result.deckTitle}" 덱에 추가했어요.`)
+      setToastMessage(messages.card.addedToDeck(result.deckTitle))
     } finally {
       setSaving(false)
     }
@@ -83,7 +85,7 @@ export default function SentenceFlip({ deckId, ko, en }: Props) {
             toggle()
           }
         }}
-        aria-label="문장 뒤집기"
+        aria-label={messages.card.sentenceFlip}
         className="relative flex w-full cursor-pointer items-start gap-2 rounded-lg px-2 py-2 text-sm leading-relaxed transition-colors hover:bg-gray-50 dark:hover:bg-zinc-800"
         style={{ perspective: "800px" }}
       >
@@ -112,8 +114,8 @@ export default function SentenceFlip({ deckId, ko, en }: Props) {
             type="button"
             onClick={handleCreateCard}
             disabled={saving}
-            aria-label={saved ? "카드에 추가됨" : "카드에 추가"}
-            title={saved ? "카드에 추가됨" : "카드에 추가"}
+            aria-label={saved ? messages.card.addSaved : messages.card.addFromSentence}
+            title={saved ? messages.card.addSaved : messages.card.addFromSentence}
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-60 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
           >
             {saving ? (
@@ -127,8 +129,8 @@ export default function SentenceFlip({ deckId, ko, en }: Props) {
           <button
             type="button"
             onClick={handleCopy}
-            aria-label={copied ? "복사됨" : "문장 복사"}
-            title={copied ? "복사됨" : "문장 복사"}
+            aria-label={copied ? messages.card.copied : messages.card.copySentence}
+            title={copied ? messages.card.copied : messages.card.copySentence}
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
           >
             {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
@@ -136,8 +138,8 @@ export default function SentenceFlip({ deckId, ko, en }: Props) {
           <button
             type="button"
             onClick={handleSpeak}
-            aria-label="읽기"
-            title="읽기"
+            aria-label={messages.card.read}
+            title={messages.card.read}
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
           >
             <Volume2 size={16} aria-hidden="true" />

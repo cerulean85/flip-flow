@@ -7,6 +7,7 @@ import SignOutButton from "@/components/nav/SignOutButton"
 import AdSlot from "@/components/ads/AdSlot"
 import NavLinks from "./NavLinks"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface Props {
   user: { name?: string | null; email?: string | null; image?: string | null }
@@ -25,6 +26,8 @@ export default function Sidebar({
   onToggleCollapse,
   className,
 }: Props) {
+  const { messages } = useLocale()
+
   return (
     <aside
       className={cn(
@@ -46,7 +49,7 @@ export default function Sidebar({
           <button
             type="button"
             onClick={onToggleCollapse}
-            aria-label="메뉴 접기"
+            aria-label={messages.nav.collapse}
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
           >
             <ChevronLeft size={16} aria-hidden="true" />
@@ -59,7 +62,7 @@ export default function Sidebar({
           <button
             type="button"
             onClick={onToggleCollapse}
-            aria-label="메뉴 펼치기"
+            aria-label={messages.nav.expand}
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
           >
             <ChevronRight size={16} aria-hidden="true" />

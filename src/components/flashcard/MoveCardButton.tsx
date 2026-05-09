@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useRef, useEffect } from "react"
 import { moveCard } from "@/actions/card.actions"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface TargetDeck {
   id: string
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export default function MoveCardButton({ cardId, fromDeckId, decks }: Props) {
+  const { messages } = useLocale()
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
   const ref = useRef<HTMLDivElement>(null)
@@ -43,15 +45,15 @@ export default function MoveCardButton({ cardId, fromDeckId, decks }: Props) {
         onClick={() => setOpen((v) => !v)}
         disabled={isPending}
         className="text-gray-300 hover:text-blue-400 disabled:opacity-50 text-sm transition-colors dark:text-zinc-600"
-        aria-label="다른 덱으로 이동"
-        title="다른 덱으로 이동"
+        aria-label={messages.card.move}
+        title={messages.card.move}
       >
         {isPending ? "…" : "⇥"}
       </button>
 
       {open && (
         <div className="absolute right-0 top-6 z-20 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 overflow-hidden dark:bg-zinc-900 dark:border-zinc-800">
-          <p className="text-xs text-gray-400 px-3 py-1.5 border-b border-gray-50 dark:border-zinc-800 dark:text-zinc-500">덱으로 이동</p>
+          <p className="text-xs text-gray-400 px-3 py-1.5 border-b border-gray-50 dark:border-zinc-800 dark:text-zinc-500">{messages.card.moveToDeck}</p>
           {decks.map((deck) => (
             <button
               key={deck.id}

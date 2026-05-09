@@ -7,6 +7,7 @@ import AdSlot from "@/components/ads/AdSlot"
 import FlipCard from "./FlipCard"
 import BookmarkButton from "./BookmarkButton"
 import type { Card } from "@/generated/prisma/client"
+import { useLocale } from "@/components/LocaleProvider"
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -35,6 +36,7 @@ interface CardSliderProps {
 }
 
 export default function CardSlider({ cards, controlsPosition = "bottom" }: CardSliderProps) {
+  const { messages } = useLocale()
   const [shuffled, setShuffled] = useState<Card[]>(cards)
   const [[index, direction], setPage] = useState([0, 0])
   const initializedRef = useRef(false)
@@ -92,7 +94,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
           className="flex items-center gap-1 text-sm font-medium text-blue-600 disabled:text-gray-300 transition-colors dark:text-blue-400 dark:disabled:text-zinc-700"
         >
           <ChevronLeft size={16} aria-hidden="true" />
-          이전
+          {messages.card.previous}
         </button>
 
         <BookmarkButton cardId={card.id} isBookmark={card.isBookmark} />
@@ -102,7 +104,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
           disabled={index === shuffled.length - 1}
           className="flex items-center gap-1 text-sm font-medium text-blue-600 disabled:text-gray-300 transition-colors dark:text-blue-400 dark:disabled:text-zinc-700"
         >
-          다음
+          {messages.card.next}
           <ChevronRight size={16} aria-hidden="true" />
         </button>
       </div>
@@ -127,7 +129,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
           className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 transition-colors dark:hover:text-blue-300"
         >
           <Shuffle size={14} aria-hidden="true" />
-          다시 섞기
+          {messages.card.reshuffle}
         </button>
       </div>
 

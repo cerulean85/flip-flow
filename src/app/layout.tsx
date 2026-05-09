@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next"
 import { Geist } from "next/font/google"
+import { headers } from "next/headers"
 import Script from "next/script"
 import Providers from "@/components/Providers"
+import { defaultLocale, isLocale, type Locale } from "@/lib/i18n"
 import "./globals.css"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
@@ -30,11 +32,14 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const requestLocale = (await headers()).get("x-flip-flow-locale") ?? undefined
+  const locale: Locale = isLocale(requestLocale) ? requestLocale : defaultLocale
+
   return (
-    <html lang="ko" className={`${geist.variable} h-full antialiased`} suppressHydrationWarning>
+    <html lang={locale} className={`${geist.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full">
-        <Providers>{children}</Providers>
+        <Providers locale={locale}>{children}</Providers>
         <Script
           id="google-adsense"
           strategy="afterInteractive"

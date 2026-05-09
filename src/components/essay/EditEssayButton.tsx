@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import EssayEditorModal from "./EssayEditorModal"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface Props {
   essayId: string
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function EditEssayButton({ essayId, title, content }: Props) {
+  const { messages } = useLocale()
   const [open, setOpen] = useState(false)
 
   return (
@@ -19,7 +21,7 @@ export default function EditEssayButton({ essayId, title, content }: Props) {
         onClick={() => setOpen(true)}
         className="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
       >
-        수정
+        {messages.essay.editButton}
       </button>
       <EssayEditorModal
         open={open}

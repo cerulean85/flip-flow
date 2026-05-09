@@ -9,6 +9,7 @@ import rehypeKatex from "rehype-katex"
 import { Search, Sparkles, X, Loader2, MessageSquareText, Volume2 } from "lucide-react"
 import SentenceFlip from "./SentenceFlip"
 import { speak } from "@/lib/speech"
+import { useLocale } from "@/components/LocaleProvider"
 
 type Sentence = { ko: string; en: string }
 
@@ -19,6 +20,7 @@ interface FlipCardProps {
 }
 
 export default function FlipCard({ deckId, front, back }: FlipCardProps) {
+  const { messages } = useLocale()
   const [isFlipped, setIsFlipped] = useState(false)
   const [geminiResult, setGeminiResult] = useState<string | null>(null)
   const [isSearching, setIsSearching] = useState(false)
@@ -49,9 +51,9 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
         body: JSON.stringify({ word: front }),
       })
       const data = await res.json()
-      setGeminiResult(data.result ?? data.error ?? "결과를 가져올 수 없습니다.")
+      setGeminiResult(data.result ?? data.error ?? messages.card.noResult)
     } catch {
-      setGeminiResult("네트워크 오류가 발생했습니다.")
+      setGeminiResult(messages.card.networkError)
     } finally {
       setIsSearching(false)
       setShowResult(true)
@@ -82,10 +84,10 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
       if (Array.isArray(data.sentences) && data.sentences.length > 0) {
         setSentences(data.sentences)
       } else {
-        setSentencesError(data.error ?? "예문을 생성하지 못했습니다.")
+        setSentencesError(data.error ?? messages.card.sentenceError)
       }
     } catch {
-      setSentencesError("네트워크 오류가 발생했습니다.")
+      setSentencesError(messages.card.networkError)
     } finally {
       setIsGenerating(false)
       setShowSentences(true)
@@ -116,8 +118,8 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
                 e.stopPropagation()
                 speak(front)
               }}
-              aria-label="앞면 읽기"
-              title="앞면 읽기"
+              aria-label={messages.card.readFront}
+              title={messages.card.readFront}
               className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
             >
               <Volume2 size={18} aria-hidden="true" />
@@ -126,7 +128,7 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
             <p className="text-xl font-semibold text-gray-800 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">
               {front}
             </p>
-            <p className="text-xs text-gray-300 mt-4 dark:text-zinc-600">탭하여 뒤집기</p>
+            <p className="text-xs text-gray-300 mt-4 dark:text-zinc-600">{messages.card.tapToFlip}</p>
 
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <button
@@ -139,7 +141,7 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
                 ) : (
                   <MessageSquareText size={16} aria-hidden="true" />
                 )}
-                연습하기
+                {messages.card.practice}
               </button>
               <button
                 onClick={searchMeaning}
@@ -151,7 +153,7 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
                 ) : (
                   <Search size={16} aria-hidden="true" />
                 )}
-                뜻 검색
+                {messages.card.definition}
               </button>
             </div>
           </div>
@@ -167,15 +169,15 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
                 e.stopPropagation()
                 speak(back)
               }}
-              aria-label="뒷면 읽기"
-              title="뒷면 읽기"
+              aria-label={messages.card.readBack}
+              title={messages.card.readBack}
               className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
             >
               <Volume2 size={18} aria-hidden="true" />
             </button>
 
             <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">{back}</p>
-            <p className="text-xs text-gray-300 mt-4 dark:text-zinc-500">탭하여 뒤집기</p>
+            <p className="text-xs text-gray-300 mt-4 dark:text-zinc-500">{messages.card.tapToFlip}</p>
 
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <button
@@ -188,7 +190,7 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
                 ) : (
                   <MessageSquareText size={16} aria-hidden="true" />
                 )}
-                연습하기
+                {messages.card.practice}
               </button>
               <button
                 onClick={searchMeaning}
@@ -200,7 +202,7 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
                 ) : (
                   <Search size={16} aria-hidden="true" />
                 )}
-                뜻 검색
+                {messages.card.definition}
               </button>
             </div>
           </div>
@@ -220,11 +222,11 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
             <div className="flex items-center justify-between mb-2">
               <p className="inline-flex items-center gap-1 text-xs font-semibold text-blue-500 uppercase tracking-widest dark:text-blue-400">
                 <Sparkles size={12} aria-hidden="true" />
-                AI 검색 결과
+                {messages.card.aiResult}
               </p>
               <button
                 onClick={() => setShowResult(false)}
-                aria-label="닫기"
+                aria-label={messages.card.close}
                 className="text-gray-300 hover:text-gray-500 transition-colors dark:text-zinc-600 dark:hover:text-zinc-400"
               >
                 <X size={14} aria-hidden="true" />
@@ -268,11 +270,11 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
             <div className="flex items-center justify-between mb-3">
               <p className="inline-flex items-center gap-1 text-xs font-semibold text-blue-500 uppercase tracking-widest dark:text-blue-400">
                 <MessageSquareText size={12} aria-hidden="true" />
-                연습하기
+                {messages.card.practice}
               </p>
               <button
                 onClick={() => setShowSentences(false)}
-                aria-label="닫기"
+                aria-label={messages.card.close}
                 className="text-gray-300 hover:text-gray-500 transition-colors dark:text-zinc-600 dark:hover:text-zinc-400"
               >
                 <X size={14} aria-hidden="true" />
@@ -283,7 +285,7 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
             ) : (
               <>
                 <p className="mb-2 text-xs text-gray-400 dark:text-zinc-500">
-                  문장을 탭하면 한국어 뜻을 볼 수 있어요
+                  {messages.card.practiceHint}
                 </p>
                 <ol className="list-decimal list-inside space-y-1">
                   {sentences!.map((s, i) => (

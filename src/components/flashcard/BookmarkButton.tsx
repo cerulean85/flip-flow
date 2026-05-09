@@ -4,6 +4,7 @@ import { useOptimistic, useTransition } from "react"
 import { Star } from "lucide-react"
 import { toggleBookmark } from "@/actions/card.actions"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface BookmarkButtonProps {
   cardId: string
@@ -11,6 +12,7 @@ interface BookmarkButtonProps {
 }
 
 export default function BookmarkButton({ cardId, isBookmark }: BookmarkButtonProps) {
+  const { messages } = useLocale()
   const [optimisticBookmark, setOptimistic] = useOptimistic(isBookmark)
   const [, startTransition] = useTransition()
 
@@ -24,7 +26,7 @@ export default function BookmarkButton({ cardId, isBookmark }: BookmarkButtonPro
   return (
     <button
       onClick={handleToggle}
-      aria-label={optimisticBookmark ? "북마크 해제" : "북마크 추가"}
+      aria-label={optimisticBookmark ? messages.card.unbookmark : messages.card.bookmark}
       className="transition-transform active:scale-125"
     >
       <Star

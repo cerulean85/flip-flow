@@ -6,6 +6,7 @@ import DeckCard from "./DeckCard"
 import Link from "next/link"
 import { Layers, Search, X } from "lucide-react"
 import { useMemo, useState } from "react"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface CardWithDeck {
   id: string
@@ -21,6 +22,7 @@ interface DeckListProps {
 }
 
 export default function DeckList({ decks, cards }: DeckListProps) {
+  const { messages } = useLocale()
   const [query, setQuery] = useState("")
   const q = query.trim().toLowerCase()
 
@@ -34,12 +36,12 @@ export default function DeckList({ decks, cards }: DeckListProps) {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-zinc-100">내 덱</h1>
+        <h1 className="text-xl font-bold text-gray-800 dark:text-zinc-100">{messages.deck.title}</h1>
         <Link
           href="/decks/new"
           className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
         >
-          + 새 덱
+          {messages.deck.newDeck}
         </Link>
       </div>
 
@@ -53,14 +55,14 @@ export default function DeckList({ decks, cards }: DeckListProps) {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="모든 카드에서 검색"
+          placeholder={messages.deck.searchPlaceholder}
           className="w-full rounded-xl border border-gray-200 bg-white py-2 pl-9 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
         />
         {query && (
           <button
             type="button"
             onClick={() => setQuery("")}
-            aria-label="검색 지우기"
+            aria-label={messages.deck.clearSearch}
             className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
           >
             <X size={14} aria-hidden="true" />
@@ -74,7 +76,7 @@ export default function DeckList({ decks, cards }: DeckListProps) {
         ) : decks.length === 0 ? (
           <div className="py-16 text-center text-gray-400 dark:text-zinc-500">
             <Layers size={48} strokeWidth={1.5} className="mx-auto mb-3" aria-hidden="true" />
-            <p className="text-sm">아직 덱이 없어요. 첫 번째 덱을 만들어보세요!</p>
+            <p className="text-sm">{messages.deck.empty}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3">
@@ -91,10 +93,12 @@ export default function DeckList({ decks, cards }: DeckListProps) {
 }
 
 function CardSearchResults({ cards, query }: { cards: CardWithDeck[]; query: string }) {
+  const { messages } = useLocale()
+
   if (cards.length === 0) {
     return (
       <p className="py-8 text-center text-sm text-gray-400 dark:text-zinc-500">
-        &quot;{query}&quot;와 일치하는 카드가 없어요.
+        {messages.deck.noSearchResults(query)}
       </p>
     )
   }
@@ -102,7 +106,7 @@ function CardSearchResults({ cards, query }: { cards: CardWithDeck[]; query: str
   return (
     <div className="flex flex-col gap-2">
       <p className="text-xs text-gray-400 dark:text-zinc-500">
-        카드 {cards.length}개 일치
+        {messages.deck.matchCount(cards.length)}
       </p>
       {cards.map((card) => (
         <Link

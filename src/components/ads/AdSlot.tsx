@@ -1,4 +1,7 @@
+"use client"
+
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/LocaleProvider"
 
 type AdPlacement = "sidebar" | "content" | "study"
 
@@ -13,16 +16,13 @@ const placementClasses: Record<AdPlacement, string> = {
   study: "min-h-20 w-full",
 }
 
-const placementLabels: Record<AdPlacement, string> = {
-  sidebar: "스폰서",
-  content: "광고",
-  study: "광고",
-}
-
 export default function AdSlot({ placement, className }: AdSlotProps) {
+  const { messages } = useLocale()
+  const label = messages.ads[placement]
+
   return (
     <aside
-      aria-label={placementLabels[placement]}
+      aria-label={label}
       data-ad-placement={placement}
       className={cn(
         "overflow-hidden rounded-xl border border-dashed border-gray-200 bg-white/70 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/70",
@@ -32,7 +32,7 @@ export default function AdSlot({ placement, className }: AdSlotProps) {
     >
       <div className="flex h-full flex-col items-center justify-center gap-1 px-4 py-3 text-center">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-300 dark:text-zinc-600">
-          {placementLabels[placement]}
+          {label}
         </p>
         <div className="h-2 w-16 rounded-full bg-gray-100 dark:bg-zinc-800" aria-hidden="true" />
         <div className="h-2 w-24 rounded-full bg-gray-100 dark:bg-zinc-800" aria-hidden="true" />

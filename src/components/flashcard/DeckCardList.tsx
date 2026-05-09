@@ -5,6 +5,7 @@ import { Inbox, Search, X } from "lucide-react"
 import CardForm from "./CardForm"
 import CardListItem from "./CardListItem"
 import type { Card } from "@/generated/prisma/client"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface TargetDeck {
   id: string
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export default function DeckCardList({ cards, deckId, otherDecks }: Props) {
+  const { messages } = useLocale()
   const [query, setQuery] = useState("")
   const q = query.trim().toLowerCase()
 
@@ -44,14 +46,14 @@ export default function DeckCardList({ cards, deckId, otherDecks }: Props) {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="카드 검색"
+          placeholder={messages.card.searchPlaceholder}
           className="w-full rounded-xl border border-gray-200 bg-white py-2 pl-9 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
         />
         {query && (
           <button
             type="button"
             onClick={() => setQuery("")}
-            aria-label="검색 지우기"
+            aria-label={messages.deck.clearSearch}
             className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
           >
             <X size={14} aria-hidden="true" />
@@ -63,19 +65,19 @@ export default function DeckCardList({ cards, deckId, otherDecks }: Props) {
 
       {q && (
         <p className="text-xs text-gray-400 dark:text-zinc-500">
-          {filtered.length}개 일치
+          {messages.deck.matchCount(filtered.length)}
         </p>
       )}
 
       {filtered.length === 0 ? (
         q ? (
           <p className="py-8 text-center text-sm text-gray-400 dark:text-zinc-500">
-            &quot;{query}&quot;와 일치하는 카드가 없어요.
+            {messages.deck.noSearchResults(query)}
           </p>
         ) : (
           <div className="py-8 text-center text-gray-400 dark:text-zinc-500">
             <Inbox size={40} strokeWidth={1.5} className="mx-auto mb-2" aria-hidden="true" />
-            <p className="text-sm">아직 카드가 없어요. 위에서 추가해보세요!</p>
+            <p className="text-sm">{messages.card.emptyInDeck}</p>
           </div>
         )
       ) : (

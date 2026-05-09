@@ -5,18 +5,18 @@ import { prisma } from "@/lib/prisma"
 import EssayContent from "@/components/essay/EssayContent"
 import DeleteEssayButton from "@/components/essay/DeleteEssayButton"
 import EditEssayButton from "@/components/essay/EditEssayButton"
+import { headers } from "next/headers"
+import { getRequestLocale } from "@/lib/i18n"
+import { formatLocalizedDate } from "@/lib/date"
 
 interface Props {
   params: Promise<{ essayId: string }>
 }
 
-function formatDate(d: Date) {
-  return d.toLocaleDateString("ko", { year: "numeric", month: "long", day: "numeric" })
-}
-
 export default async function EssayDetailPage({ params }: Props) {
   const { essayId } = await params
   const session = await auth()
+  const locale = getRequestLocale(await headers())
 
   const essay = await prisma.essay.findFirst({
     where: { id: essayId, userId: session!.user.id },
@@ -38,7 +38,7 @@ export default async function EssayDetailPage({ params }: Props) {
             {essay.title}
           </h1>
           <p className="mt-1 text-xs text-gray-400 dark:text-zinc-500">
-            {formatDate(essay.updatedAt)}
+            {formatLocalizedDate(essay.updatedAt, locale)}
           </p>
         </div>
         <EditEssayButton

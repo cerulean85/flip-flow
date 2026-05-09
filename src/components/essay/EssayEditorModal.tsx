@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { X } from "lucide-react"
 import EssayEditor from "./EssayEditor"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface Props {
   open: boolean
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export default function EssayEditorModal({ open, onClose, essayId, defaultValues }: Props) {
+  const { messages } = useLocale()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -50,12 +52,12 @@ export default function EssayEditorModal({ open, onClose, essayId, defaultValues
       >
         <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-zinc-800">
           <h2 className="text-base font-semibold text-gray-900 dark:text-zinc-100">
-            {essayId ? "에세이 수정" : "새 에세이"}
+            {essayId ? messages.essay.editEssay : messages.essay.newEssay}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="닫기"
+            aria-label={messages.card.close}
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
           >
             <X size={18} aria-hidden="true" />

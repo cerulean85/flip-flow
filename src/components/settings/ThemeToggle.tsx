@@ -3,15 +3,13 @@
 import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/LocaleProvider"
 
-const themes = [
-  { value: "light", label: "라이트" },
-  { value: "dark", label: "다크" },
-  { value: "system", label: "시스템" },
-]
+const themeValues = ["light", "dark", "system"] as const
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme()
+  const { messages } = useLocale()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -22,7 +20,7 @@ export default function ThemeToggle() {
 
   return (
     <div className="flex gap-2">
-      {themes.map(({ value, label }) => {
+      {themeValues.map((value) => {
         const active = mounted && theme === value
         return (
           <button
@@ -36,7 +34,7 @@ export default function ThemeToggle() {
                 : "border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
             )}
           >
-            {label}
+            {messages.settings.themes[value]}
           </button>
         )
       })}

@@ -5,6 +5,9 @@ import { prisma } from "@/lib/prisma"
 import DeleteDeckButton from "@/components/deck/DeleteDeckButton"
 import EditDeckSection from "@/components/deck/EditDeckSection"
 import DeckCardList from "@/components/flashcard/DeckCardList"
+import { headers } from "next/headers"
+import { getRequestLocale } from "@/lib/i18n"
+import { messages } from "@/lib/messages"
 
 interface Props {
   params: Promise<{ deckId: string }>
@@ -13,6 +16,8 @@ interface Props {
 export default async function DeckDetailPage({ params }: Props) {
   const { deckId } = await params
   const session = await auth()
+  const locale = getRequestLocale(await headers())
+  const t = messages[locale]
 
   const [deck, otherDecks] = await Promise.all([
     prisma.deck.findFirst({
@@ -47,7 +52,7 @@ export default async function DeckDetailPage({ params }: Props) {
               href={`/decks/${deckId}/study`}
               className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors"
             >
-              학습 시작
+              {t.deck.startStudy}
             </Link>
           )}
           <DeleteDeckButton deckId={deckId} />

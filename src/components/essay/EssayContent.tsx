@@ -1,8 +1,11 @@
+"use client"
+
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
 import { normalizeEssayMarkdown } from "@/lib/markdown"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface Props {
   markdown: string
@@ -10,12 +13,13 @@ interface Props {
 }
 
 export default function EssayContent({ markdown, className = "" }: Props) {
+  const { messages } = useLocale()
   const normalizedMarkdown = normalizeEssayMarkdown(markdown)
 
   if (!normalizedMarkdown.trim()) {
     return (
       <p className={`text-sm text-gray-400 italic dark:text-zinc-500 ${className}`}>
-        내용이 비어 있습니다.
+        {messages.essay.emptyContent}
       </p>
     )
   }

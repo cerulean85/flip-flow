@@ -6,6 +6,7 @@ import Link from "next/link"
 import { createEssay, updateEssay } from "@/actions/essay.actions"
 import EssayContent from "./EssayContent"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/LocaleProvider"
 
 interface Props {
   essayId?: string
@@ -27,6 +28,7 @@ function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: st
 }
 
 export default function EssayEditor({ essayId, defaultValues, onCancel }: Props) {
+  const { messages } = useLocale()
   const [content, setContent] = useState(defaultValues?.content ?? "")
   const [mobileMode, setMobileMode] = useState<"edit" | "preview">("edit")
 
@@ -45,7 +47,7 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
         name="title"
         required
         defaultValue={defaultValues?.title}
-        placeholder="제목을 입력하세요"
+        placeholder={messages.essay.titlePlaceholder}
         className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
       />
 
@@ -63,7 +65,7 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
                 : "text-gray-600 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
             )}
           >
-            {m === "edit" ? "편집" : "미리보기"}
+            {m === "edit" ? messages.essay.edit : messages.essay.preview}
           </button>
         ))}
       </div>
@@ -75,7 +77,7 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
             name="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="마크다운으로 작성하세요...&#10;&#10;예) # 제목&#10;**굵게** *기울임*&#10;- 리스트&#10;`코드`"
+            placeholder={messages.essay.contentPlaceholder}
             rows={20}
             className="h-[65vh] w-full resize-none rounded-xl border border-gray-200 bg-white p-4 font-mono text-sm leading-relaxed text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
           />
@@ -91,16 +93,16 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
       <div className="flex items-center justify-end gap-2">
         {onCancel ? (
           <button type="button" onClick={onCancel} className={cancelClassName}>
-            취소
+            {messages.essay.cancel}
           </button>
         ) : (
           <Link href={cancelHref} className={cancelClassName}>
-            취소
+            {messages.essay.cancel}
           </Link>
         )}
         <SubmitButton
-          label={essayId ? "저장" : "발행"}
-          pendingLabel="저장 중..."
+          label={essayId ? messages.essay.save : messages.essay.publish}
+          pendingLabel={messages.essay.saving}
         />
       </div>
     </form>

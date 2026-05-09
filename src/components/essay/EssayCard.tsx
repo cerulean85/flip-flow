@@ -1,11 +1,10 @@
 import Link from "next/link"
+import { formatLocalizedDate } from "@/lib/date"
+import { getRequestLocale } from "@/lib/i18n"
+import { headers } from "next/headers"
 
 interface Props {
   essay: { id: string; title: string; content: string; updatedAt: Date }
-}
-
-function formatDate(d: Date) {
-  return d.toLocaleDateString("ko", { year: "numeric", month: "long", day: "numeric" })
 }
 
 function previewText(markdown: string, len = 120) {
@@ -14,7 +13,9 @@ function previewText(markdown: string, len = 120) {
   return trimmed.slice(0, len) + "…"
 }
 
-export default function EssayCard({ essay }: Props) {
+export default async function EssayCard({ essay }: Props) {
+  const locale = getRequestLocale(await headers())
+
   return (
     <Link
       href={`/essays/${essay.id}`}
@@ -29,7 +30,7 @@ export default function EssayCard({ essay }: Props) {
         </p>
       )}
       <p className="mt-3 text-xs text-gray-400 dark:text-zinc-500">
-        {formatDate(essay.updatedAt)}
+        {formatLocalizedDate(essay.updatedAt, locale)}
       </p>
     </Link>
   )

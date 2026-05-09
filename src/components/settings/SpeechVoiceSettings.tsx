@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Volume2 } from "lucide-react"
 import { getSpeechVoices, speak, speechVoiceStorageKeys } from "@/lib/speech"
+import { useLocale } from "@/components/LocaleProvider"
 
 type VoiceOption = {
   lang: string
@@ -13,14 +14,14 @@ type VoiceOption = {
 
 const languageSettings = [
   {
-    label: "한국어",
+    labelKey: "korean",
     lang: "ko-KR",
     fixedVoice: "Yuna",
     storageKey: speechVoiceStorageKeys.ko,
     testText: "오늘도 좋은 흐름으로 공부해요.",
   },
   {
-    label: "영어",
+    labelKey: "english",
     lang: "en-US",
     fixedVoice: "Samantha",
     storageKey: speechVoiceStorageKeys.en,
@@ -38,6 +39,7 @@ function toVoiceOption(voice: SpeechSynthesisVoice): VoiceOption {
 }
 
 export default function SpeechVoiceSettings() {
+  const { messages } = useLocale()
   const [voices, setVoices] = useState<VoiceOption[]>([])
   const [selected, setSelected] = useState<Record<string, string>>(() => {
     if (typeof window === "undefined") return {}
@@ -84,8 +86,9 @@ export default function SpeechVoiceSettings() {
 
   return (
     <div className="space-y-4">
-      {languageSettings.map(({ label, lang, fixedVoice, storageKey, testText }) => {
+      {languageSettings.map(({ labelKey, lang, fixedVoice, storageKey, testText }) => {
         const languageVoices = voicesByLanguage[lang] ?? []
+        const label = messages.settings.voice[labelKey]
 
         return (
           <div key={lang} className="space-y-2">
@@ -97,8 +100,8 @@ export default function SpeechVoiceSettings() {
                 type="button"
                 onClick={() => speak(testText, lang)}
                 className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
-                aria-label={`${label} 음성 테스트`}
-                title={`${label} 음성 테스트`}
+                aria-label={`${label} ${messages.settings.voice.testSuffix}`}
+                title={`${label} ${messages.settings.voice.testSuffix}`}
               >
                 <Volume2 size={15} aria-hidden="true" />
               </button>
@@ -109,11 +112,11 @@ export default function SpeechVoiceSettings() {
               onChange={(event) => updateVoice(lang, storageKey, event.target.value)}
               className="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-blue-400 dark:focus:ring-blue-950"
             >
-              <option value="">기본값 ({fixedVoice})</option>
+              <option value="">{messages.settings.voice.defaultOption(fixedVoice)}</option>
               {languageVoices.map((voice) => (
                 <option key={voice.voiceURI} value={voice.voiceURI}>
                   {voice.name} ({voice.lang}
-                  {voice.localService ? ", 기기" : ""})
+                  {voice.localService ? `, ${messages.settings.voice.localDevice}` : ""})
                 </option>
               ))}
             </select>

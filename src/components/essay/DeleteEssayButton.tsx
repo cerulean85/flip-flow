@@ -2,20 +2,22 @@
 
 import { useTransition } from "react"
 import { deleteEssay } from "@/actions/essay.actions"
+import { useLocale } from "@/components/LocaleProvider"
 
 export default function DeleteEssayButton({ essayId }: { essayId: string }) {
+  const { messages } = useLocale()
   const [isPending, startTransition] = useTransition()
 
   return (
     <button
       onClick={() => {
-        if (!confirm("이 에세이를 삭제하시겠습니까?")) return
+        if (!confirm(messages.essay.deleteConfirm)) return
         startTransition(() => deleteEssay(essayId))
       }}
       disabled={isPending}
       className="text-sm text-red-500 hover:text-red-700 disabled:opacity-50"
     >
-      {isPending ? "삭제 중..." : "삭제"}
+      {isPending ? messages.essay.deleting : messages.essay.delete}
     </button>
   )
 }

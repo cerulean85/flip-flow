@@ -3,16 +3,16 @@
 import { useState, useTransition } from "react"
 import { Trash2 } from "lucide-react"
 import { deleteAccount } from "@/actions/account.actions"
-
-const CONFIRM_PHRASE = "삭제"
+import { useLocale } from "@/components/LocaleProvider"
 
 export default function DeleteAccountButton() {
+  const { messages } = useLocale()
   const [open, setOpen] = useState(false)
   const [confirmText, setConfirmText] = useState("")
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
-  const isConfirmed = confirmText.trim() === CONFIRM_PHRASE
+  const isConfirmed = confirmText.trim() === messages.settings.deleteConfirmPhrase
 
   const close = () => {
     if (isPending) return
@@ -28,7 +28,7 @@ export default function DeleteAccountButton() {
       try {
         await deleteAccount()
       } catch (err) {
-        setError(err instanceof Error ? err.message : "계정을 삭제하지 못했습니다.")
+        setError(err instanceof Error ? err.message : messages.settings.deleteError)
       }
     })
   }
@@ -41,7 +41,7 @@ export default function DeleteAccountButton() {
         className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:border-red-900 dark:bg-zinc-900 dark:text-red-400 dark:hover:bg-red-950"
       >
         <Trash2 size={16} aria-hidden="true" />
-        계정 삭제
+        {messages.settings.deleteButton}
       </button>
 
       {open && (
@@ -55,16 +55,17 @@ export default function DeleteAccountButton() {
             onClick={(e) => e.stopPropagation()}
           >
             <div>
-              <p className="text-base font-semibold text-gray-900 dark:text-zinc-100">계정 삭제</p>
+              <p className="text-base font-semibold text-gray-900 dark:text-zinc-100">
+                {messages.settings.deleteDialogTitle}
+              </p>
               <p className="mt-2 text-sm text-gray-600 dark:text-zinc-400">
-                계정과 함께 작성하신 모든 덱, 카드, 에세이가 영구적으로 삭제됩니다.
-                이 작업은 되돌릴 수 없습니다.
+                {messages.settings.deleteDialogBody}
               </p>
             </div>
 
             <div>
               <label htmlFor="delete-confirm" className="mb-1.5 block text-xs font-medium text-gray-700 dark:text-zinc-300">
-                계속하려면 아래 칸에 <span className="font-semibold text-red-600 dark:text-red-400">삭제</span>를 입력하세요
+                {messages.settings.deleteConfirmLabel}
               </label>
               <input
                 id="delete-confirm"
@@ -73,7 +74,7 @@ export default function DeleteAccountButton() {
                 onChange={(e) => setConfirmText(e.target.value)}
                 disabled={isPending}
                 autoComplete="off"
-                placeholder="삭제"
+                placeholder={messages.settings.deleteConfirmPhrase}
                 className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-600"
               />
             </div>
@@ -91,7 +92,7 @@ export default function DeleteAccountButton() {
                 disabled={isPending}
                 className="flex-1 rounded-xl bg-gray-100 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 disabled:opacity-50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
               >
-                취소
+                {messages.settings.cancel}
               </button>
               <button
                 type="button"
@@ -99,7 +100,7 @@ export default function DeleteAccountButton() {
                 disabled={isPending || !isConfirmed}
                 className="flex-1 rounded-xl bg-red-500 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isPending ? "삭제 중..." : "삭제"}
+                {isPending ? messages.settings.deleting : messages.settings.deleteConfirmPhrase}
               </button>
             </div>
           </div>
