@@ -1,18 +1,24 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { Check, Copy, Volume2 } from "lucide-react"
+import { Check, Copy, Loader2, Plus, Volume2 } from "lucide-react"
+import { createCardFromSentence } from "@/actions/card.actions"
 import { speak } from "@/lib/speech"
 
 interface Props {
+  deckId: string
   ko: string
   en: string
 }
 
-export default function SentenceFlip({ ko, en }: Props) {
+export default function SentenceFlip({ deckId, ko, en }: Props) {
+  const router = useRouter()
   const [flipped, setFlipped] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
 
   const visibleSentence = flipped ? ko : en
   const visibleLocale = flipped ? "ko-KR" : "en-US"
@@ -22,6 +28,12 @@ export default function SentenceFlip({ ko, en }: Props) {
     const timeout = window.setTimeout(() => setCopied(false), 1400)
     return () => window.clearTimeout(timeout)
   }, [copied])
+
+  useEffect(() => {
+    if (!saved) return
+    const timeout = window.setTimeout(() => setSaved(false), 1800)
+    return () => window.clearTimeout(timeout)
+  }, [saved])
 
   const handleSpeak = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -35,6 +47,20 @@ export default function SentenceFlip({ ko, en }: Props) {
       setCopied(true)
     } catch {
       setCopied(false)
+    }
+  }
+
+  const handleCreateCard = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (saving) return
+
+    setSaving(true)
+    try {
+      await createCardFromSentence(deckId, { en, ko })
+      setSaved(true)
+      router.refresh()
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -76,6 +102,22 @@ export default function SentenceFlip({ ko, en }: Props) {
       </motion.div>
 
       <div className="flex shrink-0 items-center gap-1">
+        <button
+          type="button"
+          onClick={handleCreateCard}
+          disabled={saving}
+          aria-label={saved ? "카드에 추가됨" : "카드에 추가"}
+          title={saved ? "카드에 추가됨" : "카드에 추가"}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-60 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+        >
+          {saving ? (
+            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+          ) : saved ? (
+            <Check size={16} aria-hidden="true" />
+          ) : (
+            <Plus size={16} aria-hidden="true" />
+          )}
+        </button>
         <button
           type="button"
           onClick={handleCopy}

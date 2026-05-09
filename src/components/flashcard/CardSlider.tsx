@@ -129,6 +129,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
           >
             <FlipCard
               key={card.id}
+              deckId={card.deckId}
               front={card.front}
               back={card.back}
             />

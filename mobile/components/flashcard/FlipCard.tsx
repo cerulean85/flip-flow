@@ -8,11 +8,12 @@ import type { Sentence } from "@/lib/types"
 import SentenceFlip from "./SentenceFlip"
 
 interface Props {
+  deckId: string
   front: string
   back: string
 }
 
-export default function FlipCard({ front, back }: Props) {
+export default function FlipCard({ deckId, front, back }: Props) {
   const { colors } = useTheme()
   const [flipped, setFlipped] = useState(false)
   const value = useRef(new Animated.Value(0)).current
@@ -260,7 +261,7 @@ export default function FlipCard({ front, back }: Props) {
                 문장을 탭하면 영어 번역을 볼 수 있어요
               </Text>
               {sentences!.map((s, i) => (
-                <SentenceFlip key={i} ko={s.ko} en={s.en} index={i} />
+                <SentenceFlip key={i} deckId={deckId} ko={s.ko} en={s.en} index={i} />
               ))}
             </>
           )}

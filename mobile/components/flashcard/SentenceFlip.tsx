@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from "react"
-import { Animated, Easing, Pressable, Text, View } from "react-native"
+import { ActivityIndicator, Animated, Easing, Pressable, Text, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import { api } from "@/lib/api"
 import { speak } from "@/lib/speech"
 import { useTheme } from "@/lib/theme"
 
 interface Props {
+  deckId: string
   ko: string
   en: string
   index: number
 }
 
-export default function SentenceFlip({ ko, en, index }: Props) {
+export default function SentenceFlip({ deckId, ko, en, index }: Props) {
   const { colors } = useTheme()
   const [flipped, setFlipped] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
   const value = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -24,12 +28,31 @@ export default function SentenceFlip({ ko, en, index }: Props) {
     }).start()
   }, [flipped, value])
 
+  useEffect(() => {
+    if (!saved) return
+    const timeout = setTimeout(() => setSaved(false), 1800)
+    return () => clearTimeout(timeout)
+  }, [saved])
+
   const frontInterpolate = value.interpolate({ inputRange: [0, 180], outputRange: ["0deg", "180deg"] })
   const backInterpolate = value.interpolate({ inputRange: [0, 180], outputRange: ["180deg", "360deg"] })
   const frontOpacity = value.interpolate({ inputRange: [0, 89, 90, 180], outputRange: [1, 1, 0, 0] })
   const backOpacity = value.interpolate({ inputRange: [0, 89, 90, 180], outputRange: [0, 0, 1, 1] })
 
   const handleSpeak = () => speak(flipped ? en : ko, flipped ? "en-US" : "ko-KR")
+  const handleCreateCard = async () => {
+    if (saving) return
+
+    setSaving(true)
+    try {
+      await api.createCard(deckId, { front: en, back: ko })
+      setSaved(true)
+    } catch (e) {
+      console.warn("[sentence/create-card]", e)
+    } finally {
+      setSaving(false)
+    }
+  }
 
   return (
     <Pressable
@@ -62,6 +85,23 @@ export default function SentenceFlip({ ko, en, index }: Props) {
           <Text style={{ color: colors.primarySoftText, fontSize: 14, lineHeight: 22 }}>{en}</Text>
         </Animated.View>
       </View>
+      <Pressable
+        onPress={handleCreateCard}
+        disabled={saving}
+        hitSlop={8}
+        style={{ padding: 4, opacity: saving ? 0.6 : 1 }}
+        accessibilityLabel={saved ? "카드에 추가됨" : "카드에 추가"}
+      >
+        {saving ? (
+          <ActivityIndicator size="small" color={colors.textSubtle} />
+        ) : (
+          <Ionicons
+            name={saved ? "checkmark-outline" : "add-outline"}
+            size={16}
+            color={colors.textSubtle}
+          />
+        )}
+      </Pressable>
       <Pressable onPress={handleSpeak} hitSlop={8} style={{ padding: 4 }} accessibilityLabel="읽기">
         <Ionicons name="volume-medium-outline" size={16} color={colors.textSubtle} />
       </Pressable>
