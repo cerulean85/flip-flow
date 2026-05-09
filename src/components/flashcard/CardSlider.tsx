@@ -35,7 +35,6 @@ interface CardSliderProps {
 
 export default function CardSlider({ cards, controlsPosition = "bottom" }: CardSliderProps) {
   const [shuffled, setShuffled] = useState<Card[]>(cards)
-  const [reversedMap, setReversedMap] = useState<Record<string, boolean>>({})
   const [[index, direction], setPage] = useState([0, 0])
 
   useEffect(() => {
@@ -45,11 +44,6 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
     // Math.random would mismatch between SSR and CSR, so this stays in an effect.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setShuffled(shuffle(cards))
-    const nextReversedMap: Record<string, boolean> = {}
-    cards.forEach((card) => {
-      nextReversedMap[card.id] = Math.random() < 0.5
-    })
-    setReversedMap(nextReversedMap)
     setPage([0, 0])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards.length])
@@ -62,11 +56,6 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
 
   const reshuffle = () => {
     setShuffled(shuffle(cards))
-    const nextReversedMap: Record<string, boolean> = {}
-    cards.forEach((card) => {
-      nextReversedMap[card.id] = Math.random() < 0.5
-    })
-    setReversedMap(nextReversedMap)
     setPage([0, 0])
   }
 
@@ -75,9 +64,6 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
   const cardById = useMemo(() => new Map(cards.map((c) => [c.id, c])), [cards])
   const shuffledCard = shuffled[index]
   const card = (shuffledCard && cardById.get(shuffledCard.id)) ?? shuffledCard
-  const isReversed = reversedMap[card.id] ?? false
-  const front = isReversed ? card.back : card.front
-  const back = isReversed ? card.front : card.back
 
   const controls = (
     <>
@@ -143,8 +129,8 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
           >
             <FlipCard
               key={card.id}
-              front={front}
-              back={back}
+              front={card.front}
+              back={card.back}
             />
           </motion.div>
         </AnimatePresence>
