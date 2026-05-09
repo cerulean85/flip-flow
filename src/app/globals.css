@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "katex/dist/katex.min.css";
 
+@source "../components/landing/**/*.{ts,tsx}";
+
 @variant dark (&:where(.dark, .dark *));
 
 :root {
@@ -17,4 +19,167 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+.landing-device {
+  animation: landing-device-in 760ms ease-out both;
+}
+
+.landing-card-float {
+  animation: landing-card-float 5.6s ease-in-out infinite;
+}
+
+.landing-card-float-reverse {
+  animation: landing-card-float-reverse 6.2s ease-in-out infinite;
+}
+
+.landing-screenshot-pop {
+  animation: landing-screenshot-pop 5.2s ease-in-out infinite;
+}
+
+.landing-screenshot-pop-reverse {
+  animation: landing-screenshot-pop-reverse 5.8s ease-in-out infinite;
+}
+
+.landing-list-item {
+  animation: landing-list-rise 680ms ease-out both;
+}
+
+.landing-word-rise {
+  animation: landing-word-rise 2.4s ease-in-out infinite;
+}
+
+.landing-progress {
+  animation: landing-progress 2.8s ease-in-out infinite;
+}
+
+.landing-pulse {
+  animation: landing-pulse 2.6s ease-in-out infinite;
+}
+
+.landing-shine::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(115deg, transparent 36%, rgba(255, 255, 255, 0.28) 48%, transparent 60%);
+  transform: translateX(-60%) rotate(8deg);
+  animation: landing-shine 4.2s ease-in-out infinite;
+}
+
+@keyframes landing-device-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes landing-card-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-10deg);
+  }
+  50% {
+    transform: translate3d(12px, -18px, 0) rotate(-4deg);
+  }
+}
+
+@keyframes landing-card-float-reverse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(9deg);
+  }
+  50% {
+    transform: translate3d(-14px, 16px, 0) rotate(3deg);
+  }
+}
+
+@keyframes landing-screenshot-pop {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate3d(8px, -10px, 0) rotate(-1deg);
+  }
+}
+
+@keyframes landing-screenshot-pop-reverse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(4deg);
+  }
+  50% {
+    transform: translate3d(-8px, -12px, 0) rotate(1deg);
+  }
+}
+
+@keyframes landing-list-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes landing-word-rise {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes landing-progress {
+  0%,
+  100% {
+    width: 46%;
+  }
+  50% {
+    width: 84%;
+  }
+}
+
+@keyframes landing-pulse {
+  0%,
+  100% {
+    box-shadow: 0 22px 42px rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    box-shadow: 0 28px 62px rgba(217, 70, 239, 0.28);
+  }
+}
+
+@keyframes landing-shine {
+  0%,
+  35% {
+    transform: translateX(-60%) rotate(8deg);
+  }
+  70%,
+  100% {
+    transform: translateX(80%) rotate(8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-device,
+  .landing-card-float,
+  .landing-card-float-reverse,
+  .landing-screenshot-pop,
+  .landing-screenshot-pop-reverse,
+  .landing-list-item,
+  .landing-word-rise,
+  .landing-progress,
+  .landing-pulse,
+  .landing-shine::before {
+    animation: none;
+  }
 }
