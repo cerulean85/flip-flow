@@ -113,13 +113,14 @@ function MoveDeckModal({ decks, onSelect, onClose }: MoveDeckModalProps) {
 }
 
 interface CardDetailModalProps {
+  deckId: string
   front: string
   back: string
   isBookmark: boolean
   onClose: () => void
 }
 
-function CardDetailModal({ front, back, isBookmark, onClose }: CardDetailModalProps) {
+function CardDetailModal({ deckId, front, back, isBookmark, onClose }: CardDetailModalProps) {
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
@@ -144,7 +145,7 @@ function CardDetailModal({ front, back, isBookmark, onClose }: CardDetailModalPr
           </button>
         </div>
         <div className="px-5 pb-8">
-          <FlipCard front={front} back={back} />
+          <FlipCard deckId={deckId} front={front} back={back} />
         </div>
       </div>
     </div>,
@@ -262,6 +263,7 @@ export default function CardListItem({
 
       {detailOpen && (
         <CardDetailModal
+          deckId={deckId}
           front={front}
           back={back}
           isBookmark={isBookmark}
