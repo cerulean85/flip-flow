@@ -3,7 +3,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import Logo from "@/components/ui/Logo"
 
-const appHosts = new Set(["flip-flop.dycdyp.com", "www.flip-flop.dycdyp.com"])
+const appHosts = new Set(["flip-flow.dycdyp.com", "www.flip-flow.dycdyp.com"])
 
 const features = [
   {
@@ -58,7 +58,7 @@ export default async function HomePage() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
-                href="https://flip-flop.dycdyp.com/login"
+                href="https://flip-flow.dycdyp.com/login"
                 className="inline-flex h-11 items-center justify-center rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
               >
                 Flip &amp; Flow 시작하기
