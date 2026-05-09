@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Logo from "@/components/ui/Logo"
 import SignOutButton from "@/components/nav/SignOutButton"
+import AdSlot from "@/components/ads/AdSlot"
 import NavLinks from "./NavLinks"
 import { cn } from "@/lib/utils"
 
@@ -101,6 +102,12 @@ export default function Sidebar({
 
         <NavLinks onNavigate={onNavigate} collapsed={collapsed} />
       </div>
+
+      {!collapsed && (
+        <div className="px-4 pb-4">
+          <AdSlot placement="sidebar" />
+        </div>
+      )}
 
       <div className={cn("border-t border-gray-200 dark:border-zinc-800", collapsed ? "p-2" : "p-4")}>
         <SignOutButton
