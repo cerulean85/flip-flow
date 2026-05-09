@@ -1,14 +1,19 @@
 import type { Metadata, Viewport } from "next"
 import { Geist } from "next/font/google"
+import Script from "next/script"
 import Providers from "@/components/Providers"
 import "./globals.css"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
+const adsenseAccount = "ca-pub-2703512740946569"
 
 export const metadata: Metadata = {
   title: "Flip & Flow",
   description: "Your personal flashcard learning app",
   manifest: "/manifest.webmanifest",
+  other: {
+    "google-adsense-account": adsenseAccount,
+  },
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Flip & Flow" },
   icons: {
     icon: [
@@ -30,6 +35,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko" className={`${geist.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full">
         <Providers>{children}</Providers>
+        <Script
+          id="google-adsense"
+          strategy="afterInteractive"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseAccount}`}
+          crossOrigin="anonymous"
+        />
       </body>
     </html>
   )
