@@ -54,9 +54,7 @@ export async function createCardFromSentence(
     data: { front, back, deckId },
   })
 
-  revalidatePath("/study")
   revalidatePath(`/decks/${deckId}`)
-  revalidatePath(`/decks/${deckId}/study`)
 }
 
 export async function updateCard(cardId: string, deckId: string, formData: FormData) {

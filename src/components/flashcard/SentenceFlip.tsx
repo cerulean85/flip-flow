@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Check, Copy, Loader2, Plus, Volume2 } from "lucide-react"
 import { createCardFromSentence } from "@/actions/card.actions"
@@ -14,7 +13,6 @@ interface Props {
 }
 
 export default function SentenceFlip({ deckId, ko, en }: Props) {
-  const router = useRouter()
   const [flipped, setFlipped] = useState(false)
   const [copied, setCopied] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -58,7 +56,6 @@ export default function SentenceFlip({ deckId, ko, en }: Props) {
     try {
       await createCardFromSentence(deckId, { en, ko })
       setSaved(true)
-      router.refresh()
     } finally {
       setSaving(false)
     }
