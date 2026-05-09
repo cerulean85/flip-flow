@@ -1,6 +1,7 @@
 "use client"
 
 import type { Deck } from "@/generated/prisma/client"
+import AdSlot from "@/components/ads/AdSlot"
 import DeckCard from "./DeckCard"
 import Link from "next/link"
 import { Layers, Search, X } from "lucide-react"
@@ -67,20 +68,24 @@ export default function DeckList({ decks, cards }: DeckListProps) {
         )}
       </div>
 
-      {q ? (
-        <CardSearchResults cards={matchedCards} query={query} />
-      ) : decks.length === 0 ? (
-        <div className="py-16 text-center text-gray-400 dark:text-zinc-500">
-          <Layers size={48} strokeWidth={1.5} className="mx-auto mb-3" aria-hidden="true" />
-          <p className="text-sm">아직 덱이 없어요. 첫 번째 덱을 만들어보세요!</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-3">
-          {decks.map((deck) => (
-            <DeckCard key={deck.id} deck={deck} />
-          ))}
-        </div>
-      )}
+      <div className="flex flex-col gap-5">
+        {q ? (
+          <CardSearchResults cards={matchedCards} query={query} />
+        ) : decks.length === 0 ? (
+          <div className="py-16 text-center text-gray-400 dark:text-zinc-500">
+            <Layers size={48} strokeWidth={1.5} className="mx-auto mb-3" aria-hidden="true" />
+            <p className="text-sm">아직 덱이 없어요. 첫 번째 덱을 만들어보세요!</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3">
+            {decks.map((deck) => (
+              <DeckCard key={deck.id} deck={deck} />
+            ))}
+          </div>
+        )}
+
+        <AdSlot placement="content" />
+      </div>
     </div>
   )
 }

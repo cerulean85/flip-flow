@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Shuffle, ChevronLeft, ChevronRight } from "lucide-react"
+import AdSlot from "@/components/ads/AdSlot"
 import FlipCard from "./FlipCard"
 import BookmarkButton from "./BookmarkButton"
 import type { Card } from "@/generated/prisma/client"
@@ -155,6 +156,8 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
       </div>
 
       {controlsPosition === "bottom" && controls}
+
+      <AdSlot placement="study" className="hidden md:block" />
     </div>
   )
 }
