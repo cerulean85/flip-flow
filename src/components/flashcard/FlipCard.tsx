@@ -117,9 +117,9 @@ export default function FlipCard({ front, back }: FlipCardProps) {
               }}
               aria-label="앞면 읽기"
               title="앞면 읽기"
-              className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
             >
-              <Volume2 size={14} aria-hidden="true" />
+              <Volume2 size={18} aria-hidden="true" />
             </button>
 
             <p className="text-xl font-semibold text-gray-800 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">
@@ -131,24 +131,24 @@ export default function FlipCard({ front, back }: FlipCardProps) {
               <button
                 onClick={generateSentences}
                 disabled={isGenerating}
-                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50 dark:hover:text-blue-300 dark:hover:bg-blue-950"
+                className="flex min-h-9 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950 dark:hover:text-blue-300"
               >
                 {isGenerating ? (
-                  <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
                 ) : (
-                  <MessageSquareText size={12} aria-hidden="true" />
+                  <MessageSquareText size={16} aria-hidden="true" />
                 )}
                 연습하기
               </button>
               <button
                 onClick={searchMeaning}
                 disabled={isSearching}
-                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50 dark:hover:text-blue-300 dark:hover:bg-blue-950"
+                className="flex min-h-9 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950 dark:hover:text-blue-300"
               >
                 {isSearching ? (
-                  <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
                 ) : (
-                  <Search size={12} aria-hidden="true" />
+                  <Search size={16} aria-hidden="true" />
                 )}
                 뜻 검색
               </button>
@@ -168,9 +168,9 @@ export default function FlipCard({ front, back }: FlipCardProps) {
               }}
               aria-label="뒷면 읽기"
               title="뒷면 읽기"
-              className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
             >
-              <Volume2 size={14} aria-hidden="true" />
+              <Volume2 size={18} aria-hidden="true" />
             </button>
 
             <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">{back}</p>
@@ -180,24 +180,24 @@ export default function FlipCard({ front, back }: FlipCardProps) {
               <button
                 onClick={generateSentences}
                 disabled={isGenerating}
-                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-100 dark:hover:text-blue-300 dark:hover:bg-blue-900"
+                className="flex min-h-9 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-900 dark:hover:text-blue-300"
               >
                 {isGenerating ? (
-                  <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
                 ) : (
-                  <MessageSquareText size={12} aria-hidden="true" />
+                  <MessageSquareText size={16} aria-hidden="true" />
                 )}
                 연습하기
               </button>
               <button
                 onClick={searchMeaning}
                 disabled={isSearching}
-                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-blue-100 dark:hover:text-blue-300 dark:hover:bg-blue-900"
+                className="flex min-h-9 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-900 dark:hover:text-blue-300"
               >
                 {isSearching ? (
-                  <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
                 ) : (
-                  <Search size={12} aria-hidden="true" />
+                  <Search size={16} aria-hidden="true" />
                 )}
                 뜻 검색
               </button>

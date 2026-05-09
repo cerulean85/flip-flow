@@ -60,9 +60,9 @@ export default function SentenceFlip({ ko, en }: Props) {
         onClick={handleSpeak}
         aria-label="읽기"
         title="읽기"
-        className="shrink-0 inline-flex h-6 w-6 items-center justify-center rounded text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+        className="shrink-0 inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
       >
-        <Volume2 size={12} aria-hidden="true" />
+        <Volume2 size={16} aria-hidden="true" />
       </button>
     </div>
   )
