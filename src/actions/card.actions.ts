@@ -44,7 +44,7 @@ export async function createCardFromSentence(
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")
 
-  await verifyDeckOwnership(deckId, session.user.id)
+  const deck = await verifyDeckOwnership(deckId, session.user.id)
 
   const front = sentence.en.trim()
   const back = sentence.ko.trim()
@@ -55,6 +55,8 @@ export async function createCardFromSentence(
   })
 
   revalidatePath(`/decks/${deckId}`)
+
+  return { deckTitle: deck.title }
 }
 
 export async function updateCard(cardId: string, deckId: string, formData: FormData) {
