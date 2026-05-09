@@ -3,7 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
-import { ArrowRight, Bookmark, Layers, Sparkles, Wand2 } from "lucide-react"
+import { ArrowRight, Bookmark, Layers, Smartphone, Sparkles, Wand2 } from "lucide-react"
 import LandingFlipCard from "@/components/landing/LandingFlipCard"
 import LandingThemeButton from "@/components/settings/LandingThemeButton"
 import Logo from "@/components/ui/Logo"
@@ -32,6 +32,11 @@ const features = [
     title: "북마크 & 에세이",
     body: "어려운 카드는 별표로 모아 집중 복습하고, 짧은 에세이로 묶어 장기 기억으로 옮깁니다.",
   },
+  {
+    Icon: Smartphone,
+    title: "PWA로 가볍게 설치",
+    body: "브라우저에서 바로 시작하고, 원하면 홈 화면에 앱처럼 설치해 모바일에서도 빠르게 이어갈 수 있습니다.",
+  },
 ]
 
 const steps = [
@@ -41,6 +46,7 @@ const steps = [
     body: "주제별로 덱을 묶고 단어와 예문을 직접 입력하세요. 새로고침 없이 즉시 저장됩니다.",
     image: "/images/landing/app-dashboard-clean.png",
     alt: "Flip & Flow 덱 목록 화면",
+    imageClassName: "aspect-[1440/700]",
   },
   {
     number: "02",
@@ -48,6 +54,7 @@ const steps = [
     body: "탭으로 뒤집고, 좌우로 슬라이드, AI 검색과 예문 연습까지. 카드 한 장 안에서 다 끝납니다.",
     image: "/images/landing/app-study-open.png",
     alt: "Flip & Flow 카드 학습 화면",
+    imageClassName: "aspect-[1440/880]",
   },
   {
     number: "03",
@@ -55,6 +62,7 @@ const steps = [
     body: "외운 표현을 짧은 글로 묶으면 장기 기억으로 자리잡아요. 북마크와 함께 한 곳에서 관리됩니다.",
     image: "/images/landing/app-essays-clean.png",
     alt: "Flip & Flow 에세이 목록 화면",
+    imageClassName: "aspect-[1440/600]",
   },
 ]
 
@@ -146,7 +154,7 @@ export default async function HomePage() {
                 <span className="text-emerald-500">✓</span> 무료로 시작
               </li>
               <li className="inline-flex items-center gap-1.5">
-                <span className="text-emerald-500">✓</span> 설치 없이 바로 사용
+                <span className="text-emerald-500">✓</span> PWA 홈 화면 설치 지원
               </li>
               <li className="inline-flex items-center gap-1.5">
                 <span className="text-emerald-500">✓</span> 카드부터 에세이까지 한 곳
@@ -174,7 +182,7 @@ export default async function HomePage() {
               불필요한 화면 전환과 메뉴를 덜어내고, 카드 한 장 안에서 학습 흐름이 완성되도록 설계했습니다.
             </p>
           </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {features.map(({ Icon, title, body }) => (
               <article
                 key={title}
@@ -233,7 +241,7 @@ export default async function HomePage() {
                         alt={step.alt}
                         width={1440}
                         height={1000}
-                        className="h-auto w-full rounded-2xl"
+                        className={`${step.imageClassName} w-full rounded-2xl object-cover object-top`}
                       />
                     </div>
                   </div>
@@ -277,7 +285,7 @@ export default async function HomePage() {
           <div className="flex flex-col gap-2">
             <Logo size={28} />
             <p className="text-sm text-zinc-500 dark:text-zinc-500">
-              © 2026 Flip &amp; Flow · dycdyp.com learning studio
+              © 2026 Flip &amp; Flow · DycDyp learning studio
             </p>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-600 dark:text-zinc-400">
