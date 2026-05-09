@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Shuffle, ChevronLeft, ChevronRight } from "lucide-react"
 import FlipCard from "./FlipCard"
@@ -36,15 +36,32 @@ interface CardSliderProps {
 export default function CardSlider({ cards, controlsPosition = "bottom" }: CardSliderProps) {
   const [shuffled, setShuffled] = useState<Card[]>(cards)
   const [[index, direction], setPage] = useState([0, 0])
+  const initializedRef = useRef(false)
 
   useEffect(() => {
-    // shuffle only when the set of cards changes (mount, add/remove) —
-    // ignore cards reference changes from server revalidation (e.g. bookmark toggle)
-    // so the deck doesn't reshuffle and skip mid-session.
-    // Math.random would mismatch between SSR and CSR, so this stays in an effect.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setShuffled(shuffle(cards))
-    setPage([0, 0])
+    // Math.random would mismatch between SSR and CSR, so the initial shuffle stays in an effect.
+    if (!initializedRef.current) {
+      initializedRef.current = true
+      setShuffled(shuffle(cards))
+      setPage([0, 0])
+      return
+    }
+
+    const currentCardId = shuffled[index]?.id
+    const latestCardById = new Map(cards.map((card) => [card.id, card]))
+    const keptCards = shuffled
+      .map((card) => latestCardById.get(card.id))
+      .filter((card): card is Card => Boolean(card))
+    const keptCardIds = new Set(keptCards.map((card) => card.id))
+    const addedCards = cards.filter((card) => !keptCardIds.has(card.id))
+    const nextShuffled = [...keptCards, ...shuffle(addedCards)]
+    const nextIndex = Math.max(
+      0,
+      currentCardId ? nextShuffled.findIndex((card) => card.id === currentCardId) : 0
+    )
+
+    setShuffled(nextShuffled)
+    setPage([nextIndex, 0])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards.length])
 
