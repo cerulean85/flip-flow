@@ -93,6 +93,8 @@ const ko = {
       titlePlaceholder: "제목을 입력하세요",
       edit: "편집",
       preview: "미리보기",
+      hidePreview: "미리보기 접기",
+      showPreview: "미리보기 펼치기",
       contentPlaceholder:
         "마크다운으로 작성하세요...\n\n예) # 제목\n**굵게** *기울임*\n- 리스트\n`코드`",
       cancel: "취소",
@@ -260,6 +262,8 @@ const en = {
       titlePlaceholder: "Enter a title",
       edit: "Edit",
       preview: "Preview",
+      hidePreview: "Collapse preview",
+      showPreview: "Expand preview",
       contentPlaceholder:
         "Write in Markdown...\n\nExample) # Title\n**bold** *italic*\n- list\n`code`",
       cancel: "Cancel",
