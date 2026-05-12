@@ -68,12 +68,17 @@ export async function updateCard(cardId: string, deckId: string, formData: FormD
   const front = (formData.get("front") as string).trim()
   const back = (formData.get("back") as string).trim()
 
-  await prisma.card.update({
+  const card = await prisma.card.update({
     where: { id: cardId },
     data: { front: front || undefined, back: back || undefined },
   })
 
   revalidatePath(`/decks/${deckId}`)
+  revalidatePath(`/decks/${deckId}/study`)
+  revalidatePath("/study")
+  revalidatePath("/bookmarks")
+
+  return card
 }
 
 export async function deleteCard(cardId: string, deckId: string) {
