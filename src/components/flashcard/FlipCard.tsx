@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
-import { Search, Sparkles, X, Loader2, MessageSquareText, Volume2 } from "lucide-react"
+import { Search, Sparkles, X, Loader2, MessageSquareText, Pencil, Volume2 } from "lucide-react"
 import SentenceFlip from "./SentenceFlip"
 import { speak } from "@/lib/speech"
 import { useLocale } from "@/components/LocaleProvider"
@@ -17,9 +17,10 @@ interface FlipCardProps {
   deckId: string
   front: string
   back: string
+  onEdit?: () => void
 }
 
-export default function FlipCard({ deckId, front, back }: FlipCardProps) {
+export default function FlipCard({ deckId, front, back, onEdit }: FlipCardProps) {
   const { messages } = useLocale()
   const [isFlipped, setIsFlipped] = useState(false)
   const [geminiResult, setGeminiResult] = useState<string | null>(null)
@@ -113,9 +114,23 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
         >
           {/* Front */}
           <div
-            className="flex flex-col items-center justify-center rounded-2xl bg-white shadow-md p-6 pb-12 text-center min-h-40 dark:bg-zinc-900 dark:border dark:border-zinc-800"
+            className="flex flex-col items-center justify-center rounded-2xl bg-white shadow-md px-6 pb-16 pt-16 text-center min-h-40 dark:bg-zinc-900 dark:border dark:border-zinc-800"
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", willChange: "transform" }}
           >
+            {onEdit && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onEdit()
+                }}
+                aria-label={messages.card.edit}
+                title={messages.card.edit}
+                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+              >
+                <Pencil size={18} aria-hidden="true" />
+              </button>
+            )}
             <button
               type="button"
               onClick={(e) => {
@@ -124,7 +139,7 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
               }}
               aria-label={messages.card.readFront}
               title={messages.card.readFront}
-              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+              className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
             >
               <Volume2 size={18} aria-hidden="true" />
             </button>
@@ -164,9 +179,23 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
 
           {/* Back */}
           <div
-            className="flex flex-col items-center justify-center rounded-2xl bg-blue-50 shadow-md p-6 pb-12 text-center min-h-40 dark:bg-blue-950"
+            className="flex flex-col items-center justify-center rounded-2xl bg-blue-50 shadow-md px-6 pb-16 pt-16 text-center min-h-40 dark:bg-blue-950"
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", transform: "rotateY(180deg)", willChange: "transform" }}
           >
+            {onEdit && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onEdit()
+                }}
+                aria-label={messages.card.edit}
+                title={messages.card.edit}
+                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+              >
+                <Pencil size={18} aria-hidden="true" />
+              </button>
+            )}
             <button
               type="button"
               onClick={(e) => {
@@ -175,7 +204,7 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
               }}
               aria-label={messages.card.readBack}
               title={messages.card.readBack}
-              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+              className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
             >
               <Volume2 size={18} aria-hidden="true" />
             </button>

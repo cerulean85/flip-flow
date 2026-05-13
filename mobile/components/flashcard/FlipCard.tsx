@@ -11,9 +11,10 @@ interface Props {
   deckId: string
   front: string
   back: string
+  onEdit?: () => void
 }
 
-export default function FlipCard({ deckId, front, back }: Props) {
+export default function FlipCard({ deckId, front, back, onEdit }: Props) {
   const { colors } = useTheme()
   const [flipped, setFlipped] = useState(false)
   const value = useRef(new Animated.Value(0)).current
@@ -92,6 +93,7 @@ export default function FlipCard({ deckId, front, back }: Props) {
   const cardBase = {
     borderRadius: 20,
     padding: 24,
+    paddingTop: 58,
     minHeight: 200,
     alignItems: "center" as const,
     justifyContent: "center" as const,
@@ -117,13 +119,26 @@ export default function FlipCard({ deckId, front, back }: Props) {
             },
           ]}
         >
+          {onEdit && (
+            <Pressable
+              onPress={(event) => {
+                event.stopPropagation()
+                onEdit()
+              }}
+              hitSlop={8}
+              style={{ position: "absolute", top: 12, right: 12, padding: 6, zIndex: 1 }}
+              accessibilityLabel="카드 수정"
+            >
+              <Ionicons name="pencil" size={18} color={colors.textSubtle} />
+            </Pressable>
+          )}
           <Text style={{ color: colors.text, fontSize: 22, fontWeight: "600", textAlign: "center" }}>
             {front}
           </Text>
           <Pressable
             onPress={() => speak(front, "en-US")}
             hitSlop={8}
-            style={{ position: "absolute", top: 12, right: 12, padding: 6 }}
+            style={{ position: "absolute", top: 12, left: 12, padding: 6 }}
             accessibilityLabel="읽기"
           >
             <Ionicons name="volume-medium-outline" size={18} color={colors.textSubtle} />
@@ -148,11 +163,24 @@ export default function FlipCard({ deckId, front, back }: Props) {
             },
           ]}
         >
+          {onEdit && (
+            <Pressable
+              onPress={(event) => {
+                event.stopPropagation()
+                onEdit()
+              }}
+              hitSlop={8}
+              style={{ position: "absolute", top: 12, right: 12, padding: 6, zIndex: 1 }}
+              accessibilityLabel="카드 수정"
+            >
+              <Ionicons name="pencil" size={18} color={colors.textSubtle} />
+            </Pressable>
+          )}
           <Text style={{ color: colors.text, fontSize: 18, textAlign: "center" }}>{back}</Text>
           <Pressable
             onPress={() => speak(back, "ko-KR")}
             hitSlop={8}
-            style={{ position: "absolute", top: 12, right: 12, padding: 6 }}
+            style={{ position: "absolute", top: 12, left: 12, padding: 6 }}
             accessibilityLabel="읽기"
           >
             <Ionicons name="volume-medium-outline" size={18} color={colors.textSubtle} />

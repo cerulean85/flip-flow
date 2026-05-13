@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { Shuffle, ChevronLeft, ChevronRight, Pencil, Repeat2 } from "lucide-react"
+import { Shuffle, ChevronLeft, ChevronRight, Repeat2 } from "lucide-react"
 import AdSlot from "@/components/ads/AdSlot"
 import FlipCard from "./FlipCard"
 import BookmarkButton from "./BookmarkButton"
@@ -132,15 +132,6 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
 
         <div className="flex items-center gap-1">
           <BookmarkButton cardId={card.id} isBookmark={card.isBookmark} />
-          <button
-            type="button"
-            onClick={() => setEditingCardId(card.id)}
-            aria-label={messages.card.edit}
-            title={messages.card.edit}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
-          >
-            <Pencil size={16} aria-hidden="true" />
-          </button>
         </div>
 
         <button
@@ -248,6 +239,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
                 deckId={card.deckId}
                 front={studyFront}
                 back={studyBack}
+                onEdit={() => setEditingCardId(card.id)}
               />
             )}
           </motion.div>

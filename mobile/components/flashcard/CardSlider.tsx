@@ -147,9 +147,6 @@ export default function CardSlider({ cards }: Props) {
 
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
           <BookmarkButton cardId={card.id} isBookmark={card.isBookmark} />
-          <Pressable onPress={openEdit} hitSlop={8} style={{ padding: 8 }} accessibilityLabel="카드 수정">
-            <Ionicons name="pencil" size={17} color={colors.primary} />
-          </Pressable>
         </View>
 
         <Pressable
@@ -191,6 +188,7 @@ export default function CardSlider({ cards }: Props) {
         deckId={card.deckId}
         front={front}
         back={back}
+        onEdit={openEdit}
       />
 
       <Modal
