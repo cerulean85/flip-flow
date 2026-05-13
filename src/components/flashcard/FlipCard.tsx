@@ -23,6 +23,7 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
   const { messages } = useLocale()
   const [isFlipped, setIsFlipped] = useState(false)
   const [geminiResult, setGeminiResult] = useState<string | null>(null)
+  const [geminiTerm, setGeminiTerm] = useState<string | null>(null)
   const [isSearching, setIsSearching] = useState(false)
   const [showResult, setShowResult] = useState(false)
 
@@ -35,7 +36,9 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
     e.stopPropagation()
     if (isSearching) return
 
-    if (showResult && geminiResult) {
+    const visibleTerm = isFlipped ? back : front
+
+    if (showResult && geminiResult && geminiTerm === visibleTerm) {
       setShowResult(false)
       return
     }
@@ -43,12 +46,13 @@ export default function FlipCard({ deckId, front, back }: FlipCardProps) {
     setIsSearching(true)
     setShowResult(false)
     setGeminiResult(null)
+    setGeminiTerm(visibleTerm)
 
     try {
       const res = await fetch("/api/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ word: front }),
+        body: JSON.stringify({ word: visibleTerm }),
       })
       const data = await res.json()
       setGeminiResult(data.result ?? data.error ?? messages.card.noResult)

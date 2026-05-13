@@ -19,6 +19,7 @@ export default function FlipCard({ deckId, front, back }: Props) {
   const value = useRef(new Animated.Value(0)).current
 
   const [definition, setDefinition] = useState<string | null>(null)
+  const [definitionTerm, setDefinitionTerm] = useState<string | null>(null)
   const [defLoading, setDefLoading] = useState(false)
   const [showDef, setShowDef] = useState(false)
 
@@ -42,13 +43,17 @@ export default function FlipCard({ deckId, front, back }: Props) {
 
   const handleSearch = async () => {
     if (defLoading) return
-    if (showDef && definition) {
+
+    const visibleTerm = flipped ? back : front
+
+    if (showDef && definition && definitionTerm === visibleTerm) {
       setShowDef(false)
       return
     }
     setDefLoading(true)
+    setDefinitionTerm(visibleTerm)
     try {
-      const { result } = await api.searchDefinition(front)
+      const { result } = await api.searchDefinition(visibleTerm)
       setDefinition(result)
       setShowDef(true)
     } catch (e) {
