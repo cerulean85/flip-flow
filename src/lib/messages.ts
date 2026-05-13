@@ -2,6 +2,8 @@ import type { Locale } from "@/lib/i18n"
 
 const ko = {
     nav: {
+      home: "Home",
+      journal: "Journal",
       decks: "덱",
       study: "전체 학습",
       bookmarks: "북마크",
@@ -174,6 +176,8 @@ const ko = {
 
 const en = {
     nav: {
+      home: "Home",
+      journal: "Journal",
       decks: "Decks",
       study: "Study all",
       bookmarks: "Bookmarks",

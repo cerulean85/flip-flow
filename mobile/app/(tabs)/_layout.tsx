@@ -22,14 +22,15 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "덱",
-          tabBarIcon: ({ color, size }) => <Ionicons name="albums-outline" color={color} size={size} />,
+          title: "Home",
+          tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="study"
         options={{
           title: "전체 학습",
+          href: null,
           tabBarIcon: ({ color, size }) => <Ionicons name="book-outline" color={color} size={size} />,
         }}
       />
@@ -37,13 +38,14 @@ export default function TabsLayout() {
         name="bookmarks"
         options={{
           title: "북마크",
+          href: null,
           tabBarIcon: ({ color, size }) => <Ionicons name="star-outline" color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="essays"
         options={{
-          title: "에세이",
+          title: "Journal",
           tabBarIcon: ({ color, size }) => <Ionicons name="create-outline" color={color} size={size} />,
         }}
       />
@@ -51,6 +53,7 @@ export default function TabsLayout() {
         name="settings"
         options={{
           title: "설정",
+          href: null,
           tabBarIcon: ({ color, size }) => <Ionicons name="settings-outline" color={color} size={size} />,
         }}
       />
