@@ -2,13 +2,16 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, NotebookPen, type LucideIcon } from "lucide-react"
+import { Layers, BookOpen, Star, NotebookPen, Settings, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLocale } from "@/components/LocaleProvider"
 
 const links: { href: string; key: keyof ReturnType<typeof useLocale>["messages"]["nav"]; Icon: LucideIcon }[] = [
-  { href: "/dashboard", key: "home", Icon: Home },
-  { href: "/essays", key: "journal", Icon: NotebookPen },
+  { href: "/dashboard", key: "decks", Icon: Layers },
+  { href: "/study", key: "study", Icon: BookOpen },
+  { href: "/bookmarks", key: "bookmarks", Icon: Star },
+  { href: "/essays", key: "essays", Icon: NotebookPen },
+  { href: "/settings", key: "settings", Icon: Settings },
 ]
 
 interface Props {
