@@ -3,7 +3,7 @@ import type { Locale } from "@/lib/i18n"
 const ko = {
     nav: {
       decks: "덱",
-      study: "전체 학습",
+      study: "학습하기",
       bookmarks: "북마크",
       essays: "에세이",
       settings: "설정",
@@ -55,7 +55,7 @@ const ko = {
       toggleStudySide: "학습 기준 전환",
       studyFrontFirst: "앞면 기준",
       studyBackFirst: "뒷면 기준",
-      allStudy: "전체 학습",
+      allStudy: "학습하기",
       allStudyCount: (count: number) => `모든 덱의 카드 ${count}장`,
       bookmarks: "북마크",
       emptyBookmarks: "북마크한 카드가 없어요.",
@@ -203,7 +203,7 @@ const ko = {
 const en = {
     nav: {
       decks: "Decks",
-      study: "Study all",
+      study: "Study",
       bookmarks: "Bookmarks",
       essays: "Essays",
       settings: "Settings",
@@ -255,7 +255,7 @@ const en = {
       toggleStudySide: "Switch study side",
       studyFrontFirst: "Front first",
       studyBackFirst: "Back first",
-      allStudy: "Study all",
+      allStudy: "Study",
       allStudyCount: (count: number) => `${count} ${count === 1 ? "card" : "cards"} across all decks`,
       bookmarks: "Bookmarks",
       emptyBookmarks: "No bookmarked cards yet.",

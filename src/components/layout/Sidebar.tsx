@@ -42,7 +42,7 @@ export default function Sidebar({
           collapsed ? "justify-center px-2" : "justify-between px-3"
         )}
       >
-        <Link href="/dashboard" onClick={onNavigate} className="flex items-center min-w-0">
+        <Link href="/study" onClick={onNavigate} className="flex items-center min-w-0">
           <Logo size={26} showText={!collapsed} className="text-base" />
         </Link>
         {onToggleCollapse && !collapsed && (

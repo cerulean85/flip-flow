@@ -9,7 +9,7 @@ type Props = {
 export default function AppleSignInButton({ label = "Apple로 로그인" }: Props) {
   return (
     <button
-      onClick={() => signIn("apple", { callbackUrl: "/dashboard" })}
+      onClick={() => signIn("apple", { callbackUrl: "/study" })}
       className="flex w-full items-center justify-center gap-3 rounded-xl bg-black px-6 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-zinc-800"
     >
       <svg

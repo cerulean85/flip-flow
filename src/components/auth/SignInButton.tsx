@@ -9,7 +9,7 @@ type Props = {
 export default function SignInButton({ label = "Google로 로그인" }: Props) {
   return (
     <button
-      onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+      onClick={() => signIn("google", { callbackUrl: "/study" })}
       className="flex items-center justify-center gap-3 w-full py-3 px-6 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition-colors font-medium text-gray-700 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
     >
       <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">

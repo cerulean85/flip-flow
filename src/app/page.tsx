@@ -16,7 +16,7 @@ export default async function HomePage() {
   const host = headersList.get("host")
 
   if (isAppHost(host)) {
-    redirect("/dashboard")
+    redirect("/study")
   }
 
   return (

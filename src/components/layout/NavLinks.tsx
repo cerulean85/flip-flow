@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils"
 import { useLocale } from "@/components/LocaleProvider"
 
 const links: { href: string; key: keyof ReturnType<typeof useLocale>["messages"]["nav"]; Icon: LucideIcon }[] = [
-  { href: "/dashboard", key: "decks", Icon: Layers },
   { href: "/study", key: "study", Icon: BookOpen },
+  { href: "/dashboard", key: "decks", Icon: Layers },
   { href: "/bookmarks", key: "bookmarks", Icon: Star },
   { href: "/essays", key: "essays", Icon: NotebookPen },
   { href: "/settings", key: "settings", Icon: Settings },

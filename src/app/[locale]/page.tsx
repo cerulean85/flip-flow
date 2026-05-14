@@ -36,7 +36,7 @@ export default async function LocalizedHomePage({ params }: Props) {
   const host = headersList.get("host")
 
   if (isAppHost(host)) {
-    redirect("/dashboard")
+    redirect("/study")
   }
 
   return <LandingHome locale={locale} appBaseUrl={getAppBaseUrl(host)} />

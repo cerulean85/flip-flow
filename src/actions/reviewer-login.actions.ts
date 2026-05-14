@@ -17,6 +17,6 @@ export async function signInAsReviewer() {
   await signIn("reviewer", {
     email,
     token,
-    redirectTo: "/dashboard",
+    redirectTo: "/study",
   })
 }

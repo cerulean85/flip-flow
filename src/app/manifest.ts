@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Flip & Flow",
     short_name: "FlipFlow",
     description: "Your personal flashcard learning app",
-    start_url: "/dashboard",
+    start_url: "/study",
     display: "standalone",
     background_color: "#ffffff",
     theme_color: "#3b82f6",

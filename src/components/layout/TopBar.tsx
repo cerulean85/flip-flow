@@ -35,7 +35,7 @@ export default function TopBar({ onToggle }: Props) {
           <line x1="4" y1="18" x2="20" y2="18" />
         </svg>
       </button>
-      <Link href="/dashboard" className="flex items-center">
+      <Link href="/study" className="flex items-center">
         <Logo size={26} showText={true} className="text-base" />
       </Link>
     </header>

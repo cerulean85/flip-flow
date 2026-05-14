@@ -27,7 +27,7 @@ export default auth((req) => {
     return Response.redirect(new URL("/login", req.url))
   }
   if (isLoggedIn && isAuthPage) {
-    return Response.redirect(new URL("/dashboard", req.url))
+    return Response.redirect(new URL("/study", req.url))
   }
 
   return NextResponse.next({
