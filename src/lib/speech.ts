@@ -50,12 +50,12 @@ function findFixedVoice(voices: SpeechSynthesisVoice[], lang: string) {
 
 function selectVoice(lang: string) {
   const voices = getVoices()
-  const fixedVoice = findFixedVoice(voices, lang)
-  if (fixedVoice) return fixedVoice
-
   const storedVoiceUri = getStoredVoiceUri(lang)
   const storedVoice = voices.find((voice) => voice.voiceURI === storedVoiceUri)
   if (storedVoice) return storedVoice
+
+  const fixedVoice = findFixedVoice(voices, lang)
+  if (fixedVoice) return fixedVoice
 
   return voices.find((voice) => voice.lang.toLowerCase() === lang.toLowerCase())
     ?? voices.find((voice) => voice.lang.toLowerCase().startsWith(lang.toLowerCase().split("-")[0]))
