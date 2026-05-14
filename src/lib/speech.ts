@@ -1,4 +1,4 @@
-function detectLang(text: string): "ko-KR" | "en-US" {
+export function detectSpeechLang(text: string): "ko-KR" | "en-US" {
   return /[ㄱ-ㆎ가-힣]/.test(text) ? "ko-KR" : "en-US"
 }
 
@@ -99,7 +99,7 @@ export function speak(text: string, lang?: string) {
   window.speechSynthesis.cancel()
 
   const requestId = ++speakRequestId
-  speakWhenVoicesAreReady(trimmed, lang ?? detectLang(trimmed), requestId)
+  speakWhenVoicesAreReady(trimmed, lang ?? detectSpeechLang(trimmed), requestId)
 }
 
 export function stopSpeaking() {

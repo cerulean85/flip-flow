@@ -123,3 +123,29 @@ export async function generatePracticeSentences(front: string, back: string) {
         .slice(0, 3)
     : []
 }
+
+export async function explainPronunciationMistake(target: string, transcript: string, lang: string) {
+  const targetText = target.trim()
+  const transcriptText = transcript.trim()
+
+  return requestChatCompletion({
+    messages: [
+      {
+        role: "user",
+        content: `학습자가 다음 문장을 발음 연습했습니다.
+
+목표 문장: ${targetText}
+인식된 발화: ${transcriptText || "(인식된 발화 없음)"}
+언어: ${lang}
+
+학습자가 목표 문장처럼 말하려면 어떻게 발음해야 하는지 한국어로 간결하게 설명해주세요.
+요구사항:
+- 틀린 부분을 짚고, 입모양/강세/끊어 읽기 중 도움이 되는 팁을 포함
+- 목표 문장을 음절 또는 단어 단위로 연습할 수 있게 안내
+- 4문장 이내`,
+      },
+    ],
+    max_tokens: 320,
+    temperature: 0.2,
+  })
+}
