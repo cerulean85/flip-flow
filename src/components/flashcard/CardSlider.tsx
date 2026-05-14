@@ -6,9 +6,14 @@ import { Shuffle, ChevronLeft, ChevronRight, Repeat2 } from "lucide-react"
 import AdSlot from "@/components/ads/AdSlot"
 import FlipCard from "./FlipCard"
 import BookmarkButton from "./BookmarkButton"
+import { SpeakingCardPractice } from "@/components/speaking/SpeakingPractice"
 import type { Card } from "@/generated/prisma/client"
 import { useLocale } from "@/components/LocaleProvider"
 import { updateCard } from "@/actions/card.actions"
+
+type StudyCard = Card & {
+  deck?: { title: string }
+}
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -31,14 +36,18 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
+function swipePower(offset: number, velocity: number) {
+  return Math.abs(offset) * velocity
+}
+
 interface CardSliderProps {
-  cards: Card[]
+  cards: StudyCard[]
   controlsPosition?: "top" | "bottom"
 }
 
 export default function CardSlider({ cards, controlsPosition = "bottom" }: CardSliderProps) {
   const { messages } = useLocale()
-  const [shuffled, setShuffled] = useState<Card[]>(cards)
+  const [shuffled, setShuffled] = useState<StudyCard[]>(cards)
   const [editedCards, setEditedCards] = useState<Record<string, Pick<Card, "front" | "back">>>({})
   const [editingCardId, setEditingCardId] = useState<string | null>(null)
   const [studyBackFirst, setStudyBackFirst] = useState(false)
@@ -63,7 +72,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
     const latestCardById = new Map(visibleCards.map((card) => [card.id, card]))
     const keptCards = shuffled
       .map((card) => latestCardById.get(card.id))
-      .filter((card): card is Card => Boolean(card))
+      .filter((card): card is StudyCard => Boolean(card))
     const keptCardIds = new Set(keptCards.map((card) => card.id))
     const addedCards = visibleCards.filter((card) => !keptCardIds.has(card.id))
     const nextShuffled = [...keptCards, ...shuffle(addedCards)]
@@ -193,6 +202,14 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
             animate="center"
             exit="exit"
             transition={{ type: "tween", duration: 0.22, ease: "easeInOut" }}
+            drag={editingCardId === card.id ? false : "x"}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.18}
+            onDragEnd={(_, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x)
+              if (swipe < -6000) paginate(1)
+              if (swipe > 6000) paginate(-1)
+            }}
             style={{ willChange: "transform, opacity" }}
           >
             {editingCardId === card.id ? (
@@ -234,13 +251,20 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
                 </div>
               </form>
             ) : (
-              <FlipCard
-                key={`${card.id}-${studyBackFirst ? "back" : "front"}`}
-                deckId={card.deckId}
-                front={studyFront}
-                back={studyBack}
-                onEdit={() => setEditingCardId(card.id)}
-              />
+              <div className="flex flex-col gap-4">
+                <FlipCard
+                  key={`${card.id}-${studyBackFirst ? "back" : "front"}`}
+                  deckId={card.deckId}
+                  front={studyFront}
+                  back={studyBack}
+                  deckTitle={card.deck?.title}
+                  onEdit={() => setEditingCardId(card.id)}
+                />
+                <SpeakingCardPractice
+                  key={`${card.id}-${studyBackFirst ? "back" : "front"}-speaking`}
+                  target={studyFront}
+                />
+              </div>
             )}
           </motion.div>
         </AnimatePresence>

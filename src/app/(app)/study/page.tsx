@@ -12,6 +12,7 @@ export default async function StudyAllPage() {
 
   const cards = await prisma.card.findMany({
     where: { deck: { userId: session!.user.id } },
+    include: { deck: { select: { title: true } } },
     orderBy: { createdAt: "desc" },
   })
 

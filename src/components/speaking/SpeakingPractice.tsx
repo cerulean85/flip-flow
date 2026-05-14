@@ -1,12 +1,16 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { AlertCircle, ChevronLeft, ChevronRight, Loader2, Mic, Repeat2, Volume2 } from "lucide-react"
-import type { Card } from "@/generated/prisma/client"
+import {
+  AlertCircle,
+  Loader2,
+  MessageCircleQuestion,
+  Mic,
+  Volume2,
+} from "lucide-react"
 import { detectSpeechLang, speak, stopSpeaking } from "@/lib/speech"
 import { useLocale } from "@/components/LocaleProvider"
 
-type PracticeSide = "front" | "back"
 type FeedbackState = "idle" | "correct" | "incorrect" | "error"
 
 type SpeechAlternative = {
@@ -52,10 +56,6 @@ declare global {
   }
 }
 
-interface Props {
-  cards: Card[]
-}
-
 function normalizeSpeech(text: string) {
   return text
     .toLowerCase()
@@ -83,80 +83,37 @@ function levenshteinDistance(a: string, b: string) {
   return previous[b.length]
 }
 
-function isCloseMatch(target: string, transcript: string) {
+function getSimilarityScore(target: string, transcript: string) {
   const normalizedTarget = normalizeSpeech(target)
   const normalizedTranscript = normalizeSpeech(transcript)
-  if (!normalizedTarget || !normalizedTranscript) return false
-  if (normalizedTarget === normalizedTranscript) return true
-  if (normalizedTranscript.includes(normalizedTarget)) return true
+  if (!normalizedTarget || !normalizedTranscript) return 0
+  if (normalizedTarget === normalizedTranscript) return 100
+  if (normalizedTranscript.includes(normalizedTarget)) return 100
 
   const maxLength = Math.max(normalizedTarget.length, normalizedTranscript.length)
   const distance = levenshteinDistance(normalizedTarget, normalizedTranscript)
   const similarity = 1 - distance / maxLength
-  return similarity >= 0.72
+  return Math.max(0, Math.min(100, Math.round(similarity * 100)))
 }
 
-function getInitialSide(card: Card): PracticeSide {
-  const frontLang = detectSpeechLang(card.front)
-  const backLang = detectSpeechLang(card.back)
-  return frontLang === "en-US" || backLang === "ko-KR" ? "front" : "back"
+function isCloseMatch(score: number) {
+  return score >= 72
 }
 
-export default function SpeakingPractice({ cards }: Props) {
+interface SpeakingCardPracticeProps {
+  target: string
+}
+
+export function SpeakingCardPractice({ target }: SpeakingCardPracticeProps) {
   const { messages } = useLocale()
-  const [index, setIndex] = useState(0)
-  const card = cards[index]
-
-  const goTo = (direction: number) => {
-    if (cards.length === 0) return
-    setIndex((current) => (current + direction + cards.length) % cards.length)
-  }
-
-  if (cards.length === 0) {
-    return (
-      <div className="py-16 text-center text-gray-400 dark:text-zinc-500">
-        <Mic size={48} strokeWidth={1.5} className="mx-auto mb-3" aria-hidden="true" />
-        <p className="text-sm">{messages.speaking.empty}</p>
-      </div>
-    )
-  }
-
-  return (
-    <SpeakingPracticeCard
-      key={card.id}
-      card={card}
-      current={index + 1}
-      total={cards.length}
-      onPrevious={() => goTo(-1)}
-      onNext={() => goTo(1)}
-    />
-  )
-}
-
-function SpeakingPracticeCard({
-  card,
-  current,
-  total,
-  onPrevious,
-  onNext,
-}: {
-  card: Card
-  current: number
-  total: number
-  onPrevious: () => void
-  onNext: () => void
-}) {
-  const { messages } = useLocale()
-  const [side, setSide] = useState<PracticeSide>(() => getInitialSide(card))
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState("")
+  const [similarityScore, setSimilarityScore] = useState<number | null>(null)
   const [attempts, setAttempts] = useState(0)
   const [feedback, setFeedback] = useState<FeedbackState>("idle")
   const [guide, setGuide] = useState<string | null>(null)
   const [isGuideLoading, setIsGuideLoading] = useState(false)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
-
-  const target = side === "front" ? card.front : card.back
   const lang = useMemo(() => detectSpeechLang(target), [target])
   const supportsRecognition = typeof window !== "undefined" && Boolean(window.SpeechRecognition ?? window.webkitSpeechRecognition)
 
@@ -167,10 +124,11 @@ function SpeakingPracticeCard({
     }
   }, [])
 
-  const fetchGuide = async (nextAttempts: number, nextTranscript: string) => {
-    if (nextAttempts < 3 || isGuideLoading || guide) return
+  const fetchGuide = async (nextTranscript: string) => {
+    if (isGuideLoading) return
 
     setIsGuideLoading(true)
+    setGuide(null)
     try {
       const res = await fetch("/api/pronunciation", {
         method: "POST",
@@ -187,9 +145,11 @@ function SpeakingPracticeCard({
   }
 
   const handleTranscript = (nextTranscript: string) => {
+    const nextScore = getSimilarityScore(target, nextTranscript)
     setTranscript(nextTranscript)
+    setSimilarityScore(nextScore)
 
-    if (isCloseMatch(target, nextTranscript)) {
+    if (isCloseMatch(nextScore)) {
       setFeedback("correct")
       setAttempts(0)
       setGuide(null)
@@ -199,7 +159,6 @@ function SpeakingPracticeCard({
     const nextAttempts = attempts + 1
     setAttempts(nextAttempts)
     setFeedback("incorrect")
-    void fetchGuide(nextAttempts, nextTranscript)
   }
 
   const startListening = () => {
@@ -236,75 +195,75 @@ function SpeakingPracticeCard({
     recognition.start()
   }
 
-  const toggleSide = () => {
-    setSide((current) => (current === "front" ? "back" : "front"))
-    setTranscript("")
-    setAttempts(0)
-    setFeedback("idle")
-    setGuide(null)
-  }
-
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-400 dark:text-zinc-500">
-          {messages.speaking.progress(current, total)}
+    <section className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="mb-3 flex items-center justify-between">
+        <p className="text-xs font-semibold uppercase tracking-widest text-blue-500 dark:text-blue-400">
+          {messages.speaking.title}
         </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
-          onClick={toggleSide}
-          aria-label={messages.speaking.switchSide}
-          title={messages.speaking.switchSide}
-          className="inline-flex min-h-8 items-center gap-1 rounded-xl border border-blue-100 px-2.5 text-xs font-medium text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:border-blue-900 dark:text-blue-400 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+          onClick={() => speak(target, lang)}
+          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-gray-200 px-4 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
         >
-          <Repeat2 size={14} aria-hidden="true" />
-          {side === "front" ? messages.speaking.frontSide : messages.speaking.backSide}
+          <Volume2 size={17} aria-hidden="true" />
+          {messages.speaking.listen}
+        </button>
+        <button
+          type="button"
+          onClick={() => void fetchGuide(transcript)}
+          disabled={isGuideLoading}
+          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-blue-100 px-4 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-70 dark:border-blue-900 dark:text-blue-300 dark:hover:bg-blue-950"
+        >
+          {isGuideLoading ? (
+            <Loader2 size={17} className="animate-spin" aria-hidden="true" />
+          ) : (
+            <MessageCircleQuestion size={17} aria-hidden="true" />
+          )}
+          {messages.speaking.explain}
+        </button>
+        <button
+          type="button"
+          onClick={startListening}
+          disabled={isListening}
+          className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {isListening ? (
+            <Loader2 size={17} className="animate-spin" aria-hidden="true" />
+          ) : (
+            <Mic size={17} aria-hidden="true" />
+          )}
+          {isListening
+            ? messages.speaking.listening
+            : transcript
+              ? messages.speaking.retry
+              : messages.speaking.start}
         </button>
       </div>
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-blue-500 dark:text-blue-400">
-          {messages.speaking.targetLabel}
-        </p>
-        <p className="whitespace-pre-wrap text-2xl font-semibold leading-relaxed text-gray-900 dark:text-zinc-100">
-          {target}
-        </p>
-        <div className="mt-5 flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => speak(target, lang)}
-            className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-gray-200 px-4 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
-          >
-            <Volume2 size={17} aria-hidden="true" />
-            {messages.speaking.listen}
-          </button>
-          <button
-            type="button"
-            onClick={startListening}
-            disabled={isListening}
-            className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {isListening ? (
-              <Loader2 size={17} className="animate-spin" aria-hidden="true" />
-            ) : (
-              <Mic size={17} aria-hidden="true" />
-            )}
-            {isListening
-              ? messages.speaking.listening
-              : transcript
-                ? messages.speaking.retry
-                : messages.speaking.start}
-          </button>
-        </div>
-      </section>
-
-      <section className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="mt-4 rounded-xl bg-gray-50 p-3 dark:bg-zinc-950">
         <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-zinc-500">
           {messages.speaking.recognizedLabel}
         </p>
         <p className="min-h-6 whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-zinc-300">
           {transcript || messages.speaking.noTranscript}
         </p>
+        {similarityScore !== null && (
+          <div className="mt-4">
+            <div className="mb-1 flex items-center justify-between text-xs font-medium text-gray-400 dark:text-zinc-500">
+              <span>{messages.speaking.similarity}</span>
+              <span>{messages.speaking.similarityScore(similarityScore)}</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-zinc-800">
+              <div
+                className="h-full rounded-full bg-blue-500 transition-all duration-300"
+                style={{ width: `${similarityScore}%` }}
+              />
+            </div>
+          </div>
+        )}
         {feedback === "correct" && (
           <p className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-400">
             {messages.speaking.correct}
@@ -321,10 +280,10 @@ function SpeakingPracticeCard({
             {transcript || messages.speaking.unsupported}
           </p>
         )}
-      </section>
+      </div>
 
       {(isGuideLoading || guide) && (
-        <section className="rounded-2xl border border-blue-100 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/40">
+        <div className="mt-3 rounded-xl border border-blue-100 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950/40">
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-300">
             {messages.speaking.guideTitle}
           </p>
@@ -338,27 +297,8 @@ function SpeakingPracticeCard({
               {guide}
             </p>
           )}
-        </section>
+        </div>
       )}
-
-      <div className="flex items-center justify-between px-2">
-        <button
-          type="button"
-          onClick={onPrevious}
-          className="inline-flex min-h-10 items-center gap-1 text-sm font-medium text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-        >
-          <ChevronLeft size={17} aria-hidden="true" />
-          {messages.speaking.previous}
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          className="inline-flex min-h-10 items-center gap-1 text-sm font-medium text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-        >
-          {messages.speaking.next}
-          <ChevronRight size={17} aria-hidden="true" />
-        </button>
-      </div>
-    </div>
+    </section>
   )
 }

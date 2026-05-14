@@ -17,10 +17,11 @@ interface FlipCardProps {
   deckId: string
   front: string
   back: string
+  deckTitle?: string
   onEdit?: () => void
 }
 
-export default function FlipCard({ deckId, front, back, onEdit }: FlipCardProps) {
+export default function FlipCard({ deckId, front, back, deckTitle, onEdit }: FlipCardProps) {
   const { messages } = useLocale()
   const [isFlipped, setIsFlipped] = useState(false)
   const [geminiResult, setGeminiResult] = useState<string | null>(null)
@@ -131,18 +132,27 @@ export default function FlipCard({ deckId, front, back, onEdit }: FlipCardProps)
                 <Pencil size={18} aria-hidden="true" />
               </button>
             )}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                speak(front)
-              }}
-              aria-label={messages.card.readFront}
-              title={messages.card.readFront}
-              className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
-            >
-              <Volume2 size={18} aria-hidden="true" />
-            </button>
+            {deckTitle ? (
+              <span
+                title={deckTitle}
+                className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-500 dark:bg-zinc-800 dark:text-zinc-400"
+              >
+                {deckTitle}
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  speak(front)
+                }}
+                aria-label={messages.card.readFront}
+                title={messages.card.readFront}
+                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+              >
+                <Volume2 size={18} aria-hidden="true" />
+              </button>
+            )}
 
             <p className="text-xl font-semibold text-gray-800 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">
               {front}
@@ -196,18 +206,27 @@ export default function FlipCard({ deckId, front, back, onEdit }: FlipCardProps)
                 <Pencil size={18} aria-hidden="true" />
               </button>
             )}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                speak(back)
-              }}
-              aria-label={messages.card.readBack}
-              title={messages.card.readBack}
-              className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
-            >
-              <Volume2 size={18} aria-hidden="true" />
-            </button>
+            {deckTitle ? (
+              <span
+                title={deckTitle}
+                className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-900 dark:text-blue-300"
+              >
+                {deckTitle}
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  speak(back)
+                }}
+                aria-label={messages.card.readBack}
+                title={messages.card.readBack}
+                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+              >
+                <Volume2 size={18} aria-hidden="true" />
+              </button>
+            )}
 
             <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">{back}</p>
             <p className="text-xs text-gray-300 mt-4 dark:text-zinc-500">{messages.card.tapToFlip}</p>
