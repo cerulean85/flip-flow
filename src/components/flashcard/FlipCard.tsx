@@ -6,39 +6,114 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
-import { Search, Sparkles, X, Loader2, MessageSquareText, Pencil, Volume2 } from "lucide-react"
+import { CircleHelp, Search, Sparkles, X, Loader2, MessageSquareText, Pencil, Volume2 } from "lucide-react"
 import SentenceFlip from "./SentenceFlip"
 import { speak } from "@/lib/speech"
 import { useLocale } from "@/components/LocaleProvider"
 
 type Sentence = { ko: string; en: string }
+type AiFollowUp = { question: string; answer: string }
+
+const maxStoredFollowUps = 10
+const aiFollowUpStoragePrefix = "flip-flow.ai.followups."
+
+function getFollowUpStorageKey(term: string) {
+  return `${aiFollowUpStoragePrefix}${encodeURIComponent(term)}`
+}
+
+function isAiFollowUp(value: unknown): value is AiFollowUp {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "question" in value &&
+    "answer" in value &&
+    typeof value.question === "string" &&
+    typeof value.answer === "string"
+  )
+}
+
+function loadStoredFollowUps(term: string) {
+  if (typeof window === "undefined") return []
+
+  try {
+    const raw = window.localStorage.getItem(getFollowUpStorageKey(term))
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed)
+      ? parsed.filter(isAiFollowUp).slice(-maxStoredFollowUps)
+      : []
+  } catch {
+    return []
+  }
+}
+
+function saveStoredFollowUps(term: string, followUps: AiFollowUp[]) {
+  if (typeof window === "undefined") return
+
+  try {
+    window.localStorage.setItem(
+      getFollowUpStorageKey(term),
+      JSON.stringify(followUps.slice(-maxStoredFollowUps))
+    )
+  } catch {
+    // Ignore storage failures; the visible conversation still remains in component state.
+  }
+}
 
 interface FlipCardProps {
   deckId: string
   front: string
   back: string
   deckTitle?: string
+  onFlipChange?: (isFlipped: boolean) => void
   onEdit?: () => void
 }
 
-export default function FlipCard({ deckId, front, back, deckTitle, onEdit }: FlipCardProps) {
+export default function FlipCard({
+  deckId,
+  front,
+  back,
+  deckTitle,
+  onFlipChange,
+  onEdit,
+}: FlipCardProps) {
   const { messages } = useLocale()
   const [isFlipped, setIsFlipped] = useState(false)
   const [geminiResult, setGeminiResult] = useState<string | null>(null)
   const [geminiTerm, setGeminiTerm] = useState<string | null>(null)
   const [isSearching, setIsSearching] = useState(false)
   const [showResult, setShowResult] = useState(false)
+  const [followUpQuestion, setFollowUpQuestion] = useState("")
+  const [followUps, setFollowUps] = useState<AiFollowUp[]>([])
+  const [storedFollowUps, setStoredFollowUps] = useState<AiFollowUp[]>(() => loadStoredFollowUps(front))
+  const [isAskingFollowUp, setIsAskingFollowUp] = useState(false)
+  const [showQuestionPanel, setShowQuestionPanel] = useState(false)
 
   const [sentences, setSentences] = useState<Sentence[] | null>(null)
   const [sentencesError, setSentencesError] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [showSentences, setShowSentences] = useState(false)
+  const visibleTerm = isFlipped ? back : front
+
+  const toggleFlip = () => {
+    setIsFlipped((current) => {
+      const next = !current
+      setStoredFollowUps(loadStoredFollowUps(next ? back : front))
+      setShowQuestionPanel(false)
+      onFlipChange?.(next)
+      return next
+    })
+  }
+
+  const toggleQuestionPanel = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowResult(false)
+    setShowQuestionPanel((current) => !current)
+  }
 
   const searchMeaning = async (e: React.MouseEvent) => {
     e.stopPropagation()
     if (isSearching) return
-
-    const visibleTerm = isFlipped ? back : front
 
     if (showResult && geminiResult && geminiTerm === visibleTerm) {
       setShowResult(false)
@@ -46,9 +121,14 @@ export default function FlipCard({ deckId, front, back, deckTitle, onEdit }: Fli
     }
 
     setIsSearching(true)
+    setShowQuestionPanel(false)
     setShowResult(false)
     setGeminiResult(null)
     setGeminiTerm(visibleTerm)
+    setFollowUpQuestion("")
+    const stored = loadStoredFollowUps(visibleTerm)
+    setFollowUps(stored)
+    setStoredFollowUps(stored)
 
     try {
       const res = await fetch("/api/gemini", {
@@ -100,12 +180,142 @@ export default function FlipCard({ deckId, front, back, deckTitle, onEdit }: Fli
     }
   }
 
+  const askFollowUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (isAskingFollowUp) return
+
+    const question = followUpQuestion.trim()
+    if (!question) return
+    const term = visibleTerm
+    const currentHistory = loadStoredFollowUps(term)
+    const contextParts = [
+      ...(geminiTerm === term && geminiResult ? [geminiResult] : []),
+      ...currentHistory.map((item) => `질문: ${item.question}\n답변: ${item.answer}`),
+    ]
+
+    setIsAskingFollowUp(true)
+    setFollowUpQuestion("")
+
+    try {
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          word: term,
+          context: contextParts.join("\n\n"),
+          question,
+        }),
+      })
+      const data = await res.json()
+      const answer = data.result ?? data.error ?? messages.card.noResult
+      const next = [...currentHistory, { question, answer }].slice(-maxStoredFollowUps)
+      saveStoredFollowUps(term, next)
+      setStoredFollowUps(next)
+      if (geminiTerm === term) {
+        setFollowUps(next)
+      }
+    } catch {
+      const next = [...currentHistory, { question, answer: messages.card.networkError }].slice(-maxStoredFollowUps)
+      saveStoredFollowUps(term, next)
+      setStoredFollowUps(next)
+      if (geminiTerm === term) {
+        setFollowUps(next)
+      }
+    } finally {
+      setIsAskingFollowUp(false)
+    }
+  }
+
+  const deleteFollowUp = (itemIndex: number) => {
+    const next = storedFollowUps.filter((_, index) => index !== itemIndex)
+    saveStoredFollowUps(visibleTerm, next)
+    setStoredFollowUps(next)
+    if (geminiTerm === visibleTerm) {
+      setFollowUps(next)
+    }
+  }
+
+  const markdownComponents = {
+    p: ({ children }: { children?: React.ReactNode }) => <p className="mb-2 last:mb-0">{children}</p>,
+    strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-semibold text-gray-900 dark:text-zinc-100">{children}</strong>,
+    em: ({ children }: { children?: React.ReactNode }) => <em className="italic text-gray-600 dark:text-zinc-400">{children}</em>,
+    ul: ({ children }: { children?: React.ReactNode }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
+    ol: ({ children }: { children?: React.ReactNode }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
+    li: ({ children }: { children?: React.ReactNode }) => <li className="text-gray-700 dark:text-zinc-300">{children}</li>,
+    h1: ({ children }: { children?: React.ReactNode }) => <h1 className="text-base font-bold text-gray-900 mb-1 dark:text-zinc-100">{children}</h1>,
+    h2: ({ children }: { children?: React.ReactNode }) => <h2 className="text-sm font-bold text-gray-900 mb-1 dark:text-zinc-100">{children}</h2>,
+    h3: ({ children }: { children?: React.ReactNode }) => <h3 className="text-sm font-semibold text-gray-800 mb-1 dark:text-zinc-200">{children}</h3>,
+    code: ({ children }: { children?: React.ReactNode }) => <code className="bg-blue-100 text-blue-700 rounded px-1 py-0.5 text-xs font-mono dark:bg-blue-900 dark:text-blue-300">{children}</code>,
+    blockquote: ({ children }: { children?: React.ReactNode }) => <blockquote className="border-l-2 border-blue-300 pl-3 text-gray-500 italic my-1 dark:border-blue-700">{children}</blockquote>,
+  }
+
+  const renderFollowUps = (items: AiFollowUp[], options?: { canDelete?: boolean }) => (
+    <div className="space-y-3">
+      {items.map((item, followUpIndex) => (
+        <div key={`${item.question}-${followUpIndex}`} className="space-y-2">
+          <div className="flex min-h-11 items-center gap-2 rounded-xl bg-white/70 px-3 py-2 dark:bg-zinc-950">
+            <p className="min-w-0 flex-1 self-center text-sm font-medium leading-normal text-gray-800 dark:text-zinc-100">
+              {item.question}
+            </p>
+            {options?.canDelete && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  deleteFollowUp(followUpIndex)
+                }}
+                aria-label={messages.card.deleteQuestionHistory}
+                title={messages.card.deleteQuestionHistory}
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-gray-300 transition-colors hover:bg-red-50 hover:text-red-500 dark:text-zinc-600 dark:hover:bg-red-950 dark:hover:text-red-400"
+              >
+                <X size={14} aria-hidden="true" />
+              </button>
+            )}
+          </div>
+          <div className="text-sm leading-relaxed text-gray-700 dark:text-zinc-300">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm, remarkMath]}
+              rehypePlugins={[rehypeKatex]}
+              components={markdownComponents}
+            >
+              {item.answer}
+            </ReactMarkdown>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const questionForm = (
+    <form onSubmit={askFollowUp} className="flex gap-2">
+      <input
+        type="text"
+        value={followUpQuestion}
+        onChange={(e) => setFollowUpQuestion(e.target.value)}
+        placeholder={messages.card.aiQuestionPlaceholder}
+        className="min-w-0 flex-1 rounded-xl border border-blue-100 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-500 dark:focus:ring-blue-950"
+      />
+      <button
+        type="submit"
+        disabled={isAskingFollowUp || !followUpQuestion.trim()}
+        className="inline-flex min-h-10 min-w-16 items-center justify-center rounded-xl bg-blue-600 px-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {isAskingFollowUp ? (
+          <Loader2 size={16} className="animate-spin" aria-label={messages.card.aiQuestionLoading} />
+        ) : (
+          messages.card.aiQuestionSubmit
+        )}
+      </button>
+    </form>
+  )
+
   return (
     <div className="flex flex-col gap-3">
       <div
         className="relative w-full cursor-pointer select-none"
         style={{ perspective: "1200px" }}
-        onClick={() => setIsFlipped((f) => !f)}
+        onClick={toggleFlip}
       >
         <motion.div
           className="grid w-full"
@@ -159,30 +369,41 @@ export default function FlipCard({ deckId, front, back, deckTitle, onEdit }: Fli
             </p>
             <p className="text-xs text-gray-300 mt-4 dark:text-zinc-600">{messages.card.tapToFlip}</p>
 
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-1">
               <button
                 onClick={generateSentences}
                 disabled={isGenerating}
-                className="flex min-h-9 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+                className="flex h-9 translate-y-0.5 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950 dark:hover:text-blue-300"
               >
                 {isGenerating ? (
-                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden="true" />
                 ) : (
-                  <MessageSquareText size={16} aria-hidden="true" />
+                  <MessageSquareText size={16} className="shrink-0" aria-hidden="true" />
                 )}
-                {messages.card.practice}
+                <span className="leading-none">{messages.card.practice}</span>
+              </button>
+              <button
+                type="button"
+                onClick={toggleQuestionPanel}
+                aria-pressed={showQuestionPanel}
+                aria-label={messages.card.askQuestion}
+                title={messages.card.askQuestion}
+                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+              >
+                <CircleHelp size={16} className="shrink-0" aria-hidden="true" />
+                <span className="leading-none">{messages.card.askQuestion}</span>
               </button>
               <button
                 onClick={searchMeaning}
                 disabled={isSearching}
-                className="flex min-h-9 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950 dark:hover:text-blue-300"
               >
                 {isSearching ? (
-                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden="true" />
                 ) : (
-                  <Search size={16} aria-hidden="true" />
+                  <Search size={16} className="shrink-0" aria-hidden="true" />
                 )}
-                {messages.card.definition}
+                <span className="leading-none">{messages.card.definition}</span>
               </button>
             </div>
           </div>
@@ -231,35 +452,70 @@ export default function FlipCard({ deckId, front, back, deckTitle, onEdit }: Fli
             <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">{back}</p>
             <p className="text-xs text-gray-300 mt-4 dark:text-zinc-500">{messages.card.tapToFlip}</p>
 
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-1">
               <button
                 onClick={generateSentences}
                 disabled={isGenerating}
-                className="flex min-h-9 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+                className="flex h-9 translate-y-0.5 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-900 dark:hover:text-blue-300"
               >
                 {isGenerating ? (
-                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden="true" />
                 ) : (
-                  <MessageSquareText size={16} aria-hidden="true" />
+                  <MessageSquareText size={16} className="shrink-0" aria-hidden="true" />
                 )}
-                {messages.card.practice}
+                <span className="leading-none">{messages.card.practice}</span>
+              </button>
+              <button
+                type="button"
+                onClick={toggleQuestionPanel}
+                aria-pressed={showQuestionPanel}
+                aria-label={messages.card.askQuestion}
+                title={messages.card.askQuestion}
+                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+              >
+                <CircleHelp size={16} className="shrink-0" aria-hidden="true" />
+                <span className="leading-none">{messages.card.askQuestion}</span>
               </button>
               <button
                 onClick={searchMeaning}
                 disabled={isSearching}
-                className="flex min-h-9 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-900 dark:hover:text-blue-300"
               >
                 {isSearching ? (
-                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden="true" />
                 ) : (
-                  <Search size={16} aria-hidden="true" />
+                  <Search size={16} className="shrink-0" aria-hidden="true" />
                 )}
-                {messages.card.definition}
+                <span className="leading-none">{messages.card.definition}</span>
               </button>
             </div>
           </div>
         </motion.div>
       </div>
+
+      {/* AI question panel */}
+      <AnimatePresence>
+        {showQuestionPanel && !showResult && !isSearching && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="rounded-2xl border border-blue-100 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900"
+          >
+            <p className="mb-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-blue-500 dark:text-blue-400">
+              <MessageSquareText size={12} aria-hidden="true" />
+              {messages.card.askQuestion}
+            </p>
+            <div className={storedFollowUps.length > 0 ? "mb-4" : ""}>{questionForm}</div>
+            {storedFollowUps.length > 0 && (
+              <div className="max-h-80 overflow-y-auto pr-1">
+                {renderFollowUps(storedFollowUps, { canDelete: true })}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* AI result panel */}
       <AnimatePresence>
@@ -284,27 +540,21 @@ export default function FlipCard({ deckId, front, back, deckTitle, onEdit }: Fli
                 <X size={14} aria-hidden="true" />
               </button>
             </div>
+            <div className="mb-4">{questionForm}</div>
             <div className="text-sm text-gray-700 leading-relaxed dark:text-zinc-300">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeKatex]}
-                components={{
-                  p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                  strong: ({ children }) => <strong className="font-semibold text-gray-900 dark:text-zinc-100">{children}</strong>,
-                  em: ({ children }) => <em className="italic text-gray-600 dark:text-zinc-400">{children}</em>,
-                  ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
-                  ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
-                  li: ({ children }) => <li className="text-gray-700 dark:text-zinc-300">{children}</li>,
-                  h1: ({ children }) => <h1 className="text-base font-bold text-gray-900 mb-1 dark:text-zinc-100">{children}</h1>,
-                  h2: ({ children }) => <h2 className="text-sm font-bold text-gray-900 mb-1 dark:text-zinc-100">{children}</h2>,
-                  h3: ({ children }) => <h3 className="text-sm font-semibold text-gray-800 mb-1 dark:text-zinc-200">{children}</h3>,
-                  code: ({ children }) => <code className="bg-blue-100 text-blue-700 rounded px-1 py-0.5 text-xs font-mono dark:bg-blue-900 dark:text-blue-300">{children}</code>,
-                  blockquote: ({ children }) => <blockquote className="border-l-2 border-blue-300 pl-3 text-gray-500 italic my-1 dark:border-blue-700">{children}</blockquote>,
-                }}
+                components={markdownComponents}
               >
                 {geminiResult}
               </ReactMarkdown>
             </div>
+            {followUps.length > 0 && (
+              <div className="mt-4 space-y-3 border-t border-blue-100 pt-3 dark:border-zinc-800">
+                {renderFollowUps(followUps)}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

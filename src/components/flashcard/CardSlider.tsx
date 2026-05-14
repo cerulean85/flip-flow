@@ -51,6 +51,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
   const [editedCards, setEditedCards] = useState<Record<string, Pick<Card, "front" | "back">>>({})
   const [editingCardId, setEditingCardId] = useState<string | null>(null)
   const [studyBackFirst, setStudyBackFirst] = useState(false)
+  const [isCardFlipped, setIsCardFlipped] = useState(false)
   const [[index, direction], setPage] = useState([0, 0])
   const [isSaving, startSaving] = useTransition()
   const initializedRef = useRef(false)
@@ -90,11 +91,13 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
     const next = index + newDirection
     if (next < 0 || next >= shuffled.length) return
     setEditingCardId(null)
+    setIsCardFlipped(false)
     setPage([next, newDirection])
   }
 
   const reshuffle = () => {
     setEditingCardId(null)
+    setIsCardFlipped(false)
     setShuffled(shuffle(visibleCards))
     setPage([0, 0])
   }
@@ -124,6 +127,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
 
   const toggleStudySide = () => {
     setEditingCardId(null)
+    setIsCardFlipped(false)
     setStudyBackFirst((current) => !current)
   }
 
@@ -258,11 +262,12 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
                   front={studyFront}
                   back={studyBack}
                   deckTitle={card.deck?.title}
+                  onFlipChange={setIsCardFlipped}
                   onEdit={() => setEditingCardId(card.id)}
                 />
                 <SpeakingCardPractice
-                  key={`${card.id}-${studyBackFirst ? "back" : "front"}-speaking`}
-                  target={studyFront}
+                  key={`${card.id}-${studyBackFirst ? "back" : "front"}-${isCardFlipped ? "flipped" : "front"}-speaking`}
+                  target={isCardFlipped ? studyBack : studyFront}
                 />
               </div>
             )}

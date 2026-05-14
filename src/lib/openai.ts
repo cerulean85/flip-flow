@@ -73,6 +73,36 @@ export async function defineWordInKorean(word: string) {
   })
 }
 
+export async function answerDefinitionQuestion(term: string, context: string, question: string) {
+  const trimmedTerm = term.trim()
+  const trimmedContext = context.trim()
+  const trimmedQuestion = question.trim()
+
+  return requestChatCompletion({
+    messages: [
+      {
+        role: "user",
+        content: `다음 단어/표현 학습 결과를 참고해서 사용자의 추가 질문에 한국어로 답해주세요.
+
+단어/표현: ${trimmedTerm}
+
+기존 AI 검색 결과:
+${trimmedContext || "(기존 결과 없음)"}
+
+추가 질문: ${trimmedQuestion}
+
+요구사항:
+- 기존 설명과 연결해서 답변
+- 학습자가 바로 이해할 수 있게 간결하게 설명
+- 필요하면 짧은 예문 1개 포함
+- 4문장 이내`,
+      },
+    ],
+    max_tokens: 360,
+    temperature: 0.2,
+  })
+}
+
 export async function generatePracticeSentences(front: string, back: string) {
   const frontTerm = front.trim()
   const backTerm = back.trim()

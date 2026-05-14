@@ -1,18 +1,24 @@
 import { NextRequest } from "next/server"
 import {
+  answerDefinitionQuestion,
   defineWordInKorean,
   OpenAiConfigurationError,
   OpenAiRequestError,
 } from "@/lib/openai"
 
 export async function POST(request: NextRequest) {
-  const { word } = await request.json()
+  const { word, context, question } = await request.json()
   if (!word?.trim()) {
     return Response.json({ error: "단어를 입력해주세요." }, { status: 400 })
   }
+  if (question !== undefined && !question?.trim()) {
+    return Response.json({ error: "질문을 입력해주세요." }, { status: 400 })
+  }
 
   try {
-    const text = await defineWordInKorean(word)
+    const text = question?.trim()
+      ? await answerDefinitionQuestion(word, context ?? "", question)
+      : await defineWordInKorean(word)
     return Response.json({ result: text || "결과를 가져올 수 없습니다." })
   } catch (error) {
     if (error instanceof OpenAiConfigurationError) {
