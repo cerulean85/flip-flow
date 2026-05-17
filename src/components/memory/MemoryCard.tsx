@@ -1,9 +1,10 @@
+"use client"
+
 import Link from "next/link"
 import { Bookmark } from "lucide-react"
 import type { MemoryItemType } from "@/generated/prisma/enums"
 import { formatLocalizedDate } from "@/lib/date"
-import { getRequestLocale } from "@/lib/i18n"
-import { headers } from "next/headers"
+import { useLocale } from "@/components/LocaleProvider"
 import MemoryTypeBadge from "./MemoryTypeBadge"
 
 interface Props {
@@ -17,8 +18,8 @@ interface Props {
   }
 }
 
-export default async function MemoryCard({ item }: Props) {
-  const locale = getRequestLocale(await headers())
+export default function MemoryCard({ item }: Props) {
+  const { locale } = useLocale()
 
   return (
     <Link

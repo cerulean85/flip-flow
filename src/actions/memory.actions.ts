@@ -64,19 +64,12 @@ async function verifyMemoryOwnership(id: string, userId: string) {
 
 async function verifySourceOwnership(opts: {
   userId: string
-  deckId?: string | null
   cardId?: string | null
   essayId?: string | null
 }) {
-  const { userId, deckId, cardId, essayId } = opts
-  if (deckId) {
-    const deck = await prisma.deck.findFirst({ where: { id: deckId, userId } })
-    if (!deck) throw new FormValidationError("source_not_found")
-  }
+  const { userId, cardId, essayId } = opts
   if (cardId) {
-    const card = await prisma.card.findFirst({
-      where: { id: cardId, deck: { userId } },
-    })
+    const card = await prisma.card.findFirst({ where: { id: cardId, userId } })
     if (!card) throw new FormValidationError("source_not_found")
   }
   if (essayId) {
@@ -100,13 +93,11 @@ export async function createMemoryItem(
     const explanation = optionalString(formData.get("explanation"))
     const example = optionalString(formData.get("example"))
     const contextText = optionalString(formData.get("contextText"))
-    const deckId = optionalString(formData.get("deckId"))
     const cardId = optionalString(formData.get("cardId"))
     const essayId = optionalString(formData.get("essayId"))
 
     await verifySourceOwnership({
       userId: session.user.id,
-      deckId,
       cardId,
       essayId,
     })
@@ -127,7 +118,6 @@ export async function createMemoryItem(
           explanation,
           example,
           contextText,
-          deckId,
           cardId,
           essayId,
         },
@@ -232,12 +222,11 @@ export async function gradeReview(id: string, grade: Grade) {
   revalidatePath(`/memory/${id}`)
 }
 
-export async function exportToDeck(id: string, deckId: string) {
+export async function exportToVocabulary(id: string) {
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")
 
   const item = await verifyMemoryOwnership(id, session.user.id)
-  await verifySourceOwnership({ userId: session.user.id, deckId })
 
   const front = item.title
   const back = item.meaning ?? item.explanation ?? ""
@@ -245,29 +234,29 @@ export async function exportToDeck(id: string, deckId: string) {
     throw new Error("Both front and back are required to export")
   }
 
-  if (item.cardId && item.deckId === deckId) {
+  if (item.cardId) {
     const existing = await prisma.card.findFirst({
-      where: { id: item.cardId, deckId, deck: { userId: session.user.id } },
+      where: { id: item.cardId, userId: session.user.id },
       select: { id: true },
     })
     if (existing) {
-      return { cardId: existing.id, deckId, alreadyExported: true as const }
+      return { cardId: existing.id, alreadyExported: true as const }
     }
   }
 
   const card = await prisma.card.create({
-    data: { front, back, deckId },
+    data: { front, back, userId: session.user.id },
   })
 
   await prisma.memoryItem.update({
     where: { id },
-    data: { cardId: card.id, deckId },
+    data: { cardId: card.id },
   })
 
-  revalidatePath(`/decks/${deckId}`)
+  revalidatePath("/dashboard")
   revalidatePath(`/memory/${id}`)
 
-  return { cardId: card.id, deckId, alreadyExported: false as const }
+  return { cardId: card.id, alreadyExported: false as const }
 }
 
 export async function enrichWithAI(id: string) {

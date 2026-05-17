@@ -35,26 +35,23 @@ export default async function NewMemoryPage({
 
   const essayIdParam = firstString(params.essayId)
   const cardIdParam = firstString(params.cardId)
-  const deckIdParam = firstString(params.deckId)
 
   let title = firstString(params.title) ?? ""
   let meaning: string | null = firstString(params.meaning) ?? null
   let contextText: string | null = firstString(params.contextText) ?? null
   const type = parseType(firstString(params.type))
-  let resolvedDeckId = deckIdParam
   let resolvedCardId: string | undefined
   let resolvedEssayId: string | undefined
 
   if (cardIdParam) {
     const card = await prisma.card.findFirst({
-      where: { id: cardIdParam, deck: { userId: session!.user.id } },
-      select: { id: true, front: true, back: true, deckId: true },
+      where: { id: cardIdParam, userId: session!.user.id },
+      select: { id: true, front: true, back: true },
     })
     if (card) {
       title = title || card.front
       meaning = meaning ?? card.back
       resolvedCardId = card.id
-      resolvedDeckId = resolvedDeckId || card.deckId
     }
   }
 
@@ -67,14 +64,6 @@ export default async function NewMemoryPage({
       resolvedEssayId = essay.id
       if (!contextText) contextText = `From: ${essay.title}`
     }
-  }
-
-  if (resolvedDeckId) {
-    const deck = await prisma.deck.findFirst({
-      where: { id: resolvedDeckId, userId: session!.user.id },
-      select: { id: true },
-    })
-    if (!deck) resolvedDeckId = undefined
   }
 
   return (
@@ -92,7 +81,6 @@ export default async function NewMemoryPage({
           contextText,
         }}
         source={{
-          deckId: resolvedDeckId,
           cardId: resolvedCardId,
           essayId: resolvedEssayId,
         }}

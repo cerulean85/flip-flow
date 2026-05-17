@@ -8,10 +8,9 @@ import { useLocale } from "@/components/LocaleProvider"
 
 interface Props {
   cardId: string
-  deckId: string
 }
 
-export default function DeleteCardButton({ cardId, deckId }: Props) {
+export default function DeleteCardButton({ cardId }: Props) {
   const { messages } = useLocale()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -23,7 +22,7 @@ export default function DeleteCardButton({ cardId, deckId }: Props) {
           setError(null)
           startTransition(async () => {
             try {
-              await deleteCard(cardId, deckId)
+              await deleteCard(cardId)
             } catch (err) {
               unstable_rethrow(err)
               console.error(err)

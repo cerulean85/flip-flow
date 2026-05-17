@@ -11,7 +11,7 @@ export async function POST(
     const { id } = await params
 
     const card = await prisma.card.findFirst({
-      where: { id, deck: { userId } },
+      where: { id, userId },
     })
     if (!card) return Response.json({ error: "Not found" }, { status: 404 })
 

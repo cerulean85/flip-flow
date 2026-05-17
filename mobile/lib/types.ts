@@ -5,23 +5,14 @@ export interface User {
   image: string | null
 }
 
-export interface Deck {
-  id: string
-  title: string
-  description: string | null
-  color: string
-  createdAt: string
-  updatedAt: string
-  _count?: { cards: number }
-}
-
 export interface Card {
   id: string
   front: string
   back: string
   isBookmark: boolean
   order: number
-  deckId: string
+  category: string | null
+  userId: string
   createdAt: string
   updatedAt: string
 }

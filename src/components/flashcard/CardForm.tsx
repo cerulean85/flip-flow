@@ -20,11 +20,11 @@ function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: st
 }
 
 interface CardFormProps {
-  deckId: string
+  defaultCategory?: string | null
   className?: string
 }
 
-export default function CardForm({ deckId, className = "mt-6" }: CardFormProps) {
+export default function CardForm({ defaultCategory, className = "mt-6" }: CardFormProps) {
   const { messages } = useLocale()
   const formRef = useRef<HTMLFormElement>(null)
   const submittingRef = useRef(false)
@@ -34,7 +34,7 @@ export default function CardForm({ deckId, className = "mt-6" }: CardFormProps) 
 
     submittingRef.current = true
     try {
-      await createCard(deckId, formData)
+      await createCard(formData)
       formRef.current?.reset()
     } finally {
       submittingRef.current = false
@@ -58,6 +58,12 @@ export default function CardForm({ deckId, className = "mt-6" }: CardFormProps) 
       <h2 className="font-semibold text-gray-700 text-sm dark:text-zinc-300">
         {messages.card.addTitle}
       </h2>
+      <input
+        name="category"
+        defaultValue={defaultCategory ?? ""}
+        placeholder={messages.card.categoryPlaceholder}
+        className="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+      />
       <textarea
         name="front"
         required

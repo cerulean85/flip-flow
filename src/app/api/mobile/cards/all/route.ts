@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const { userId } = await verifyMobileToken(request)
 
     const cards = await prisma.card.findMany({
-      where: { deck: { userId } },
+      where: { userId },
       orderBy: { createdAt: "desc" },
     })
 

@@ -7,7 +7,6 @@ import { useLocale } from "@/components/LocaleProvider"
 interface Props {
   essayId?: string
   cardId?: string
-  deckId?: string
   title?: string
   meaning?: string
   contextText?: string
@@ -19,7 +18,6 @@ interface Props {
 export default function AddToMemoryButton({
   essayId,
   cardId,
-  deckId,
   title,
   meaning,
   contextText,
@@ -37,7 +35,6 @@ export default function AddToMemoryButton({
   const params = new URLSearchParams()
   if (essayId) params.set("essayId", essayId)
   if (cardId) params.set("cardId", cardId)
-  if (deckId) params.set("deckId", deckId)
   if (title) params.set("title", truncate(title, SHORT_MAX))
   if (meaning) params.set("meaning", truncate(meaning, SHORT_MAX))
   if (contextText) params.set("contextText", truncate(contextText, CONTEXT_MAX))

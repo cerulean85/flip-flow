@@ -5,12 +5,13 @@ import PrimaryButton from "@/components/ui/PrimaryButton"
 import { useTheme } from "@/lib/theme"
 
 interface Props {
-  deckId: string
+  defaultCategory?: string | null
   onCreated?: () => void
 }
 
-export default function CardForm({ deckId, onCreated }: Props) {
+export default function CardForm({ defaultCategory, onCreated }: Props) {
   const { colors } = useTheme()
+  const [category, setCategory] = useState(defaultCategory ?? "")
   const [front, setFront] = useState("")
   const [back, setBack] = useState("")
   const [pending, setPending] = useState(false)
@@ -33,7 +34,11 @@ export default function CardForm({ deckId, onCreated }: Props) {
     if (!front.trim() || !back.trim()) return
     setPending(true)
     try {
-      await api.createCard(deckId, { front: front.trim(), back: back.trim() })
+      await api.createCard({
+        front: front.trim(),
+        back: back.trim(),
+        category: category.trim() || null,
+      })
       setFront("")
       setBack("")
       onCreated?.()
@@ -45,6 +50,13 @@ export default function CardForm({ deckId, onCreated }: Props) {
   return (
     <View style={{ gap: 8, marginTop: 16 }}>
       <Text style={{ color: colors.textMuted, fontSize: 13, fontWeight: "600" }}>카드 추가</Text>
+      <TextInput
+        value={category}
+        onChangeText={setCategory}
+        placeholder="카테고리 (선택)"
+        placeholderTextColor={colors.textSubtle}
+        style={[inputStyle, { minHeight: 44 }]}
+      />
       <TextInput
         value={front}
         onChangeText={setFront}

@@ -61,19 +61,17 @@ function saveStoredFollowUps(term: string, followUps: AiFollowUp[]) {
 }
 
 interface FlipCardProps {
-  deckId: string
   front: string
   back: string
-  deckTitle?: string
+  categoryLabel?: string
   onFlipChange?: (isFlipped: boolean) => void
   onEdit?: () => void
 }
 
 export default function FlipCard({
-  deckId,
   front,
   back,
-  deckTitle,
+  categoryLabel,
   onFlipChange,
   onEdit,
 }: FlipCardProps) {
@@ -342,12 +340,12 @@ export default function FlipCard({
                 <Pencil size={18} aria-hidden="true" />
               </button>
             )}
-            {deckTitle ? (
+            {categoryLabel ? (
               <span
-                title={deckTitle}
+                title={categoryLabel}
                 className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-500 dark:bg-zinc-800 dark:text-zinc-400"
               >
-                {deckTitle}
+                {categoryLabel}
               </span>
             ) : (
               <button
@@ -427,12 +425,12 @@ export default function FlipCard({
                 <Pencil size={18} aria-hidden="true" />
               </button>
             )}
-            {deckTitle ? (
+            {categoryLabel ? (
               <span
-                title={deckTitle}
+                title={categoryLabel}
                 className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-900 dark:text-blue-300"
               >
-                {deckTitle}
+                {categoryLabel}
               </span>
             ) : (
               <button
@@ -593,7 +591,7 @@ export default function FlipCard({
                   {sentences!.map((s, i) => (
                     <li key={i} className="text-sm text-gray-400 dark:text-zinc-600">
                       <span className="inline-block w-[calc(100%-1.5rem)] align-top">
-                        <SentenceFlip deckId={deckId} ko={s.ko} en={s.en} />
+                        <SentenceFlip ko={s.ko} en={s.en} category={categoryLabel ?? null} />
                       </span>
                     </li>
                   ))}

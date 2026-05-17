@@ -12,9 +12,7 @@ import type { Card } from "@/generated/prisma/client"
 import { useLocale } from "@/components/LocaleProvider"
 import { updateCard } from "@/actions/card.actions"
 
-type StudyCard = Card & {
-  deck?: { title: string }
-}
+type StudyCard = Card
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -117,7 +115,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
     if (!front || !back) return
 
     startSaving(async () => {
-      const updatedCard = await updateCard(card.id, card.deckId, formData)
+      const updatedCard = await updateCard(card.id, formData)
       setEditedCards((current) => ({
         ...current,
         [updatedCard.id]: { front: updatedCard.front, back: updatedCard.back },
@@ -259,17 +257,15 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
               <div className="flex flex-col gap-4">
                 <FlipCard
                   key={`${card.id}-${studyBackFirst ? "back" : "front"}`}
-                  deckId={card.deckId}
                   front={studyFront}
                   back={studyBack}
-                  deckTitle={card.deck?.title}
+                  categoryLabel={card.category ?? undefined}
                   onFlipChange={setIsCardFlipped}
                   onEdit={() => setEditingCardId(card.id)}
                 />
                 <div className="flex justify-end">
                   <AddToMemoryButton
                     cardId={card.id}
-                    deckId={card.deckId}
                     title={card.front}
                     meaning={card.back}
                     type={card.front.includes(" ") ? "SENTENCE" : "WORD"}

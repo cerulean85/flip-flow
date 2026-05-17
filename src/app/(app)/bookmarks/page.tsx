@@ -12,7 +12,7 @@ export default async function BookmarksPage() {
   const t = messages[locale]
 
   const cards = await prisma.card.findMany({
-    where: { isBookmark: true, deck: { userId: session!.user.id } },
+    where: { isBookmark: true, userId: session!.user.id },
     orderBy: { updatedAt: "desc" },
   })
 

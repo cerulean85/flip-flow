@@ -23,7 +23,6 @@ interface Props {
     contextText: string | null
   }
   source?: {
-    deckId?: string
     cardId?: string
     essayId?: string
   }
@@ -58,7 +57,6 @@ export default function MemoryForm({ itemId, defaultValues, source }: Props) {
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      {source?.deckId && <input type="hidden" name="deckId" value={source.deckId} />}
       {source?.cardId && <input type="hidden" name="cardId" value={source.cardId} />}
       {source?.essayId && <input type="hidden" name="essayId" value={source.essayId} />}
       <div>

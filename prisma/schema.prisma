@@ -33,24 +33,9 @@ model User {
   image         String?
   createdAt     DateTime     @default(now())
   accounts      Account[]
-  decks         Deck[]
+  cards         Card[]
   essays        Essay[]
   memoryItems   MemoryItem[]
-}
-
-model Deck {
-  id          String       @id @default(cuid())
-  title       String
-  description String?
-  color       String       @default("#6366f1")
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  userId      String
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cards       Card[]
-  memoryItems MemoryItem[]
-
-  @@index([userId])
 }
 
 model Card {
@@ -58,15 +43,17 @@ model Card {
   front       String       @db.Text
   back        String       @db.Text
   isBookmark  Boolean      @default(false)
+  category    String?
   order       Int          @default(0)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  deckId      String
-  deck        Deck         @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   memoryItems MemoryItem[]
 
-  @@index([deckId])
-  @@index([deckId, isBookmark])
+  @@index([userId])
+  @@index([userId, isBookmark])
+  @@index([userId, category])
 }
 
 model Essay {
@@ -101,8 +88,6 @@ model MemoryItem {
   example        String?        @db.Text
   contextText    String?        @db.Text
 
-  deckId         String?
-  deck           Deck?          @relation(fields: [deckId], references: [id], onDelete: SetNull)
   cardId         String?
   card           Card?          @relation(fields: [cardId], references: [id], onDelete: SetNull)
   essayId        String?
@@ -120,7 +105,6 @@ model MemoryItem {
   @@index([userId])
   @@index([userId, nextReviewAt])
   @@index([userId, isBookmarked])
-  @@index([deckId])
   @@index([cardId])
   @@index([essayId])
 }

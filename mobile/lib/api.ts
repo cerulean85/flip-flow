@@ -1,6 +1,6 @@
 import * as SecureStore from "expo-secure-store"
 import { API_URL } from "./constants"
-import type { Card, Deck, Essay, Sentence, User } from "./types"
+import type { Card, Essay, Sentence, User } from "./types"
 
 const TOKEN_KEY = "flipflow_token"
 
@@ -57,8 +57,6 @@ async function request<T>(
   return (await res.json()) as T
 }
 
-type DeckWithCount = Deck & { _count: { cards: number } }
-
 export const api = {
   // ---- Auth ----
   loginWithGoogle: (idToken: string) =>
@@ -84,38 +82,6 @@ export const api = {
       method: "DELETE",
     }),
 
-  // ---- Decks ----
-  listDecks: async () => {
-    const decks = await request<DeckWithCount[]>("/api/mobile/decks")
-    return { decks }
-  },
-  getDeck: async (id: string) => {
-    const [deckRaw, cards, allDecks] = await Promise.all([
-      request<Deck>(`/api/mobile/decks/${id}`),
-      request<Card[]>(`/api/mobile/decks/${id}/cards`),
-      request<Deck[]>("/api/mobile/decks"),
-    ])
-    return {
-      deck: { ...deckRaw, cards },
-      otherDecks: allDecks.filter((d) => d.id !== id),
-    }
-  },
-  createDeck: async (data: { title: string; description?: string; color?: string }) => {
-    const deck = await request<Deck>("/api/mobile/decks", { method: "POST", body: data })
-    return { deck }
-  },
-  updateDeck: async (
-    id: string,
-    data: { title?: string; description?: string | null; color?: string }
-  ) => {
-    const deck = await request<Deck>(`/api/mobile/decks/${id}`, { method: "PUT", body: data })
-    return { deck }
-  },
-  deleteDeck: async (id: string) => {
-    await request<unknown>(`/api/mobile/decks/${id}`, { method: "DELETE" })
-    return { ok: true as const }
-  },
-
   // ---- Cards ----
   listAllCards: async () => {
     const cards = await request<Card[]>("/api/mobile/cards/all")
@@ -125,14 +91,14 @@ export const api = {
     const cards = await request<Card[]>("/api/mobile/cards/bookmarks")
     return { cards }
   },
-  createCard: async (deckId: string, data: { front: string; back: string }) => {
-    const card = await request<Card>(`/api/mobile/decks/${deckId}/cards`, {
-      method: "POST",
-      body: data,
-    })
+  createCard: async (data: { front: string; back: string; category?: string | null }) => {
+    const card = await request<Card>("/api/mobile/cards", { method: "POST", body: data })
     return { card }
   },
-  updateCard: async (id: string, data: { front?: string; back?: string }) => {
+  updateCard: async (
+    id: string,
+    data: { front?: string; back?: string; category?: string | null }
+  ) => {
     const card = await request<Card>(`/api/mobile/cards/${id}`, { method: "PUT", body: data })
     return { card }
   },
@@ -142,13 +108,6 @@ export const api = {
   },
   toggleBookmark: async (id: string) => {
     const card = await request<Card>(`/api/mobile/cards/${id}/bookmark`, { method: "POST" })
-    return { card }
-  },
-  moveCard: async (id: string, toDeckId: string) => {
-    const card = await request<Card>(`/api/mobile/cards/${id}/move`, {
-      method: "POST",
-      body: { toDeckId },
-    })
     return { card }
   },
 

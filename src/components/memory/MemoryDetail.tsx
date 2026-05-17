@@ -10,7 +10,7 @@ import BookmarkMemoryButton from "./BookmarkMemoryButton"
 import DeleteMemoryButton from "./DeleteMemoryButton"
 import AIEnrichButton from "./AIEnrichButton"
 import AIQuestionForm from "./AIQuestionForm"
-import ExportToDeckButton from "./ExportToDeckButton"
+import ExportToVocabularyButton from "./ExportToDeckButton"
 import { SpeakingCardPractice } from "@/components/speaking/SpeakingPractice"
 
 interface Props {
@@ -24,14 +24,12 @@ interface Props {
     contextText: string | null
     isBookmarked: boolean
     updatedAt: Date
-    deckId: string | null
     cardId: string | null
     essayId: string | null
   }
-  decks: { id: string; title: string }[]
 }
 
-export default async function MemoryDetail({ item, decks }: Props) {
+export default async function MemoryDetail({ item }: Props) {
   const locale = getRequestLocale(await headers())
   const t = messages[locale]
 
@@ -40,7 +38,7 @@ export default async function MemoryDetail({ item, decks }: Props) {
       <header className="mb-4 flex items-start justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <MemoryTypeBadge type={item.type} />
-          {item.deckId || item.cardId || item.essayId ? (
+          {item.cardId || item.essayId ? (
             <span className="text-xs text-gray-400 dark:text-zinc-500">
               {t.memory.fromSource}
             </span>
@@ -105,11 +103,9 @@ export default async function MemoryDetail({ item, decks }: Props) {
         </section>
       )}
 
-      {item.type === "SENTENCE" && (
-        <section className="mt-6 border-t border-gray-100 pt-5 dark:border-zinc-800">
-          <SpeakingCardPractice target={item.title} />
-        </section>
-      )}
+      <section className="mt-6 border-t border-gray-100 pt-5 dark:border-zinc-800">
+        <SpeakingCardPractice target={item.title} />
+      </section>
 
       <section className="mt-6 border-t border-gray-100 pt-5 dark:border-zinc-800">
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
@@ -127,7 +123,7 @@ export default async function MemoryDetail({ item, decks }: Props) {
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
           {t.memory.export.sectionTitle}
         </h2>
-        <ExportToDeckButton itemId={item.id} decks={decks} />
+        <ExportToVocabularyButton itemId={item.id} />
       </section>
 
       <footer className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-zinc-800">

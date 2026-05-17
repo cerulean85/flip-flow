@@ -8,12 +8,12 @@ import { speak } from "@/lib/speech"
 import { useLocale } from "@/components/LocaleProvider"
 
 interface Props {
-  deckId: string
   ko: string
   en: string
+  category?: string | null
 }
 
-export default function SentenceFlip({ deckId, ko, en }: Props) {
+export default function SentenceFlip({ ko, en, category }: Props) {
   const { messages } = useLocale()
   const [flipped, setFlipped] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -63,9 +63,9 @@ export default function SentenceFlip({ deckId, ko, en }: Props) {
 
     setSaving(true)
     try {
-      const result = await createCardFromSentence(deckId, { en, ko })
+      await createCardFromSentence({ en, ko }, category ?? null)
       setSaved(true)
-      setToastMessage(messages.card.addedToDeck(result.deckTitle))
+      setToastMessage(messages.card.addSaved)
     } finally {
       setSaving(false)
     }

@@ -6,13 +6,13 @@ import { speak } from "@/lib/speech"
 import { useTheme } from "@/lib/theme"
 
 interface Props {
-  deckId: string
+  category?: string | null
   ko: string
   en: string
   index: number
 }
 
-export default function SentenceFlip({ deckId, ko, en, index }: Props) {
+export default function SentenceFlip({ category, ko, en, index }: Props) {
   const { colors } = useTheme()
   const [flipped, setFlipped] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -45,7 +45,7 @@ export default function SentenceFlip({ deckId, ko, en, index }: Props) {
 
     setSaving(true)
     try {
-      await api.createCard(deckId, { front: en, back: ko })
+      await api.createCard({ front: en, back: ko, category: category ?? null })
       setSaved(true)
     } catch (e) {
       console.warn("[sentence/create-card]", e)

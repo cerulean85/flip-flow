@@ -22,12 +22,11 @@ function SaveButton({ label, pendingLabel }: { label: string; pendingLabel: stri
 
 interface Props {
   cardId: string
-  deckId: string
   front: string
   back: string
 }
 
-export default function EditCardButton({ cardId, deckId, front, back }: Props) {
+export default function EditCardButton({ cardId, front, back }: Props) {
   const { messages } = useLocale()
   const [isEditing, setIsEditing] = useState(false)
   const [, startTransition] = useTransition()
@@ -49,7 +48,7 @@ export default function EditCardButton({ cardId, deckId, front, back }: Props) {
     setError(null)
     startTransition(async () => {
       try {
-        await updateCard(cardId, deckId, formData)
+        await updateCard(cardId, formData)
         setIsEditing(false)
       } catch (err) {
         unstable_rethrow(err)

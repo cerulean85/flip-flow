@@ -16,7 +16,6 @@ type CreateMemoryBody = {
   explanation?: string | null
   example?: string | null
   contextText?: string | null
-  deckId?: string | null
   cardId?: string | null
   essayId?: string | null
 }
@@ -84,7 +83,6 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: "Title is required" }, { status: 400 })
     }
 
-    const deckId = optionalString(body.deckId)
     const cardId = optionalString(body.cardId)
     const essayId = optionalString(body.essayId)
 
@@ -101,14 +99,9 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: "contextText is too long" }, { status: 400 })
     }
 
-    if (deckId) {
-      const deck = await prisma.deck.findFirst({ where: { id: deckId, userId } })
-      if (!deck) return Response.json({ error: "Deck not found" }, { status: 404 })
-    }
-
     if (cardId) {
       const card = await prisma.card.findFirst({
-        where: { id: cardId, deck: { userId } },
+        where: { id: cardId, userId },
       })
       if (!card) return Response.json({ error: "Card not found" }, { status: 404 })
     }
@@ -132,7 +125,6 @@ export async function POST(request: NextRequest) {
         explanation: optionalString(body.explanation),
         example: optionalString(body.example),
         contextText: optionalString(body.contextText),
-        deckId,
         cardId,
         essayId,
       },

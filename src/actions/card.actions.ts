@@ -4,62 +4,59 @@ import { revalidatePath } from "next/cache"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
-async function verifyDeckOwnership(deckId: string, userId: string) {
-  const deck = await prisma.deck.findFirst({
-    where: { id: deckId, userId },
-  })
-  if (!deck) throw new Error("Deck not found")
-  return deck
-}
-
 async function verifyCardOwnership(cardId: string, userId: string) {
   const card = await prisma.card.findFirst({
-    where: { id: cardId, deck: { userId } },
+    where: { id: cardId, userId },
   })
   if (!card) throw new Error("Card not found")
   return card
 }
 
-export async function createCard(deckId: string, formData: FormData) {
+function normalizeCategory(value: FormDataEntryValue | string | null | undefined): string | null {
+  if (value === undefined || value === null) return null
+  const trimmed = (value as string).trim()
+  return trimmed.length > 0 ? trimmed : null
+}
+
+export async function createCard(formData: FormData) {
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")
-
-  await verifyDeckOwnership(deckId, session.user.id)
 
   const front = (formData.get("front") as string).trim()
   const back = (formData.get("back") as string).trim()
+  const category = normalizeCategory(formData.get("category"))
   if (!front || !back) throw new Error("Front and back are required")
 
   await prisma.card.create({
-    data: { front, back, deckId },
+    data: { front, back, category, userId: session.user.id },
   })
 
-  revalidatePath(`/decks/${deckId}`)
+  revalidatePath("/dashboard")
+  revalidatePath("/study")
+  revalidatePath("/bookmarks")
 }
 
 export async function createCardFromSentence(
-  deckId: string,
-  sentence: { en: string; ko: string }
+  sentence: { en: string; ko: string },
+  category?: string | null
 ) {
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")
-
-  const deck = await verifyDeckOwnership(deckId, session.user.id)
 
   const front = sentence.en.trim()
   const back = sentence.ko.trim()
   if (!front || !back) throw new Error("Front and back are required")
 
+  const cleaned = normalizeCategory(category ?? null)
+
   await prisma.card.create({
-    data: { front, back, deckId },
+    data: { front, back, category: cleaned, userId: session.user.id },
   })
 
-  revalidatePath(`/decks/${deckId}`)
-
-  return { deckTitle: deck.title }
+  revalidatePath("/dashboard")
 }
 
-export async function updateCard(cardId: string, deckId: string, formData: FormData) {
+export async function updateCard(cardId: string, formData: FormData) {
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")
 
@@ -67,21 +64,27 @@ export async function updateCard(cardId: string, deckId: string, formData: FormD
 
   const front = (formData.get("front") as string).trim()
   const back = (formData.get("back") as string).trim()
+  const hasCategoryField = formData.has("category")
+
+  const data: { front?: string; back?: string; category?: string | null } = {
+    front: front || undefined,
+    back: back || undefined,
+  }
+  if (hasCategoryField) data.category = normalizeCategory(formData.get("category"))
 
   const card = await prisma.card.update({
     where: { id: cardId },
-    data: { front: front || undefined, back: back || undefined },
+    data,
   })
 
-  revalidatePath(`/decks/${deckId}`)
-  revalidatePath(`/decks/${deckId}/study`)
+  revalidatePath("/dashboard")
   revalidatePath("/study")
   revalidatePath("/bookmarks")
 
   return card
 }
 
-export async function deleteCard(cardId: string, deckId: string) {
+export async function deleteCard(cardId: string) {
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")
 
@@ -89,23 +92,23 @@ export async function deleteCard(cardId: string, deckId: string) {
 
   await prisma.card.delete({ where: { id: cardId } })
 
-  revalidatePath(`/decks/${deckId}`)
+  revalidatePath("/dashboard")
+  revalidatePath("/study")
+  revalidatePath("/bookmarks")
 }
 
-export async function moveCard(cardId: string, fromDeckId: string, toDeckId: string) {
+export async function changeCardCategory(cardId: string, category: string | null) {
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")
 
   await verifyCardOwnership(cardId, session.user.id)
-  await verifyDeckOwnership(toDeckId, session.user.id)
 
   await prisma.card.update({
     where: { id: cardId },
-    data: { deckId: toDeckId },
+    data: { category: normalizeCategory(category) },
   })
 
-  revalidatePath(`/decks/${fromDeckId}`)
-  revalidatePath(`/decks/${toDeckId}`)
+  revalidatePath("/dashboard")
 }
 
 export async function toggleBookmark(cardId: string) {
@@ -119,6 +122,6 @@ export async function toggleBookmark(cardId: string) {
     data: { isBookmark: !card.isBookmark },
   })
 
+  revalidatePath("/dashboard")
   revalidatePath("/bookmarks")
-  revalidatePath(`/decks/${card.deckId}`)
 }

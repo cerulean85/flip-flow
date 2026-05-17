@@ -22,8 +22,7 @@ export default async function StudyAllPage() {
   const t = messages[locale]
 
   const cards = shuffle(await prisma.card.findMany({
-    where: { deck: { userId: session!.user.id } },
-    include: { deck: { select: { title: true } } },
+    where: { userId: session!.user.id },
     orderBy: { createdAt: "desc" },
   }))
 

@@ -8,7 +8,7 @@ import { useLocale } from "@/components/LocaleProvider"
 
 const links: { href: string; key: keyof ReturnType<typeof useLocale>["messages"]["nav"]; Icon: LucideIcon }[] = [
   { href: "/study", key: "study", Icon: BookOpen },
-  { href: "/dashboard", key: "decks", Icon: Layers },
+  { href: "/dashboard", key: "vocabulary", Icon: Layers },
   { href: "/bookmarks", key: "bookmarks", Icon: Star },
   { href: "/essays", key: "essays", Icon: NotebookPen },
   { href: "/memory", key: "memory", Icon: BookMarked },

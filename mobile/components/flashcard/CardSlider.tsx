@@ -185,7 +185,7 @@ export default function CardSlider({ cards }: Props) {
 
       <FlipCard
         key={`${card.id}-${studyBackFirst ? "back" : "front"}`}
-        deckId={card.deckId}
+        category={card.category}
         front={front}
         back={back}
         onEdit={openEdit}
