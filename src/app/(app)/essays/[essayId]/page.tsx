@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import EssayContent from "@/components/essay/EssayContent"
 import DeleteEssayButton from "@/components/essay/DeleteEssayButton"
 import EditEssayButton from "@/components/essay/EditEssayButton"
+import AddToMemoryButton from "@/components/memory/AddToMemoryButton"
 import { headers } from "next/headers"
 import { getRequestLocale } from "@/lib/i18n"
 import { formatLocalizedDate } from "@/lib/date"
@@ -51,6 +52,14 @@ export default async function EssayDetailPage({ params }: Props) {
 
       <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
         <EssayContent markdown={essay.content} />
+      </div>
+
+      <div className="mt-4 flex justify-end">
+        <AddToMemoryButton
+          essayId={essay.id}
+          contextText={essay.title}
+          variant="primary"
+        />
       </div>
     </article>
   )

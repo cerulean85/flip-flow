@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Layers, BookOpen, Star, NotebookPen, Settings, type LucideIcon } from "lucide-react"
+import { Layers, BookOpen, Star, NotebookPen, BookMarked, Settings, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLocale } from "@/components/LocaleProvider"
 
@@ -11,6 +11,7 @@ const links: { href: string; key: keyof ReturnType<typeof useLocale>["messages"]
   { href: "/dashboard", key: "decks", Icon: Layers },
   { href: "/bookmarks", key: "bookmarks", Icon: Star },
   { href: "/essays", key: "essays", Icon: NotebookPen },
+  { href: "/memory", key: "memory", Icon: BookMarked },
   { href: "/settings", key: "settings", Icon: Settings },
 ]
 

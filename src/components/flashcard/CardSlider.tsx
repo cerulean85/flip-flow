@@ -6,6 +6,7 @@ import { Shuffle, ChevronLeft, ChevronRight, Repeat2 } from "lucide-react"
 import AdSlot from "@/components/ads/AdSlot"
 import FlipCard from "./FlipCard"
 import BookmarkButton from "./BookmarkButton"
+import AddToMemoryButton from "@/components/memory/AddToMemoryButton"
 import { SpeakingCardPractice } from "@/components/speaking/SpeakingPractice"
 import type { Card } from "@/generated/prisma/client"
 import { useLocale } from "@/components/LocaleProvider"
@@ -265,6 +266,15 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
                   onFlipChange={setIsCardFlipped}
                   onEdit={() => setEditingCardId(card.id)}
                 />
+                <div className="flex justify-end">
+                  <AddToMemoryButton
+                    cardId={card.id}
+                    deckId={card.deckId}
+                    title={card.front}
+                    meaning={card.back}
+                    type={card.front.includes(" ") ? "SENTENCE" : "WORD"}
+                  />
+                </div>
                 <SpeakingCardPractice
                   key={`${card.id}-${studyBackFirst ? "back" : "front"}-${isCardFlipped ? "flipped" : "front"}-speaking`}
                   target={isCardFlipped ? studyBack : studyFront}
