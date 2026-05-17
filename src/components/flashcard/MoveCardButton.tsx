@@ -20,6 +20,7 @@ export default function MoveCardButton({ cardId, fromDeckId, decks }: Props) {
   const { messages } = useLocale()
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -36,11 +37,19 @@ export default function MoveCardButton({ cardId, fromDeckId, decks }: Props) {
 
   const handleMove = (toDeckId: string) => {
     setOpen(false)
-    startTransition(() => moveCard(cardId, fromDeckId, toDeckId))
+    setError(null)
+    startTransition(async () => {
+      try {
+        await moveCard(cardId, fromDeckId, toDeckId)
+      } catch (err) {
+        console.error(err)
+        setError(messages.card.moveError)
+      }
+    })
   }
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="relative inline-flex items-center gap-2" ref={ref}>
       <button
         onClick={() => setOpen((v) => !v)}
         disabled={isPending}
@@ -50,6 +59,11 @@ export default function MoveCardButton({ cardId, fromDeckId, decks }: Props) {
       >
         {isPending ? "…" : "⇥"}
       </button>
+      {error && (
+        <span className="text-xs text-red-500" role="alert">
+          {error}
+        </span>
+      )}
 
       {open && (
         <div className="absolute right-0 top-6 z-20 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 overflow-hidden dark:bg-zinc-900 dark:border-zinc-800">

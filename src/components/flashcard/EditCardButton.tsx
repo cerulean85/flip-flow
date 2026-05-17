@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { useFormStatus } from "react-dom"
+import { unstable_rethrow } from "next/navigation"
 import { Pencil } from "lucide-react"
 import { updateCard } from "@/actions/card.actions"
 import { useLocale } from "@/components/LocaleProvider"
@@ -30,6 +31,7 @@ export default function EditCardButton({ cardId, deckId, front, back }: Props) {
   const { messages } = useLocale()
   const [isEditing, setIsEditing] = useState(false)
   const [, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
 
   if (!isEditing) {
     return (
@@ -44,9 +46,16 @@ export default function EditCardButton({ cardId, deckId, front, back }: Props) {
   }
 
   async function clientAction(formData: FormData) {
+    setError(null)
     startTransition(async () => {
-      await updateCard(cardId, deckId, formData)
-      setIsEditing(false)
+      try {
+        await updateCard(cardId, deckId, formData)
+        setIsEditing(false)
+      } catch (err) {
+        unstable_rethrow(err)
+        console.error(err)
+        setError(messages.card.updateError)
+      }
     })
   }
 
@@ -66,6 +75,11 @@ export default function EditCardButton({ cardId, deckId, front, back }: Props) {
         placeholder={messages.card.backPlaceholder}
         className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-blue-900 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
       />
+      {error && (
+        <p className="text-xs text-red-500" role="alert">
+          {error}
+        </p>
+      )}
       <div className="flex gap-2">
         <SaveButton label={messages.deck.save} pendingLabel={messages.deck.saving} />
         <button

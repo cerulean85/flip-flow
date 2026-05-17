@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react"
 import { createPortal } from "react-dom"
 import { useFormStatus } from "react-dom"
+import { unstable_rethrow } from "next/navigation"
 import { Star, X, Pencil, ArrowRight, Trash2 } from "lucide-react"
 import { updateCard, deleteCard, moveCard } from "@/actions/card.actions"
 import FlipCard from "./FlipCard"
@@ -167,10 +168,45 @@ export default function CardListItem({
   const [detailOpen, setDetailOpen] = useState(false)
   const [isDeleting, startDelete] = useTransition()
   const [isMoving, startMove] = useTransition()
+  const [error, setError] = useState<string | null>(null)
 
   async function handleSave(formData: FormData) {
-    await updateCard(cardId, deckId, formData)
-    setIsEditing(false)
+    setError(null)
+    try {
+      await updateCard(cardId, deckId, formData)
+      setIsEditing(false)
+    } catch (err) {
+      unstable_rethrow(err)
+      console.error(err)
+      setError(messages.card.updateError)
+    }
+  }
+
+  function handleMove(targetDeckId: string) {
+    setMoveOpen(false)
+    setError(null)
+    startMove(async () => {
+      try {
+        await moveCard(cardId, deckId, targetDeckId)
+      } catch (err) {
+        unstable_rethrow(err)
+        console.error(err)
+        setError(messages.card.moveError)
+      }
+    })
+  }
+
+  function handleDelete() {
+    setError(null)
+    startDelete(async () => {
+      try {
+        await deleteCard(cardId, deckId)
+      } catch (err) {
+        unstable_rethrow(err)
+        console.error(err)
+        setError(messages.card.deleteError)
+      }
+    })
   }
 
   return (
@@ -246,10 +282,7 @@ export default function CardListItem({
                     decks={otherDecks}
                     title={messages.card.selectDeck}
                     closeLabel={messages.card.close}
-                    onSelect={(targetDeckId) => {
-                      setMoveOpen(false)
-                      startMove(() => moveCard(cardId, deckId, targetDeckId))
-                    }}
+                    onSelect={handleMove}
                     onClose={() => setMoveOpen(false)}
                   />
                 )}
@@ -258,7 +291,7 @@ export default function CardListItem({
 
             {/* 삭제 */}
             <IconButton
-              onClick={() => startDelete(() => deleteCard(cardId, deckId))}
+              onClick={handleDelete}
               disabled={isDeleting}
               label={messages.card.delete}
               danger
@@ -267,6 +300,12 @@ export default function CardListItem({
             </IconButton>
           </div>
         </div>
+      )}
+
+      {error && (
+        <p className="px-4 pb-3 text-xs text-red-500" role="alert">
+          {error}
+        </p>
       )}
 
       {detailOpen && (
