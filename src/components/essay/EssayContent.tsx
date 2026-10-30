@@ -25,7 +25,7 @@ export default function EssayContent({ markdown, className = "" }: Props) {
   }
 
   return (
-    <div className={`text-base leading-relaxed text-text ${className}`}>
+    <div className={`text-reading text-text ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}

@@ -17,14 +17,14 @@ export default async function SupportPage() {
       <article className="mx-auto max-w-3xl space-y-8">
         <header className="space-y-3">
           <p className="text-sm font-semibold text-link">Flip & Flow</p>
-          <h1 className="text-3xl font-bold">{content.title}</h1>
+          <h1 className="text-display font-bold">{content.title}</h1>
           <p className="text-text-secondary">
             {content.description}
           </p>
         </header>
 
         <section className="rounded-lg border border-border p-5">
-          <h2 className="text-xl font-semibold">{content.emailTitle}</h2>
+          <h2 className="text-title font-semibold">{content.emailTitle}</h2>
           <p className="mt-3 text-text-secondary">
             <a className="font-semibold text-link" href="mailto:zhwan85@dycdyp.com">
               zhwan85@dycdyp.com

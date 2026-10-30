@@ -46,7 +46,7 @@ export default async function MemoryReviewPage() {
 
     return (
       <div className="mx-auto max-w-2xl">
-        <h1 className="mb-4 text-xl font-bold text-text">
+        <h1 className="mb-4 text-display font-bold text-text">
           {t.memory.review.title}
         </h1>
         <div className="rounded-2xl border border-border bg-surface p-8 text-center">
@@ -77,7 +77,7 @@ export default async function MemoryReviewPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-4 text-xl font-bold text-text">
+      <h1 className="mb-4 text-display font-bold text-text">
         {t.memory.review.title}
       </h1>
       <ReviewSession items={due as ReviewItem[]} />

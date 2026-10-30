@@ -64,7 +64,7 @@ export default function ReviewSession({ items }: Props) {
           className="mx-auto mb-3 text-emerald-500"
           aria-hidden="true"
         />
-        <h2 className="text-lg font-semibold text-text">
+        <h2 className="text-title font-semibold text-text">
           {t.allDone}
         </h2>
         {completed > 0 && (
@@ -90,7 +90,7 @@ export default function ReviewSession({ items }: Props) {
       </div>
 
       <article className="rounded-2xl border border-border bg-surface p-8 shadow-sm">
-        <h2 className="text-center text-2xl font-bold text-text">
+        <h2 className="text-center text-display font-bold text-text">
           {current.title}
         </h2>
 

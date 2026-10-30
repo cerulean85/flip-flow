@@ -116,7 +116,7 @@ export default function LandingFlipCard({
               <span className="text-xs font-bold uppercase tracking-widest text-link">
                 FRONT
               </span>
-              <span className="rounded-md bg-surface-muted px-2 py-0.5 text-xs font-semibold text-text-secondary">
+              <span className="rounded-lg bg-surface-muted px-2 py-0.5 text-xs font-semibold text-text-secondary">
                 {card.pos}
               </span>
             </div>
@@ -153,7 +153,7 @@ export default function LandingFlipCard({
               <span className="text-xs font-bold uppercase tracking-widest text-fuchsia-600 dark:text-fuchsia-300">
                 BACK
               </span>
-              <span className="rounded-md bg-surface-muted px-2 py-0.5 text-xs font-semibold text-text-secondary">
+              <span className="rounded-lg bg-surface-muted px-2 py-0.5 text-xs font-semibold text-text-secondary">
                 {card.pos}
               </span>
             </div>

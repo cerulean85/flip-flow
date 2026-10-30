@@ -17,13 +17,13 @@ export default async function PrivacyPage() {
       <article className="mx-auto max-w-3xl space-y-8">
         <header className="space-y-3">
           <p className="text-sm font-semibold text-link">Flip & Flow</p>
-          <h1 className="text-3xl font-bold">{content.privacy.title}</h1>
+          <h1 className="text-display font-bold">{content.privacy.title}</h1>
           <p className="text-sm text-text-muted">{content.effectiveDate}</p>
         </header>
 
         {content.privacy.sections.map((section) => (
           <section key={section.title} className="space-y-3">
-            <h2 className="text-xl font-semibold">{section.title}</h2>
+            <h2 className="text-title font-semibold">{section.title}</h2>
             <p>{section.body}</p>
           </section>
         ))}

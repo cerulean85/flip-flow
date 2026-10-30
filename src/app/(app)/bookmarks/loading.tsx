@@ -15,7 +15,7 @@ export default function BookmarksLoading() {
 
         <div className="flex items-center justify-between px-2">
           <Skeleton className="h-5 w-14" />
-          <Skeleton className="h-6 w-6 rounded" />
+          <Skeleton className="h-6 w-6 rounded-lg" />
           <Skeleton className="h-5 w-14" />
         </div>
 

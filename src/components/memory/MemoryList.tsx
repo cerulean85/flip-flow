@@ -97,7 +97,7 @@ export default function MemoryList({ items, dueCount = 0 }: Props) {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between gap-2">
-        <h1 className="text-xl font-bold text-text">
+        <h1 className="text-display font-bold text-text">
           {t.title}
         </h1>
         <div className="flex items-center gap-2">
@@ -137,7 +137,7 @@ export default function MemoryList({ items, dueCount = 0 }: Props) {
             type="button"
             onClick={() => setQuery("")}
             aria-label={t.clearSearch}
-            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded-md text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary"
+            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary touch-target"
           >
             <X size={14} aria-hidden="true" />
           </button>

@@ -67,7 +67,7 @@ export default async function LoginPage({ searchParams }: Props) {
         <div className="flex flex-col items-center gap-3">
           <Logo size={56} showText={false} />
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-link mb-1">Flip &amp; Flow</h1>
+            <h1 className="text-display font-bold text-link mb-1">Flip &amp; Flow</h1>
             <p className="text-gray-500 text-sm">{copy.tagline}</p>
           </div>
         </div>

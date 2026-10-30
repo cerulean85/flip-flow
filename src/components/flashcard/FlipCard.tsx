@@ -265,7 +265,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.deleteQuestionHistory}
                 title={messages.card.deleteQuestionHistory}
-                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950 dark:hover:text-red-400"
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950 dark:hover:text-red-400 relative touch-target"
               >
                 <X size={14} aria-hidden="true" />
               </button>
@@ -335,7 +335,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.edit}
                 title={messages.card.edit}
-                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text"
+                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text touch-target"
               >
                 <Pencil size={18} aria-hidden="true" />
               </button>
@@ -356,7 +356,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.readFront}
                 title={messages.card.readFront}
-                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text"
+                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text touch-target"
               >
                 <Volume2 size={18} aria-hidden="true" />
               </button>
@@ -420,7 +420,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.edit}
                 title={messages.card.edit}
-                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:hover:bg-blue-900"
+                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:hover:bg-blue-900 touch-target"
               >
                 <Pencil size={18} aria-hidden="true" />
               </button>
@@ -441,7 +441,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.readBack}
                 title={messages.card.readBack}
-                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:hover:bg-blue-900"
+                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:hover:bg-blue-900 touch-target"
               >
                 <Volume2 size={18} aria-hidden="true" />
               </button>

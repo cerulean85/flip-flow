@@ -77,7 +77,7 @@ export default function VocabularyList({ cards }: Props) {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between gap-2">
-        <h1 className="text-xl font-bold text-text">
+        <h1 className="text-display font-bold text-text">
           {messages.nav.vocabulary}
         </h1>
         <Link
@@ -107,7 +107,7 @@ export default function VocabularyList({ cards }: Props) {
             type="button"
             onClick={() => setQuery("")}
             aria-label={messages.deck.clearSearch}
-            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded-md text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary"
+            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary touch-target"
           >
             <X size={14} aria-hidden="true" />
           </button>

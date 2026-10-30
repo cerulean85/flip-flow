@@ -92,7 +92,7 @@ export default function MemorySwipeNav({ prevId, nextId, children }: Props) {
             disabled={!prevId}
             aria-label={t.prev}
             title={t.prev}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-muted hover:text-text disabled:opacity-30"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-muted hover:text-text disabled:opacity-30 relative touch-target"
           >
             <ChevronLeft size={18} aria-hidden="true" />
           </button>
@@ -102,7 +102,7 @@ export default function MemorySwipeNav({ prevId, nextId, children }: Props) {
             disabled={!nextId}
             aria-label={t.next}
             title={t.next}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-muted hover:text-text disabled:opacity-30"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-muted hover:text-text disabled:opacity-30 relative touch-target"
           >
             <ChevronRight size={18} aria-hidden="true" />
           </button>

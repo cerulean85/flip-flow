@@ -50,7 +50,7 @@ export default function Sidebar({
             type="button"
             onClick={onToggleCollapse}
             aria-label={messages.nav.collapse}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary relative touch-target"
           >
             <ChevronLeft size={16} aria-hidden="true" />
           </button>
@@ -63,7 +63,7 @@ export default function Sidebar({
             type="button"
             onClick={onToggleCollapse}
             aria-label={messages.nav.expand}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary relative touch-target"
           >
             <ChevronRight size={16} aria-hidden="true" />
           </button>

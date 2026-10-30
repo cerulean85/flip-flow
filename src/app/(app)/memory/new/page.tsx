@@ -68,7 +68,7 @@ export default async function NewMemoryPage({
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-4 text-xl font-bold text-text">
+      <h1 className="mb-4 text-display font-bold text-text">
         {t.memory.newItem}
       </h1>
       <MemoryForm

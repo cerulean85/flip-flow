@@ -93,7 +93,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
           <button
             onClick={onClose}
             aria-label={messages.card.close}
-            className="w-7 h-7 flex items-center justify-center rounded-full text-text-subtle hover:text-text-secondary hover:bg-surface-muted transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-full text-text-subtle hover:text-text-secondary hover:bg-surface-muted transition-colors relative touch-target"
           >
             <X size={16} aria-hidden="true" />
           </button>

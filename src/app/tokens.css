@@ -28,6 +28,14 @@
   --color-category-4: var(--category-4);
   --color-category-5: var(--category-5);
   --color-category-6: var(--category-6);
+  --text-display: 1.75rem;
+  --text-display--line-height: 2.25rem;
+  --text-title: 1.25rem;
+  --text-title--line-height: 1.75rem;
+  --text-card: 1.75rem;
+  --text-card--line-height: 2.25rem;
+  --text-reading: 1.0625rem;
+  --text-reading--line-height: 1.8125rem;
 }
 
 :root {

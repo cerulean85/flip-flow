@@ -99,7 +99,7 @@ export default function SpeechVoiceSettings() {
               <button
                 type="button"
                 onClick={() => speak(testText, lang)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text relative touch-target"
                 aria-label={`${label} ${messages.settings.voice.testSuffix}`}
                 title={`${label} ${messages.settings.voice.testSuffix}`}
               >

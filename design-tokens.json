@@ -58,6 +58,37 @@
       "#8b5cf6"
     ]
   },
+  "type": {
+    "$description": "[font size px, line height px]. label/caption/body equal Tailwind text-sm/xs/base, so only display/title/reading/card become new utilities.",
+    "display": [
+      28,
+      36
+    ],
+    "title": [
+      20,
+      28
+    ],
+    "card": [
+      28,
+      36
+    ],
+    "reading": [
+      17,
+      29
+    ],
+    "body": [
+      16,
+      24
+    ],
+    "label": [
+      14,
+      20
+    ],
+    "caption": [
+      12,
+      16
+    ]
+  },
   "radius": {
     "sm": 8,
     "md": 12,

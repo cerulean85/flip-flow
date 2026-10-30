@@ -86,7 +86,7 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
               ? messages.essay.showPreview
               : messages.essay.hidePreview
           }
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border-strong text-text-muted transition-colors hover:bg-surface-muted hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border-strong text-text-muted transition-colors hover:bg-surface-muted hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 relative touch-target"
         >
           {isPreviewCollapsed ? (
             <PanelRightOpen size={18} aria-hidden="true" />

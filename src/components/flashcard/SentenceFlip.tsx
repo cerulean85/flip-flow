@@ -116,7 +116,7 @@ export default function SentenceFlip({ ko, en, category }: Props) {
             disabled={saving}
             aria-label={saved ? messages.card.addSaved : messages.card.addFromSentence}
             title={saved ? messages.card.addSaved : messages.card.addFromSentence}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text disabled:cursor-not-allowed disabled:opacity-60 relative touch-target"
           >
             {saving ? (
               <Loader2 size={16} className="animate-spin" aria-hidden="true" />
@@ -131,7 +131,7 @@ export default function SentenceFlip({ ko, en, category }: Props) {
             onClick={handleCopy}
             aria-label={copied ? messages.card.copied : messages.card.copySentence}
             title={copied ? messages.card.copied : messages.card.copySentence}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text relative touch-target"
           >
             {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
           </button>
@@ -140,7 +140,7 @@ export default function SentenceFlip({ ko, en, category }: Props) {
             onClick={handleSpeak}
             aria-label={messages.card.read}
             title={messages.card.read}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text relative touch-target"
           >
             <Volume2 size={16} aria-hidden="true" />
           </button>

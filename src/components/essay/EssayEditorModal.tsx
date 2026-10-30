@@ -58,7 +58,7 @@ export default function EssayEditorModal({ open, onClose, essayId, defaultValues
             type="button"
             onClick={onClose}
             aria-label={messages.card.close}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary relative touch-target"
           >
             <X size={18} aria-hidden="true" />
           </button>

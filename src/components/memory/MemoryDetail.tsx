@@ -50,14 +50,14 @@ export default async function MemoryDetail({ item }: Props) {
             href={`/memory/${item.id}/edit`}
             aria-label={t.memory.edit}
             title={t.memory.edit}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-muted hover:text-text"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-muted hover:text-text relative touch-target"
           >
             <Pencil size={16} aria-hidden="true" />
           </Link>
         </div>
       </header>
 
-      <h1 className="text-2xl font-bold text-text">{item.title}</h1>
+      <h1 className="text-display font-bold text-text">{item.title}</h1>
 
       {item.meaning && (
         <section className="mt-5">

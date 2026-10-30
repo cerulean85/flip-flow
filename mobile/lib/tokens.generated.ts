@@ -42,4 +42,6 @@ export const CATEGORY_COLORS = ["#3b82f6","#ec4899","#f59e0b","#10b981","#06b6d4
 
 export const RADIUS = {"sm":8,"md":12,"lg":16} as const
 
+export const TYPE = {"display":{"fontSize":28,"lineHeight":36},"title":{"fontSize":20,"lineHeight":28},"card":{"fontSize":28,"lineHeight":36},"reading":{"fontSize":17,"lineHeight":29},"body":{"fontSize":16,"lineHeight":24},"label":{"fontSize":14,"lineHeight":20},"caption":{"fontSize":12,"lineHeight":16}} as const
+
 export const SPACE = [4,8,12,16,20,24,32] as const

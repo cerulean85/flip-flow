@@ -35,7 +35,7 @@ export default async function EssayDetailPage({ params }: Props) {
           ←
         </Link>
         <div className="flex-1 min-w-0">
-          <h1 className="truncate text-2xl font-bold text-text">
+          <h1 className="truncate text-display font-bold text-text">
             {essay.title}
           </h1>
           <p className="mt-1 text-xs text-text-subtle">

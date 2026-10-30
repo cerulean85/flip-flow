@@ -39,7 +39,7 @@ export default async function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-6 text-xl font-bold text-text">{t.settings.title}</h1>
+      <h1 className="mb-6 text-display font-bold text-text">{t.settings.title}</h1>
 
       <section className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
         <h2 className="mb-1 text-sm font-semibold text-text">{t.settings.themeTitle}</h2>

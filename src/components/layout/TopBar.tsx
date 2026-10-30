@@ -17,7 +17,7 @@ export default function TopBar({ onToggle }: Props) {
         type="button"
         onClick={onToggle}
         aria-label={messages.nav.open}
-        className="-ml-2 inline-flex h-10 w-10 items-center justify-center rounded-xl text-text-secondary transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+        className="-ml-2 inline-flex h-10 w-10 items-center justify-center rounded-xl text-text-secondary transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary relative touch-target"
       >
         <svg
           width="22"
