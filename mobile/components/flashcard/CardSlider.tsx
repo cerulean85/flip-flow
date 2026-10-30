@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react"
-import { ActivityIndicator, Modal, Pressable, Text, TextInput, View } from "react-native"
+import { useEffect, useMemo, useState } from "react"
+import { Pressable, Text, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import FlipCard from "./FlipCard"
-import BookmarkButton from "./BookmarkButton"
-import { api } from "@/lib/api"
+import StudyHelperPanel from "./StudyHelperPanel"
+import CardEditSheet from "./CardEditSheet"
+import ActionSheet from "@/components/ui/ActionSheet"
+import { categoryColor } from "@/lib/category"
 import { useTheme } from "@/lib/theme"
+import { RADIUS, TYPE } from "@/lib/tokens.generated"
 import type { Card } from "@/lib/types"
 
 interface Props {
@@ -23,275 +26,180 @@ function shuffle<T>(arr: T[]): T[] {
 export default function CardSlider({ cards }: Props) {
   const { colors } = useTheme()
   const [localCards, setLocalCards] = useState<Card[]>(cards)
-  const [shuffled, setShuffled] = useState<Card[]>(cards)
-  const [studyBackFirst, setStudyBackFirst] = useState(false)
+  const [category, setCategory] = useState<string | null>(null)
+  const [order, setOrder] = useState<string[]>(() => shuffle(cards).map((c) => c.id))
   const [index, setIndex] = useState(0)
+  const [studyBackFirst, setStudyBackFirst] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [categoryOpen, setCategoryOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
-  const [frontDraft, setFrontDraft] = useState("")
-  const [backDraft, setBackDraft] = useState("")
-  const [saving, setSaving] = useState(false)
+
+  const categories = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const c of localCards) if (c.category) counts.set(c.category, (counts.get(c.category) ?? 0) + 1)
+    return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+  }, [localCards])
+
+  const reorder = (source: Card[], nextCategory: string | null) => {
+    const pool = nextCategory ? source.filter((c) => c.category === nextCategory) : source
+    setOrder(shuffle(pool).map((c) => c.id))
+    setIndex(0)
+  }
 
   useEffect(() => {
     setLocalCards(cards)
-    setShuffled(shuffle(cards))
-    setIndex(0)
+    const stillExists = category && cards.some((c) => c.category === category)
+    const nextCategory = stillExists ? category : null
+    setCategory(nextCategory)
+    reorder(cards, nextCategory)
+    // Only reshuffle when the card list itself changes, not when the filter does
   }, [cards])
 
-  const shuffledCard = shuffled[index]
-  const card = shuffledCard
-    ? localCards.find((c) => c.id === shuffledCard.id) ?? shuffledCard
-    : undefined
+  const byId = useMemo(() => new Map(localCards.map((c) => [c.id, c])), [localCards])
+  const card = order[index] ? byId.get(order[index]) : undefined
   if (!card) return null
 
+  const total = order.length
   const front = studyBackFirst ? card.back : card.front
   const back = studyBackFirst ? card.front : card.back
 
-  const reshuffle = () => {
-    setEditOpen(false)
-    setShuffled(shuffle(localCards))
-    setIndex(0)
-  }
-
-  const toggleStudySide = () => {
-    setEditOpen(false)
-    setStudyBackFirst((current) => !current)
-  }
-
   const paginate = (dir: 1 | -1) => {
     const next = index + dir
-    if (next < 0 || next >= shuffled.length) return
-    setEditOpen(false)
+    if (next < 0 || next >= total) return
     setIndex(next)
   }
 
-  const openEdit = () => {
-    setFrontDraft(card.front)
-    setBackDraft(card.back)
-    setEditOpen(true)
+  const chooseCategory = (next: string | null) => {
+    setCategory(next)
+    reorder(localCards, next)
   }
 
-  const saveEdit = async () => {
-    const nextFront = frontDraft.trim()
-    const nextBack = backDraft.trim()
-    if (!nextFront || !nextBack || saving) return
+  const onSaved = (updated: Card) => setLocalCards((current) => current.map((c) => (c.id === updated.id ? updated : c)))
 
-    setSaving(true)
-    try {
-      const { card: updatedCard } = await api.updateCard(card.id, {
-        front: nextFront,
-        back: nextBack,
-      })
-      setLocalCards((current) =>
-        current.map((item) => (item.id === updatedCard.id ? updatedCard : item))
-      )
-      setShuffled((current) =>
-        current.map((item) => (item.id === updatedCard.id ? updatedCard : item))
-      )
-      setEditOpen(false)
-    } finally {
-      setSaving(false)
-    }
+  const navButton = (dir: 1 | -1) => {
+    const disabled = dir === -1 ? index === 0 : index === total - 1
+    const primary = dir === 1
+    return (
+      <Pressable
+        onPress={() => paginate(dir)}
+        disabled={disabled}
+        accessibilityRole="button"
+        accessibilityLabel={primary ? "다음 카드" : "이전 카드"}
+        style={({ pressed }) => ({
+          flex: 1,
+          minHeight: 48,
+          borderRadius: RADIUS.md,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: primary ? colors.primary : colors.card,
+          borderWidth: primary ? 0 : 1,
+          borderColor: colors.border,
+          opacity: disabled ? 0.4 : pressed ? 0.85 : 1,
+        })}
+      >
+        <Text style={{ ...TYPE.body, fontWeight: "600", color: primary ? colors.primaryFg : colors.text }}>
+          {primary ? "다음" : "이전"}
+        </Text>
+      </Pressable>
+    )
   }
 
   return (
-    <View style={{ gap: 16 }}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ color: colors.textSubtle, fontWeight: "500", fontSize: 13 }}>
-          {index + 1} / {shuffled.length}
-        </Text>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-          <Pressable
-            onPress={toggleStudySide}
-            accessibilityRole="switch"
-            accessibilityState={{ checked: studyBackFirst }}
-            accessibilityLabel="학습 기준 전환"
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 4,
-              borderWidth: 1,
-              borderColor: colors.border,
-              borderRadius: 12,
-              paddingVertical: 6,
-              paddingHorizontal: 9,
-              backgroundColor: studyBackFirst ? colors.primarySoft : colors.card,
-            }}
-            hitSlop={8}
-          >
-            <Ionicons name="swap-horizontal" size={14} color={colors.primary} />
-            <Text style={{ color: colors.primary, fontSize: 12, fontWeight: "600" }}>
-              {studyBackFirst ? "뒷면 기준" : "앞면 기준"}
-            </Text>
-          </Pressable>
-          <Pressable
-            onPress={reshuffle}
-            style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
-            hitSlop={8}
-          >
-            <Ionicons name="shuffle" size={14} color={colors.primary} />
-            <Text style={{ color: colors.primary, fontSize: 12 }}>다시 섞기</Text>
-          </Pressable>
+    <View style={{ flex: 1 }}>
+      {/* Top bar: progress · count · menu (DESIGN-RENEWAL 7: one line) */}
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingLeft: 16, paddingRight: 4, minHeight: 48 }}>
+        <View
+          style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: colors.cardAlt, overflow: "hidden" }}
+          accessibilityRole="progressbar"
+          accessibilityValue={{ min: 1, max: total, now: index + 1 }}
+        >
+          <View style={{ height: "100%", width: `${((index + 1) / total) * 100}%`, backgroundColor: colors.primary, borderRadius: 3 }} />
         </View>
+        <Text style={{ ...TYPE.label, color: colors.textMuted }}>
+          {index + 1} / {total}
+        </Text>
+        <Pressable
+          onPress={() => setMenuOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel="학습 메뉴"
+          style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}
+        >
+          <Ionicons name="ellipsis-horizontal" size={22} color={colors.textMuted} />
+        </Pressable>
       </View>
 
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 8 }}>
+      <View style={{ flexDirection: "row", paddingHorizontal: 16, paddingBottom: 4 }}>
         <Pressable
-          onPress={() => paginate(-1)}
-          disabled={index === 0}
-          style={{ flexDirection: "row", alignItems: "center", gap: 4, opacity: index === 0 ? 0.4 : 1 }}
-          hitSlop={8}
-        >
-          <Ionicons name="chevron-back" size={16} color={colors.primary} />
-          <Text style={{ color: colors.primary, fontSize: 14, fontWeight: "500" }}>이전</Text>
-        </Pressable>
-
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-          <BookmarkButton cardId={card.id} isBookmark={card.isBookmark} />
-        </View>
-
-        <Pressable
-          onPress={() => paginate(1)}
-          disabled={index === shuffled.length - 1}
+          onPress={() => setCategoryOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel="카테고리 선택"
           style={{
             flexDirection: "row",
             alignItems: "center",
-            gap: 4,
-            opacity: index === shuffled.length - 1 ? 0.4 : 1,
+            gap: 6,
+            minHeight: 36,
+            paddingHorizontal: 14,
+            borderRadius: 999,
+            borderWidth: 1,
+            borderColor: colors.border,
+            backgroundColor: colors.card,
           }}
-          hitSlop={8}
         >
-          <Text style={{ color: colors.primary, fontSize: 14, fontWeight: "500" }}>다음</Text>
-          <Ionicons name="chevron-forward" size={16} color={colors.primary} />
+          {category && <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: categoryColor(category) }} />}
+          <Text style={{ ...TYPE.label, color: colors.textMuted }}>
+            {category ?? "전체 카테고리"} · {total}장
+          </Text>
+          <Ionicons name="chevron-down" size={14} color={colors.textMuted} />
         </Pressable>
       </View>
 
-      <View
-        style={{
-          height: 4,
-          backgroundColor: colors.cardAlt,
-          borderRadius: 2,
-          overflow: "hidden",
-        }}
-      >
-        <View
-          style={{
-            height: "100%",
-            width: `${((index + 1) / shuffled.length) * 100}%`,
-            backgroundColor: colors.primary,
-            borderRadius: 2,
-          }}
+      <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 12, gap: 12 }}>
+        <FlipCard
+          key={`${card.id}-${studyBackFirst ? "back" : "front"}`}
+          cardId={card.id}
+          isBookmark={card.isBookmark}
+          category={card.category}
+          front={front}
+          back={back}
+          frontLang={studyBackFirst ? "ko-KR" : "en-US"}
+          onSwipe={paginate}
         />
+        <StudyHelperPanel key={card.id} front={card.front} back={card.back} category={card.category} />
       </View>
 
-      <FlipCard
-        key={`${card.id}-${studyBackFirst ? "back" : "front"}`}
-        category={card.category}
-        front={front}
-        back={back}
-        onEdit={openEdit}
-      />
+      <View style={{ flexDirection: "row", gap: 12, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 16 }}>
+        {navButton(-1)}
+        {navButton(1)}
+      </View>
 
-      <Modal
-        visible={editOpen}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setEditOpen(false)}
-      >
-        <Pressable
-          onPress={() => setEditOpen(false)}
-          style={{
-            flex: 1,
-            backgroundColor: "rgba(0,0,0,0.4)",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Pressable
-            onPress={(event) => event.stopPropagation()}
-            style={{
-              backgroundColor: colors.card,
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              borderTopWidth: 1,
-              borderColor: colors.border,
-              padding: 16,
-              paddingBottom: 28,
-              gap: 10,
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-              <Text style={{ color: colors.text, fontSize: 15, fontWeight: "700" }}>카드 수정</Text>
-              <Pressable onPress={() => setEditOpen(false)} hitSlop={8} style={{ padding: 6 }}>
-                <Ionicons name="close" size={20} color={colors.textSubtle} />
-              </Pressable>
-            </View>
-            <TextInput
-              value={frontDraft}
-              onChangeText={setFrontDraft}
-              multiline
-              placeholder="앞면 (질문)"
-              placeholderTextColor={colors.textSubtle}
-              style={{
-                color: colors.text,
-                borderWidth: 1,
-                borderColor: colors.border,
-                borderRadius: 12,
-                padding: 12,
-                minHeight: 76,
-                textAlignVertical: "top",
-              }}
-            />
-            <TextInput
-              value={backDraft}
-              onChangeText={setBackDraft}
-              multiline
-              placeholder="뒷면 (답)"
-              placeholderTextColor={colors.textSubtle}
-              style={{
-                color: colors.text,
-                borderWidth: 1,
-                borderColor: colors.border,
-                borderRadius: 12,
-                padding: 12,
-                minHeight: 92,
-                textAlignVertical: "top",
-              }}
-            />
-            <View style={{ flexDirection: "row", justifyContent: "flex-end", gap: 8, marginTop: 2 }}>
-              <Pressable
-                onPress={() => setEditOpen(false)}
-                style={{
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                  paddingVertical: 10,
-                  paddingHorizontal: 14,
-                  borderRadius: 12,
-                }}
-              >
-                <Text style={{ color: colors.textMuted, fontSize: 13, fontWeight: "600" }}>취소</Text>
-              </Pressable>
-              <Pressable
-                onPress={saveEdit}
-                disabled={saving || !frontDraft.trim() || !backDraft.trim()}
-                style={{
-                  minWidth: 64,
-                  alignItems: "center",
-                  backgroundColor: colors.primary,
-                  paddingVertical: 10,
-                  paddingHorizontal: 14,
-                  borderRadius: 12,
-                  opacity: saving || !frontDraft.trim() || !backDraft.trim() ? 0.55 : 1,
-                }}
-              >
-                {saving ? (
-                  <ActivityIndicator size="small" color={colors.primaryFg} />
-                ) : (
-                  <Text style={{ color: colors.primaryFg, fontSize: 13, fontWeight: "700" }}>저장</Text>
-                )}
-              </Pressable>
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
+      <ActionSheet
+        visible={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        options={[
+          { label: "다시 섞기", icon: "shuffle", onPress: () => reorder(localCards, category) },
+          {
+            label: studyBackFirst ? "앞면부터 보기" : "뒷면부터 보기",
+            icon: "swap-horizontal",
+            onPress: () => setStudyBackFirst((v) => !v),
+          },
+          // iOS drops a modal presented while another is still fading out
+          { label: "이 카드 수정", icon: "create-outline", onPress: () => setTimeout(() => setEditOpen(true), 300) },
+        ]}
+      />
+      <ActionSheet
+        visible={categoryOpen}
+        title="카테고리"
+        onClose={() => setCategoryOpen(false)}
+        options={[
+          { label: `전체 카테고리 · ${localCards.length}장`, selected: category === null, onPress: () => chooseCategory(null) },
+          ...categories.map(([name, count]) => ({
+            label: `${name} · ${count}장`,
+            selected: category === name,
+            onPress: () => chooseCategory(name),
+          })),
+        ]}
+      />
+      <CardEditSheet card={card} visible={editOpen} onClose={() => setEditOpen(false)} onSaved={onSaved} />
     </View>
   )
 }

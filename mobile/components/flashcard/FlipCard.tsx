@@ -1,33 +1,38 @@
-import { useEffect, useRef, useState } from "react"
-import { ActivityIndicator, Animated, Easing, Pressable, Text, View } from "react-native"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { Animated, PanResponder, Pressable, StyleSheet, Text, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
-import { api } from "@/lib/api"
+import BookmarkButton from "./BookmarkButton"
+import { categoryColor } from "@/lib/category"
 import { speak } from "@/lib/speech"
 import { useTheme } from "@/lib/theme"
-import type { Sentence } from "@/lib/types"
-import SentenceFlip from "./SentenceFlip"
+import { RADIUS, TYPE } from "@/lib/tokens.generated"
 
 interface Props {
+  cardId: string
+  isBookmark: boolean
   category?: string | null
   front: string
   back: string
-  onEdit?: () => void
+  // The side shown first is spoken in English, the other side in Korean
+  frontLang: "en-US" | "ko-KR"
+  onSwipe?: (dir: 1 | -1) => void
 }
 
-export default function FlipCard({ category, front, back, onEdit }: Props) {
+const SWIPE_DISTANCE = 60
+
+// Long sentences shrink so they still fit the card without scrolling
+function faceTextSize(text: string) {
+  if (text.length <= 24) return { fontSize: TYPE.card.fontSize, lineHeight: TYPE.card.lineHeight }
+  if (text.length <= 64) return { fontSize: 24, lineHeight: 32 }
+  return { fontSize: 20, lineHeight: 28 }
+}
+
+export default function FlipCard({ cardId, isBookmark, category, front, back, frontLang, onSwipe }: Props) {
   const { colors } = useTheme()
   const [flipped, setFlipped] = useState(false)
   const value = useRef(new Animated.Value(0)).current
-
-  const [definition, setDefinition] = useState<string | null>(null)
-  const [definitionTerm, setDefinitionTerm] = useState<string | null>(null)
-  const [defLoading, setDefLoading] = useState(false)
-  const [showDef, setShowDef] = useState(false)
-
-  const [sentences, setSentences] = useState<Sentence[] | null>(null)
-  const [sentLoading, setSentLoading] = useState(false)
-  const [sentError, setSentError] = useState<string | null>(null)
-  const [showSent, setShowSent] = useState(false)
+  const onSwipeRef = useRef(onSwipe)
+  onSwipeRef.current = onSwipe
 
   useEffect(() => {
     Animated.spring(value, {
@@ -37,269 +42,126 @@ export default function FlipCard({ category, front, back, onEdit }: Props) {
     }).start()
   }, [flipped, value])
 
-  const frontInterpolate = value.interpolate({ inputRange: [0, 180], outputRange: ["0deg", "180deg"] })
-  const backInterpolate = value.interpolate({ inputRange: [0, 180], outputRange: ["180deg", "360deg"] })
+  const pan = useMemo(
+    () =>
+      PanResponder.create({
+        // Capture phase: a horizontal drag takes over from the card's tap-to-flip
+        onMoveShouldSetPanResponderCapture: (_, g) => Math.abs(g.dx) > 12 && Math.abs(g.dx) > Math.abs(g.dy),
+        onPanResponderRelease: (_, g) => {
+          if (g.dx <= -SWIPE_DISTANCE) onSwipeRef.current?.(1)
+          else if (g.dx >= SWIPE_DISTANCE) onSwipeRef.current?.(-1)
+        },
+      }),
+    []
+  )
+
+  const frontRotate = value.interpolate({ inputRange: [0, 180], outputRange: ["0deg", "180deg"] })
+  const backRotate = value.interpolate({ inputRange: [0, 180], outputRange: ["180deg", "360deg"] })
   const frontOpacity = value.interpolate({ inputRange: [0, 89, 90, 180], outputRange: [1, 1, 0, 0] })
   const backOpacity = value.interpolate({ inputRange: [0, 89, 90, 180], outputRange: [0, 0, 1, 1] })
 
-  const handleSearch = async () => {
-    if (defLoading) return
+  const backLang = frontLang === "en-US" ? "ko-KR" : "en-US"
+  const visibleText = flipped ? back : front
+  const visibleLang = flipped ? backLang : frontLang
 
-    const visibleTerm = flipped ? back : front
-
-    if (showDef && definition && definitionTerm === visibleTerm) {
-      setShowDef(false)
-      return
-    }
-    setDefLoading(true)
-    setDefinitionTerm(visibleTerm)
-    try {
-      const { result } = await api.searchDefinition(visibleTerm)
-      setDefinition(result)
-      setShowDef(true)
-    } catch (e) {
-      setDefinition(e instanceof Error ? e.message : "결과를 가져올 수 없습니다.")
-      setShowDef(true)
-    } finally {
-      setDefLoading(false)
-    }
-  }
-
-  const handleSentences = async () => {
-    if (sentLoading) return
-    if (showSent && (sentences || sentError)) {
-      setShowSent(false)
-      return
-    }
-    setSentLoading(true)
-    setSentError(null)
-    try {
-      const { sentences: list } = await api.generateSentences(front, back)
-      if (list && list.length > 0) {
-        setSentences(list)
-        setShowSent(true)
-      } else {
-        setSentError("예문을 생성하지 못했습니다.")
-        setShowSent(true)
-      }
-    } catch (e) {
-      setSentError(e instanceof Error ? e.message : "네트워크 오류")
-      setShowSent(true)
-    } finally {
-      setSentLoading(false)
-    }
-  }
-
-  const cardBase = {
-    borderRadius: 20,
-    padding: 24,
-    paddingTop: 58,
-    minHeight: 200,
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
+  const face = {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.card,
+    borderRadius: RADIUS.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 24,
+    paddingTop: 64,
+    paddingBottom: 20,
     shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 1,
-    shadowRadius: 12,
+    shadowRadius: 16,
     elevation: 3,
   }
 
+  const hint = (label: string) => (
+    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6 }}>
+      <Ionicons name="refresh" size={14} color={colors.textSubtle} />
+      <Text style={{ ...TYPE.caption, color: colors.textSubtle }}>{label}</Text>
+    </View>
+  )
+
   return (
-    <View style={{ gap: 12 }}>
-      <Pressable onPress={() => setFlipped((f) => !f)} style={{ position: "relative", minHeight: 200 }}>
-        <Animated.View
-          style={[
-            cardBase,
-            {
-              backgroundColor: colors.card,
-              borderWidth: 1,
-              borderColor: colors.border,
-              opacity: frontOpacity,
-              transform: [{ rotateY: frontInterpolate }],
-            },
-          ]}
-        >
-          {onEdit && (
-            <Pressable
-              onPress={(event) => {
-                event.stopPropagation()
-                onEdit()
-              }}
-              hitSlop={8}
-              style={{ position: "absolute", top: 12, right: 12, padding: 6, zIndex: 1 }}
-              accessibilityLabel="카드 수정"
-            >
-              <Ionicons name="pencil" size={18} color={colors.textSubtle} />
-            </Pressable>
-          )}
-          <Text style={{ color: colors.text, fontSize: 22, fontWeight: "600", textAlign: "center" }}>
-            {front}
-          </Text>
-          <Pressable
-            onPress={() => speak(front, "en-US")}
-            hitSlop={8}
-            style={{ position: "absolute", top: 12, left: 12, padding: 6 }}
-            accessibilityLabel="읽기"
-          >
-            <Ionicons name="volume-medium-outline" size={18} color={colors.textSubtle} />
-          </Pressable>
-          <Text style={{ marginTop: 12, color: colors.textSubtle, fontSize: 12 }}>탭하여 뒤집기</Text>
+    <View style={{ flex: 1, minHeight: 240 }} {...pan.panHandlers}>
+      <Pressable
+        onPress={() => setFlipped((f) => !f)}
+        accessibilityRole="button"
+        accessibilityLabel={flipped ? `뒷면: ${back}. 탭하면 앞면으로 뒤집혀요` : `앞면: ${front}. 탭하면 뒤집혀요`}
+        accessibilityHint="왼쪽이나 오른쪽으로 밀면 다음 카드나 이전 카드로 넘어가요"
+        style={{ flex: 1 }}
+      >
+        <Animated.View style={[face, { opacity: frontOpacity, transform: [{ rotateY: frontRotate }] }]}>
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <Text style={{ ...faceTextSize(front), color: colors.text, fontWeight: "700", textAlign: "center" }}>
+              {front}
+            </Text>
+          </View>
+          {hint("탭해서 뒤집기 · 좌우로 넘기기")}
         </Animated.View>
 
         <Animated.View
-          style={[
-            cardBase,
-            {
-              backgroundColor: colors.primarySoft,
-              borderWidth: 1,
-              borderColor: colors.border,
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              opacity: backOpacity,
-              transform: [{ rotateY: backInterpolate }],
-            },
-          ]}
+          style={[face, { opacity: backOpacity, transform: [{ rotateY: backRotate }] }]}
         >
-          {onEdit && (
-            <Pressable
-              onPress={(event) => {
-                event.stopPropagation()
-                onEdit()
-              }}
-              hitSlop={8}
-              style={{ position: "absolute", top: 12, right: 12, padding: 6, zIndex: 1 }}
-              accessibilityLabel="카드 수정"
-            >
-              <Ionicons name="pencil" size={18} color={colors.textSubtle} />
-            </Pressable>
-          )}
-          <Text style={{ color: colors.text, fontSize: 18, textAlign: "center" }}>{back}</Text>
-          <Pressable
-            onPress={() => speak(back, "ko-KR")}
-            hitSlop={8}
-            style={{ position: "absolute", top: 12, left: 12, padding: 6 }}
-            accessibilityLabel="읽기"
-          >
-            <Ionicons name="volume-medium-outline" size={18} color={colors.textSubtle} />
-          </Pressable>
-          <Text style={{ marginTop: 12, color: colors.textSubtle, fontSize: 12 }}>탭하여 뒤집기</Text>
+          <View style={{ flex: 1, justifyContent: "center", gap: 12 }}>
+            <Text style={{ ...TYPE.body, color: colors.textSubtle, textAlign: "center" }} numberOfLines={2}>
+              {front}
+            </Text>
+            <Text style={{ ...faceTextSize(back), color: colors.text, fontWeight: "700", textAlign: "center" }}>
+              {back}
+            </Text>
+          </View>
+          {hint("탭해서 다시 뒤집기")}
         </Animated.View>
       </Pressable>
 
-      <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 4 }}>
+      {/* Header sits above both faces so its buttons stay tappable while flipping */}
+      <View
+        pointerEvents="box-none"
+        style={{
+          position: "absolute",
+          top: 8,
+          left: 16,
+          right: 8,
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        {category ? (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 6,
+              backgroundColor: colors.cardAlt,
+              borderRadius: 999,
+              paddingVertical: 4,
+              paddingLeft: 10,
+              paddingRight: 12,
+            }}
+          >
+            <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: categoryColor(category) }} />
+            <Text style={{ ...TYPE.caption, color: colors.textMuted }}>{category}</Text>
+          </View>
+        ) : null}
+        <View style={{ flex: 1 }} />
         <Pressable
-          onPress={handleSentences}
-          disabled={sentLoading}
-          style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
+          onPress={() => speak(visibleText, visibleLang)}
+          accessibilityRole="button"
+          accessibilityLabel="발음 듣기"
+          style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}
         >
-          {sentLoading ? (
-            <ActivityIndicator size="small" color={colors.primary} />
-          ) : (
-            <Ionicons name="chatbubbles-outline" size={14} color={colors.primary} />
-          )}
-          <Text style={{ color: colors.primary, fontSize: 12 }}>예문</Text>
+          <Ionicons name="volume-medium-outline" size={22} color={colors.textMuted} />
         </Pressable>
-        <Pressable
-          onPress={handleSearch}
-          disabled={defLoading}
-          style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
-        >
-          {defLoading ? (
-            <ActivityIndicator size="small" color={colors.primary} />
-          ) : (
-            <Ionicons name="search" size={14} color={colors.primary} />
-          )}
-          <Text style={{ color: colors.primary, fontSize: 12 }}>뜻 검색</Text>
-        </Pressable>
+        <View style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
+          <BookmarkButton key={cardId} cardId={cardId} isBookmark={isBookmark} size={22} />
+        </View>
       </View>
-
-      {showDef && definition && (
-        <View
-          style={{
-            borderRadius: 16,
-            backgroundColor: colors.card,
-            borderWidth: 1,
-            borderColor: colors.border,
-            padding: 14,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 6,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 11,
-                fontWeight: "700",
-                color: colors.primary,
-                textTransform: "uppercase",
-                letterSpacing: 1,
-              }}
-            >
-              ✨ AI 검색 결과
-            </Text>
-            <Pressable onPress={() => setShowDef(false)} hitSlop={8}>
-              <Ionicons name="close" size={16} color={colors.textSubtle} />
-            </Pressable>
-          </View>
-          <Text style={{ color: colors.textMuted, fontSize: 13, lineHeight: 20 }}>{definition}</Text>
-        </View>
-      )}
-
-      {showSent && (sentences || sentError) && (
-        <View
-          style={{
-            borderRadius: 16,
-            backgroundColor: colors.card,
-            borderWidth: 1,
-            borderColor: colors.border,
-            padding: 14,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 8,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 11,
-                fontWeight: "700",
-                color: colors.primary,
-                textTransform: "uppercase",
-                letterSpacing: 1,
-              }}
-            >
-              스피킹 예문
-            </Text>
-            <Pressable onPress={() => setShowSent(false)} hitSlop={8}>
-              <Ionicons name="close" size={16} color={colors.textSubtle} />
-            </Pressable>
-          </View>
-          {sentError ? (
-            <Text style={{ color: colors.danger, fontSize: 13 }}>{sentError}</Text>
-          ) : (
-            <>
-              <Text style={{ marginBottom: 4, fontSize: 11, color: colors.textSubtle }}>
-                문장을 탭하면 영어 번역을 볼 수 있어요
-              </Text>
-              {sentences!.map((s, i) => (
-                <SentenceFlip key={i} category={category} ko={s.ko} en={s.en} index={i} />
-              ))}
-            </>
-          )}
-        </View>
-      )}
     </View>
   )
 }

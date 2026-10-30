@@ -29,7 +29,9 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="study"
         options={{
-          title: "전체 학습",
+          title: "학습",
+          // The study screen draws its own one-line top bar
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <Ionicons name="book-outline" color={color} size={size} />,
         }}
       />
