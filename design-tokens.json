@@ -1,0 +1,50 @@
+{
+  "$description": "Single source of design tokens for web and mobile. Edit here, then run `npm run tokens`. Values match the pre-token UI (DESIGN-RENEWAL.md step 1: no visual change).",
+  "color": {
+    "light": {
+      "bg": "#f9fafb",
+      "surface": "#ffffff",
+      "surface-muted": "#f3f4f6",
+      "border": "#e5e7eb",
+      "text": "#111827",
+      "text-muted": "#4b5563",
+      "text-subtle": "#9ca3af",
+      "primary": "#3b82f6",
+      "primary-hover": "#2563eb",
+      "primary-fg": "#ffffff",
+      "primary-soft": "#eff6ff",
+      "primary-soft-text": "#2563eb",
+      "accent": "#1d4ed8",
+      "danger": "#ef4444",
+      "danger-fg": "#ffffff",
+      "warning": "#f59e0b",
+      "success": "#10b981",
+      "star": "#facc15",
+      "shadow": "rgba(15, 23, 42, 0.08)"
+    },
+    "dark": {
+      "bg": "#09090b",
+      "surface": "#18181b",
+      "surface-muted": "#27272a",
+      "border": "#27272a",
+      "text": "#fafafa",
+      "text-muted": "#a1a1aa",
+      "text-subtle": "#52525b",
+      "primary": "#3b82f6",
+      "primary-hover": "#2563eb",
+      "primary-fg": "#ffffff",
+      "primary-soft": "#172554",
+      "primary-soft-text": "#93c5fd",
+      "accent": "#1d4ed8",
+      "danger": "#f87171",
+      "danger-fg": "#ffffff",
+      "warning": "#f59e0b",
+      "success": "#10b981",
+      "star": "#facc15",
+      "shadow": "rgba(0, 0, 0, 0.5)"
+    },
+    "category": ["#3b82f6", "#ec4899", "#f59e0b", "#10b981", "#06b6d4", "#8b5cf6"]
+  },
+  "radius": { "sm": 8, "md": 12, "lg": 16 },
+  "space": [4, 8, 12, 16, 20, 24, 32]
+}
