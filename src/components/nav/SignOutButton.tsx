@@ -25,7 +25,7 @@ export default function SignOutButton({ signOutAction, image, name, compact = fa
           title={collapsed ? messages.auth.signOut : undefined}
           aria-label={collapsed ? messages.auth.signOut : undefined}
           className={cn(
-            "flex w-full items-center rounded-xl py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800",
+            "flex w-full items-center rounded-xl py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-muted",
             collapsed ? "justify-center px-2" : "gap-2 px-3"
           )}
         >
@@ -52,7 +52,7 @@ export default function SignOutButton({ signOutAction, image, name, compact = fa
           onClick={() => setOpen(false)}
         >
           <div
-            className="bg-white rounded-2xl p-6 w-full max-w-xs shadow-xl flex flex-col gap-4 dark:bg-zinc-900 dark:border dark:border-zinc-800"
+            className="bg-surface rounded-2xl p-6 w-full max-w-xs shadow-xl flex flex-col gap-4 dark:border dark:border-zinc-800"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-center">
@@ -66,7 +66,7 @@ export default function SignOutButton({ signOutAction, image, name, compact = fa
             <div className="flex gap-2">
               <button
                 onClick={() => setOpen(false)}
-                className="flex-1 py-2.5 rounded-xl text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                className="flex-1 py-2.5 rounded-xl text-sm font-medium bg-surface-muted text-gray-600 hover:bg-gray-200 transition-colors dark:text-zinc-300 dark:hover:bg-zinc-700"
               >
                 {messages.auth.cancel}
               </button>

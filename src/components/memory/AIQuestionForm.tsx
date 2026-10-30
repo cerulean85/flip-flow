@@ -121,12 +121,12 @@ export default function AIQuestionForm({ itemId }: { itemId: string }) {
           onChange={(e) => setQuestion(e.target.value)}
           placeholder={t.askPlaceholder}
           maxLength={500}
-          className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          className="flex-1 rounded-xl border border-border-strong bg-surface px-4 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:placeholder:text-zinc-500"
         />
         <button
           type="submit"
           disabled={isAsking || question.trim().length === 0}
-          className="inline-flex items-center gap-1 rounded-xl bg-blue-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600 disabled:opacity-50"
+          className="inline-flex items-center gap-1 rounded-xl bg-primary px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-50"
         >
           {isAsking ? (
             <Loader2 size={16} className="animate-spin" aria-hidden="true" />
@@ -142,7 +142,7 @@ export default function AIQuestionForm({ itemId }: { itemId: string }) {
           {answers.map((entry, index) => (
             <div
               key={index}
-              className="rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-zinc-800 dark:bg-zinc-900"
+              className="rounded-xl border border-border bg-gray-50 p-3 dark:bg-zinc-900"
             >
               <p className="mb-1 text-xs font-semibold text-gray-500 dark:text-zinc-500">
                 Q. {entry.question}

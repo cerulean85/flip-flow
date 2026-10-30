@@ -14,7 +14,7 @@ export default function StudyAll({ cards }: Props) {
 
   if (cards.length === 0) {
     return (
-      <div className="text-center py-16 text-gray-400 dark:text-zinc-500">
+      <div className="text-center py-16 text-text-subtle">
         <Layers size={48} strokeWidth={1.5} className="mx-auto mb-3" aria-hidden="true" />
         <p className="text-sm">{messages.card.empty}</p>
       </div>

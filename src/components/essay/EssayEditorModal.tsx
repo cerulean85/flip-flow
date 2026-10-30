@@ -46,19 +46,19 @@ export default function EssayEditorModal({ open, onClose, essayId, defaultValues
         aria-hidden="true"
       />
       <div
-        className="relative flex w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl dark:border dark:border-zinc-800 dark:bg-zinc-900"
+        className="relative flex w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-surface shadow-2xl dark:border dark:border-zinc-800"
         role="dialog"
         aria-modal="true"
       >
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-zinc-800">
-          <h2 className="text-base font-semibold text-gray-900 dark:text-zinc-100">
+        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+          <h2 className="text-base font-semibold text-text">
             {essayId ? messages.essay.editEssay : messages.essay.newEssay}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label={messages.card.close}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary"
           >
             <X size={18} aria-hidden="true" />
           </button>

@@ -8,8 +8,13 @@
 
 :root {
   --font-geist: "Geist", sans-serif;
-  --background: var(--bg);
-  --foreground: var(--text);
+  --background: #f9fafb;
+  --foreground: #111827;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
 }
 
 body {

@@ -25,7 +25,7 @@ export default function AdSlot({ placement, className }: AdSlotProps) {
       aria-label={label}
       data-ad-placement={placement}
       className={cn(
-        "overflow-hidden rounded-xl border border-dashed border-gray-200 bg-white/70 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/70",
+        "overflow-hidden rounded-xl border border-dashed border-border bg-white/70 shadow-sm dark:bg-zinc-900/70",
         placementClasses[placement],
         className
       )}
@@ -34,8 +34,8 @@ export default function AdSlot({ placement, className }: AdSlotProps) {
         <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-300 dark:text-zinc-600">
           {label}
         </p>
-        <div className="h-2 w-16 rounded-full bg-gray-100 dark:bg-zinc-800" aria-hidden="true" />
-        <div className="h-2 w-24 rounded-full bg-gray-100 dark:bg-zinc-800" aria-hidden="true" />
+        <div className="h-2 w-16 rounded-full bg-surface-muted" aria-hidden="true" />
+        <div className="h-2 w-24 rounded-full bg-surface-muted" aria-hidden="true" />
       </div>
     </aside>
   )

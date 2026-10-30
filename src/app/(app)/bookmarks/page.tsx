@@ -23,7 +23,7 @@ export default async function BookmarksPage() {
       </h1>
 
       {cards.length === 0 ? (
-        <div className="text-center py-16 text-gray-400 dark:text-zinc-500">
+        <div className="text-center py-16 text-text-subtle">
           <Star size={48} strokeWidth={1.5} className="mx-auto mb-3" aria-hidden="true" />
           <p className="text-sm">{t.card.emptyBookmarks}</p>
           <p className="text-sm">{t.card.bookmarkHint}</p>

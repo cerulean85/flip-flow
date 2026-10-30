@@ -47,8 +47,8 @@ export default function AddToMemoryButton({
   const sizeClasses = size === "sm" ? "h-8 px-2.5 text-xs" : "h-9 px-3 text-sm"
   const variantClasses =
     variant === "primary"
-      ? "bg-blue-500 text-white hover:bg-blue-600"
-      : "text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+      ? "bg-primary text-white hover:bg-primary-hover"
+      : "text-primary hover:bg-primary-soft dark:hover:text-blue-300"
 
   return (
     <Link href={href} className={`${baseClasses} ${sizeClasses} ${variantClasses}`}>

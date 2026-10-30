@@ -27,7 +27,7 @@ export default function AIEnrichButton({ itemId }: { itemId: string }) {
           })
         }
         disabled={isPending}
-        className="inline-flex items-center gap-2 rounded-xl bg-blue-50 px-3 py-2 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-100 disabled:opacity-50 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+        className="inline-flex items-center gap-2 rounded-xl bg-primary-soft px-3 py-2 text-sm font-medium text-primary-soft-text transition-colors hover:bg-blue-100 disabled:opacity-50 dark:hover:bg-blue-900"
       >
         {isPending ? (
           <Loader2 size={16} className="animate-spin" aria-hidden="true" />

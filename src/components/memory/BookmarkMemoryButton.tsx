@@ -35,7 +35,7 @@ export default function BookmarkMemoryButton({ itemId, isBookmarked }: Props) {
         disabled={isPending}
         aria-label={label}
         title={label}
-        className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-amber-500 disabled:opacity-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-surface-muted hover:text-amber-500 disabled:opacity-50 dark:text-zinc-400"
       >
         <Bookmark
           size={18}

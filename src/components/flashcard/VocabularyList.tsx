@@ -82,7 +82,7 @@ export default function VocabularyList({ cards }: Props) {
         </h1>
         <Link
           href="/study"
-          className="inline-flex items-center gap-1.5 rounded-xl bg-blue-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
         >
           <BookOpen size={14} aria-hidden="true" />
           {messages.card.allStudy}
@@ -92,7 +92,7 @@ export default function VocabularyList({ cards }: Props) {
       <div className="relative mb-3">
         <Search
           size={16}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle"
           aria-hidden="true"
         />
         <input
@@ -100,14 +100,14 @@ export default function VocabularyList({ cards }: Props) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={messages.card.searchPlaceholder}
-          className="w-full rounded-xl border border-gray-200 bg-white py-2 pl-9 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          className="w-full rounded-xl border border-border-strong bg-surface py-2 pl-9 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
         />
         {query && (
           <button
             type="button"
             onClick={() => setQuery("")}
             aria-label={messages.deck.clearSearch}
-            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded-md text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary"
           >
             <X size={14} aria-hidden="true" />
           </button>
@@ -124,8 +124,8 @@ export default function VocabularyList({ cards }: Props) {
               className={cn(
                 "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                 activeCategory === null
-                  ? "border-blue-500 bg-blue-500 text-white"
-                  : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  ? "border-primary bg-primary text-white"
+                  : "border-border-strong bg-surface text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
               )}
             >
               {messages.memory.periods.all}
@@ -141,8 +141,8 @@ export default function VocabularyList({ cards }: Props) {
                   className={cn(
                     "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                     active
-                      ? "border-blue-500 bg-blue-500 text-white"
-                      : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                      ? "border-primary bg-primary text-white"
+                      : "border-border-strong bg-surface text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
                   )}
                 >
                   {category}
@@ -159,7 +159,7 @@ export default function VocabularyList({ cards }: Props) {
             "ml-auto inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
             bookmarkedOnly
               ? "border-amber-400 bg-amber-100 text-amber-800 dark:border-amber-600 dark:bg-amber-950 dark:text-amber-200"
-              : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              : "border-border-strong bg-surface text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
           )}
         >
           <Star
@@ -174,18 +174,18 @@ export default function VocabularyList({ cards }: Props) {
       <CardForm className="mb-4" />
 
       {cards.length === 0 ? (
-        <div className="py-16 text-center text-gray-400 dark:text-zinc-500">
+        <div className="py-16 text-center text-text-subtle">
           <Inbox size={48} strokeWidth={1.5} className="mx-auto mb-3" aria-hidden="true" />
           <p className="text-sm">{messages.card.emptyInDeck}</p>
         </div>
       ) : filtered.length === 0 ? (
-        <p className="py-8 text-center text-sm text-gray-400 dark:text-zinc-500">
+        <p className="py-8 text-center text-sm text-text-subtle">
           {q ? messages.deck.noSearchResults(query) : messages.memory.noFilterResults}
         </p>
       ) : (
         <div className="flex flex-col gap-3">
           {isFiltering && (
-            <p className="text-xs text-gray-400 dark:text-zinc-500">
+            <p className="text-xs text-text-subtle">
               {messages.deck.matchCount(filtered.length)}
             </p>
           )}

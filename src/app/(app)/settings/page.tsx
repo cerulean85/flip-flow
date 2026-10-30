@@ -39,28 +39,28 @@ export default async function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-6 text-xl font-bold text-gray-900 dark:text-zinc-100">{t.settings.title}</h1>
+      <h1 className="mb-6 text-xl font-bold text-text">{t.settings.title}</h1>
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">{t.settings.themeTitle}</h2>
+      <section className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+        <h2 className="mb-1 text-sm font-semibold text-text">{t.settings.themeTitle}</h2>
         <p className="mb-4 text-xs text-gray-500">{t.settings.themeDescription}</p>
         <ThemeToggle />
       </section>
 
-      <section className="mt-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">{t.settings.languageTitle}</h2>
+      <section className="mt-4 rounded-2xl border border-border bg-surface p-5 shadow-sm">
+        <h2 className="mb-1 text-sm font-semibold text-text">{t.settings.languageTitle}</h2>
         <p className="mb-4 text-xs text-gray-500">{t.settings.languageDescription}</p>
         <LanguageToggle labels={t.settings.languages} />
       </section>
 
-      <section className="mt-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">{t.settings.voiceTitle}</h2>
+      <section className="mt-4 rounded-2xl border border-border bg-surface p-5 shadow-sm">
+        <h2 className="mb-1 text-sm font-semibold text-text">{t.settings.voiceTitle}</h2>
         <p className="mb-4 text-xs text-gray-500">{t.settings.voiceDescription}</p>
         <SpeechVoiceSettings />
       </section>
 
-      <section className="mt-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="mb-1 text-sm font-semibold text-gray-900 dark:text-zinc-100">
+      <section className="mt-4 rounded-2xl border border-border bg-surface p-5 shadow-sm">
+        <h2 className="mb-1 text-sm font-semibold text-text">
           {t.settings.helpTitle}
         </h2>
         <p className="mb-4 text-xs text-gray-500 dark:text-zinc-400">
@@ -73,11 +73,11 @@ export default async function SettingsPage() {
               href={href}
               className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-zinc-800/70"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-link">
                 <Icon size={18} aria-hidden="true" />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-sm font-semibold text-gray-900 dark:text-zinc-100">
+                <span className="block text-sm font-semibold text-text">
                   {t.settings.supportLinks[key].label}
                 </span>
                 <span className="mt-0.5 block text-xs leading-5 text-gray-500 dark:text-zinc-400">
@@ -96,7 +96,7 @@ export default async function SettingsPage() {
               <Copyright size={18} aria-hidden="true" />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-sm font-semibold text-gray-900 dark:text-zinc-100">
+              <span className="block text-sm font-semibold text-text">
                 {t.settings.copyright}
               </span>
               <span className="mt-0.5 block text-xs leading-5 text-gray-500 dark:text-zinc-400">
@@ -107,7 +107,7 @@ export default async function SettingsPage() {
         </div>
       </section>
 
-      <section className="mt-4 rounded-2xl border border-red-200 bg-white p-5 shadow-sm dark:border-red-900 dark:bg-zinc-900">
+      <section className="mt-4 rounded-2xl border border-red-200 bg-surface p-5 shadow-sm dark:border-red-900">
         <h2 className="mb-1 text-sm font-semibold text-red-600 dark:text-red-400">{t.settings.deleteTitle}</h2>
         <p className="mb-4 text-xs text-gray-500 dark:text-zinc-400">
           {t.settings.deleteDescription}

@@ -34,12 +34,12 @@ export default async function MemoryDetail({ item }: Props) {
   const t = messages[locale]
 
   return (
-    <article className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <article className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
       <header className="mb-4 flex items-start justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <MemoryTypeBadge type={item.type} />
           {item.cardId || item.essayId ? (
-            <span className="text-xs text-gray-400 dark:text-zinc-500">
+            <span className="text-xs text-text-subtle">
               {t.memory.fromSource}
             </span>
           ) : null}
@@ -50,14 +50,14 @@ export default async function MemoryDetail({ item }: Props) {
             href={`/memory/${item.id}/edit`}
             aria-label={t.memory.edit}
             title={t.memory.edit}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-surface-muted hover:text-text dark:text-zinc-400"
           >
             <Pencil size={16} aria-hidden="true" />
           </Link>
         </div>
       </header>
 
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">{item.title}</h1>
+      <h1 className="text-2xl font-bold text-text">{item.title}</h1>
 
       {item.meaning && (
         <section className="mt-5">
@@ -75,7 +75,7 @@ export default async function MemoryDetail({ item }: Props) {
           <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
             {t.memory.exampleLabel}
           </h2>
-          <p className="whitespace-pre-wrap text-base italic text-gray-700 dark:text-zinc-300">
+          <p className="whitespace-pre-wrap text-base italic text-text-secondary">
             {item.example}
           </p>
         </section>
@@ -86,7 +86,7 @@ export default async function MemoryDetail({ item }: Props) {
           <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
             {t.memory.explanationLabel}
           </h2>
-          <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-zinc-300">
+          <p className="whitespace-pre-wrap text-sm text-text-secondary">
             {item.explanation}
           </p>
         </section>
@@ -97,7 +97,7 @@ export default async function MemoryDetail({ item }: Props) {
           <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
             {t.memory.contextLabel}
           </h2>
-          <blockquote className="border-l-4 border-blue-300 pl-4 text-sm italic text-gray-600 dark:border-blue-700 dark:text-zinc-400">
+          <blockquote className="border-l-4 border-blue-300 pl-4 text-sm italic text-text-muted dark:border-blue-700">
             {item.contextText}
           </blockquote>
         </section>
@@ -108,7 +108,7 @@ export default async function MemoryDetail({ item }: Props) {
       </section>
 
       <section className="mt-6 border-t border-gray-100 pt-5 dark:border-zinc-800">
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-link">
           {t.memory.ai.sectionTitle}
         </h2>
         {!item.explanation && (
@@ -120,14 +120,14 @@ export default async function MemoryDetail({ item }: Props) {
       </section>
 
       <section className="mt-6 border-t border-gray-100 pt-5 dark:border-zinc-800">
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-link">
           {t.memory.export.sectionTitle}
         </h2>
         <ExportToVocabularyButton itemId={item.id} />
       </section>
 
       <footer className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-zinc-800">
-        <p className="text-xs text-gray-400 dark:text-zinc-500">
+        <p className="text-xs text-text-subtle">
           {formatLocalizedDate(item.updatedAt, locale)}
         </p>
         <DeleteMemoryButton itemId={item.id} />

@@ -30,7 +30,7 @@ export default function AppShell({ user, signOutAction, children }: Props) {
   }, [pathname])
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-zinc-950">
+    <div className="flex h-screen overflow-hidden bg-bg">
       <Sidebar
         user={user}
         signOutAction={signOutAction}

@@ -104,7 +104,7 @@ export default function LandingFlipCard({
           transition={{ type: "spring", stiffness: 240, damping: 26 }}
         >
           <div
-            className="flex flex-col justify-between rounded-[1.75rem] border border-white/60 bg-white p-7 shadow-2xl shadow-blue-900/20 dark:border-zinc-800 dark:bg-zinc-900"
+            className="flex flex-col justify-between rounded-[1.75rem] border border-white/60 bg-surface p-7 shadow-2xl shadow-blue-900/20 dark:border-zinc-800"
             style={{
               gridArea: "1 / 1",
               backfaceVisibility: "hidden",
@@ -113,7 +113,7 @@ export default function LandingFlipCard({
             }}
           >
             <div className="flex items-start justify-between">
-              <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
+              <span className="text-xs font-bold uppercase tracking-widest text-link">
                 FRONT
               </span>
               <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">

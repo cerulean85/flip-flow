@@ -196,7 +196,7 @@ export function SpeakingCardPractice({ target }: SpeakingCardPracticeProps) {
   }
 
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <section className="rounded-2xl border border-border bg-surface p-4">
       <div className="mb-3 flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-widest text-blue-500 dark:text-blue-400">
           {messages.speaking.title}
@@ -206,7 +206,7 @@ export function SpeakingCardPractice({ target }: SpeakingCardPracticeProps) {
         <button
           type="button"
           onClick={() => speak(target, lang)}
-          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-gray-200 px-4 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
+          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-border-strong px-4 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
         >
           <Volume2 size={17} aria-hidden="true" />
           {messages.speaking.listen}
@@ -215,7 +215,7 @@ export function SpeakingCardPractice({ target }: SpeakingCardPracticeProps) {
           type="button"
           onClick={() => void fetchGuide(transcript)}
           disabled={isGuideLoading}
-          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-blue-100 px-4 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-70 dark:border-blue-900 dark:text-blue-300 dark:hover:bg-blue-950"
+          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-blue-100 px-4 text-sm font-medium text-primary-soft-text transition-colors hover:bg-primary-soft hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-70 dark:border-blue-900"
         >
           {isGuideLoading ? (
             <Loader2 size={17} className="animate-spin" aria-hidden="true" />
@@ -243,22 +243,22 @@ export function SpeakingCardPractice({ target }: SpeakingCardPracticeProps) {
         </button>
       </div>
 
-      <div className="mt-4 rounded-xl bg-gray-50 p-3 dark:bg-zinc-950">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-zinc-500">
+      <div className="mt-4 rounded-xl bg-bg p-3">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-text-subtle">
           {messages.speaking.recognizedLabel}
         </p>
-        <p className="min-h-6 whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-zinc-300">
+        <p className="min-h-6 whitespace-pre-wrap text-sm leading-relaxed text-text-secondary">
           {transcript || messages.speaking.noTranscript}
         </p>
         {similarityScore !== null && (
           <div className="mt-4">
-            <div className="mb-1 flex items-center justify-between text-xs font-medium text-gray-400 dark:text-zinc-500">
+            <div className="mb-1 flex items-center justify-between text-xs font-medium text-text-subtle">
               <span>{messages.speaking.similarity}</span>
               <span>{messages.speaking.similarityScore(similarityScore)}</span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-zinc-800">
+            <div className="h-2 overflow-hidden rounded-full bg-surface-muted">
               <div
-                className="h-full rounded-full bg-blue-500 transition-all duration-300"
+                className="h-full rounded-full bg-primary transition-all duration-300"
                 style={{ width: `${similarityScore}%` }}
               />
             </div>
@@ -284,7 +284,7 @@ export function SpeakingCardPractice({ target }: SpeakingCardPracticeProps) {
 
       {(isGuideLoading || guide) && (
         <div className="mt-3 rounded-xl border border-blue-100 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950/40">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-300">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-primary-soft-text">
             {messages.speaking.guideTitle}
           </p>
           {isGuideLoading ? (

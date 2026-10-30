@@ -54,7 +54,7 @@ export default function LandingThemeButton({ labels = defaultLabels }: Props) {
         .replace("{nextTheme}", nextTheme)}
       title={label}
       onClick={() => setTheme(nextTheme)}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/70 bg-white/70 text-zinc-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white dark:border-white/10 dark:bg-zinc-950/45 dark:text-zinc-100 dark:hover:bg-zinc-900"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/70 bg-white/70 text-zinc-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-surface dark:border-white/10 dark:bg-zinc-950/45 dark:text-zinc-100"
     >
       <Icon size={18} aria-hidden="true" />
     </button>

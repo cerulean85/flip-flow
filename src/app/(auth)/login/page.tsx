@@ -53,13 +53,13 @@ export default async function LoginPage({ searchParams }: Props) {
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-50 to-white dark:from-zinc-950 dark:to-zinc-900">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-6 dark:bg-zinc-900 dark:border dark:border-zinc-800">
+      <div className="w-full max-w-sm bg-surface rounded-2xl shadow-lg p-8 flex flex-col gap-6 dark:border dark:border-zinc-800">
         <div className="-mb-2 flex justify-end">
           <Link
             href={`/login?locale=${nextLocale}`}
             hrefLang={nextLocale}
             aria-label={copy.languageLabel}
-            className="inline-flex h-9 items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-xs font-black uppercase tracking-widest text-gray-500 transition-colors hover:border-blue-200 hover:text-blue-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-blue-900 dark:hover:text-blue-400"
+            className="inline-flex h-9 items-center justify-center rounded-xl border border-border-strong bg-surface px-3 text-xs font-black uppercase tracking-widest text-gray-500 transition-colors hover:border-blue-200 hover:text-link dark:text-zinc-400 dark:hover:border-blue-900"
           >
             {nextLocale}
           </Link>
@@ -67,7 +67,7 @@ export default async function LoginPage({ searchParams }: Props) {
         <div className="flex flex-col items-center gap-3">
           <Logo size={56} showText={false} />
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-blue-600 mb-1 dark:text-blue-400">Flip &amp; Flow</h1>
+            <h1 className="text-3xl font-bold text-link mb-1">Flip &amp; Flow</h1>
             <p className="text-gray-500 text-sm">{copy.tagline}</p>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default async function LoginPage({ searchParams }: Props) {
         )}
         <Link
           href={`https://dycdyp.com/${locale}`}
-          className="text-center text-sm font-medium text-gray-400 transition-colors hover:text-blue-600 dark:text-zinc-500 dark:hover:text-blue-400"
+          className="text-center text-sm font-medium text-text-subtle transition-colors hover:text-link"
         >
           {copy.intro}
         </Link>

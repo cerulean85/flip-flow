@@ -19,6 +19,9 @@
   --color-warning: var(--warning);
   --color-success: var(--success);
   --color-star: var(--star);
+  --color-border-strong: var(--border-strong);
+  --color-text-secondary: var(--text-secondary);
+  --color-link: var(--link);
   --color-category-1: var(--category-1);
   --color-category-2: var(--category-2);
   --color-category-3: var(--category-3);
@@ -28,18 +31,18 @@
 }
 
 :root {
-  --bg: #f9fafb;
-  --surface: #ffffff;
-  --surface-muted: #f3f4f6;
-  --border: #e5e7eb;
-  --text: #111827;
-  --text-muted: #4b5563;
-  --text-subtle: #9ca3af;
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
+  --bg: var(--color-gray-50);
+  --surface: white;
+  --surface-muted: var(--color-gray-100);
+  --border: var(--color-gray-200);
+  --text: var(--color-gray-900);
+  --text-muted: var(--color-gray-600);
+  --text-subtle: var(--color-gray-400);
+  --primary: var(--color-blue-500);
+  --primary-hover: var(--color-blue-600);
   --primary-fg: #ffffff;
-  --primary-soft: #eff6ff;
-  --primary-soft-text: #2563eb;
+  --primary-soft: var(--color-blue-50);
+  --primary-soft-text: var(--color-blue-600);
   --accent: #1d4ed8;
   --danger: #ef4444;
   --danger-fg: #ffffff;
@@ -47,6 +50,9 @@
   --success: #10b981;
   --star: #facc15;
   --shadow: rgba(15, 23, 42, 0.08);
+  --border-strong: var(--color-gray-200);
+  --text-secondary: var(--color-gray-700);
+  --link: var(--color-blue-600);
   --category-1: #3b82f6;
   --category-2: #ec4899;
   --category-3: #f59e0b;
@@ -56,18 +62,18 @@
 }
 
 .dark {
-  --bg: #09090b;
-  --surface: #18181b;
-  --surface-muted: #27272a;
-  --border: #27272a;
-  --text: #fafafa;
-  --text-muted: #a1a1aa;
-  --text-subtle: #52525b;
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
+  --bg: var(--color-zinc-950);
+  --surface: var(--color-zinc-900);
+  --surface-muted: var(--color-zinc-800);
+  --border: var(--color-zinc-800);
+  --text: var(--color-zinc-100);
+  --text-muted: var(--color-zinc-400);
+  --text-subtle: var(--color-zinc-500);
+  --primary: var(--color-blue-500);
+  --primary-hover: var(--color-blue-600);
   --primary-fg: #ffffff;
-  --primary-soft: #172554;
-  --primary-soft-text: #93c5fd;
+  --primary-soft: var(--color-blue-950);
+  --primary-soft-text: var(--color-blue-300);
   --accent: #1d4ed8;
   --danger: #f87171;
   --danger-fg: #ffffff;
@@ -75,4 +81,7 @@
   --success: #10b981;
   --star: #facc15;
   --shadow: rgba(0, 0, 0, 0.5);
+  --border-strong: var(--color-zinc-700);
+  --text-secondary: var(--color-zinc-300);
+  --link: var(--color-blue-400);
 }

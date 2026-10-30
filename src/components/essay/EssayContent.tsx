@@ -18,7 +18,7 @@ export default function EssayContent({ markdown, className = "" }: Props) {
 
   if (!normalizedMarkdown.trim()) {
     return (
-      <p className={`text-sm text-gray-400 italic dark:text-zinc-500 ${className}`}>
+      <p className={`text-sm text-text-subtle italic ${className}`}>
         {messages.essay.emptyContent}
       </p>
     )
@@ -31,19 +31,19 @@ export default function EssayContent({ markdown, className = "" }: Props) {
         rehypePlugins={[rehypeKatex]}
         components={{
           h1: ({ children }) => (
-            <h1 className="mt-6 mb-3 text-2xl font-bold text-gray-900 dark:text-zinc-100">{children}</h1>
+            <h1 className="mt-6 mb-3 text-2xl font-bold text-text">{children}</h1>
           ),
           h2: ({ children }) => (
-            <h2 className="mt-5 mb-2 text-xl font-bold text-gray-900 dark:text-zinc-100">{children}</h2>
+            <h2 className="mt-5 mb-2 text-xl font-bold text-text">{children}</h2>
           ),
           h3: ({ children }) => (
-            <h3 className="mt-4 mb-2 text-lg font-semibold text-gray-900 dark:text-zinc-100">{children}</h3>
+            <h3 className="mt-4 mb-2 text-lg font-semibold text-text">{children}</h3>
           ),
           p: ({ children }) => <p className="mb-4 last:mb-0">{children}</p>,
           strong: ({ children }) => (
-            <strong className="font-semibold text-gray-900 dark:text-zinc-100">{children}</strong>
+            <strong className="font-semibold text-text">{children}</strong>
           ),
-          em: ({ children }) => <em className="italic text-gray-700 dark:text-zinc-300">{children}</em>,
+          em: ({ children }) => <em className="italic text-text-secondary">{children}</em>,
           ul: ({ children }) => <ul className="mb-4 list-inside list-disc space-y-1">{children}</ul>,
           ol: ({ children }) => <ol className="mb-4 list-inside list-decimal space-y-1">{children}</ol>,
           li: ({ children }) => <li className="text-gray-800 dark:text-zinc-200">{children}</li>,
@@ -53,12 +53,12 @@ export default function EssayContent({ markdown, className = "" }: Props) {
             </code>
           ),
           pre: ({ children }) => (
-            <pre className="mb-4 overflow-x-auto rounded-xl bg-gray-100 p-4 text-sm dark:bg-zinc-800">
+            <pre className="mb-4 overflow-x-auto rounded-xl bg-surface-muted p-4 text-sm">
               {children}
             </pre>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="mb-4 border-l-4 border-blue-300 pl-4 italic text-gray-600 dark:border-blue-700 dark:text-zinc-400">
+            <blockquote className="mb-4 border-l-4 border-blue-300 pl-4 italic text-text-muted dark:border-blue-700">
               {children}
             </blockquote>
           ),
@@ -67,14 +67,14 @@ export default function EssayContent({ markdown, className = "" }: Props) {
               href={href}
               target="_blank"
               rel="noreferrer noopener"
-              className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              className="text-link underline hover:text-blue-700 dark:hover:text-blue-300"
             >
               {children}
             </a>
           ),
-          hr: () => <hr className="my-6 border-gray-200 dark:border-zinc-800" />,
+          hr: () => <hr className="my-6 border-border" />,
           del: ({ children }) => (
-            <del className="text-gray-400 dark:text-zinc-500">{children}</del>
+            <del className="text-text-subtle">{children}</del>
           ),
           table: ({ children }) => (
             <div className="mb-4 overflow-x-auto">
@@ -82,10 +82,10 @@ export default function EssayContent({ markdown, className = "" }: Props) {
             </div>
           ),
           thead: ({ children }) => (
-            <thead className="border-b border-gray-200 dark:border-zinc-800">{children}</thead>
+            <thead className="border-b border-border">{children}</thead>
           ),
           th: ({ children }) => (
-            <th className="px-3 py-2 text-left font-semibold text-gray-900 dark:text-zinc-100">
+            <th className="px-3 py-2 text-left font-semibold text-text">
               {children}
             </th>
           ),

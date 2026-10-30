@@ -236,13 +236,13 @@ export default function FlipCard({
 
   const markdownComponents = {
     p: ({ children }: { children?: React.ReactNode }) => <p className="mb-2 last:mb-0">{children}</p>,
-    strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-semibold text-gray-900 dark:text-zinc-100">{children}</strong>,
-    em: ({ children }: { children?: React.ReactNode }) => <em className="italic text-gray-600 dark:text-zinc-400">{children}</em>,
+    strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-semibold text-text">{children}</strong>,
+    em: ({ children }: { children?: React.ReactNode }) => <em className="italic text-text-muted">{children}</em>,
     ul: ({ children }: { children?: React.ReactNode }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
     ol: ({ children }: { children?: React.ReactNode }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
-    li: ({ children }: { children?: React.ReactNode }) => <li className="text-gray-700 dark:text-zinc-300">{children}</li>,
-    h1: ({ children }: { children?: React.ReactNode }) => <h1 className="text-base font-bold text-gray-900 mb-1 dark:text-zinc-100">{children}</h1>,
-    h2: ({ children }: { children?: React.ReactNode }) => <h2 className="text-sm font-bold text-gray-900 mb-1 dark:text-zinc-100">{children}</h2>,
+    li: ({ children }: { children?: React.ReactNode }) => <li className="text-text-secondary">{children}</li>,
+    h1: ({ children }: { children?: React.ReactNode }) => <h1 className="text-base font-bold text-text mb-1">{children}</h1>,
+    h2: ({ children }: { children?: React.ReactNode }) => <h2 className="text-sm font-bold text-text mb-1">{children}</h2>,
     h3: ({ children }: { children?: React.ReactNode }) => <h3 className="text-sm font-semibold text-gray-800 mb-1 dark:text-zinc-200">{children}</h3>,
     code: ({ children }: { children?: React.ReactNode }) => <code className="bg-blue-100 text-blue-700 rounded px-1 py-0.5 text-xs font-mono dark:bg-blue-900 dark:text-blue-300">{children}</code>,
     blockquote: ({ children }: { children?: React.ReactNode }) => <blockquote className="border-l-2 border-blue-300 pl-3 text-gray-500 italic my-1 dark:border-blue-700">{children}</blockquote>,
@@ -271,7 +271,7 @@ export default function FlipCard({
               </button>
             )}
           </div>
-          <div className="text-sm leading-relaxed text-gray-700 dark:text-zinc-300">
+          <div className="text-sm leading-relaxed text-text-secondary">
             <ReactMarkdown
               remarkPlugins={[remarkGfm, remarkMath]}
               rehypePlugins={[rehypeKatex]}
@@ -292,7 +292,7 @@ export default function FlipCard({
         value={followUpQuestion}
         onChange={(e) => setFollowUpQuestion(e.target.value)}
         placeholder={messages.card.aiQuestionPlaceholder}
-        className="min-w-0 flex-1 rounded-xl border border-blue-100 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-500 dark:focus:ring-blue-950"
+        className="min-w-0 flex-1 rounded-xl border border-blue-100 bg-white px-3 py-2 text-sm text-text outline-none transition-colors focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:border-zinc-700 dark:bg-zinc-950 dark:placeholder:text-zinc-500 dark:focus:border-blue-500 dark:focus:ring-blue-950"
       />
       <button
         type="submit"
@@ -323,7 +323,7 @@ export default function FlipCard({
         >
           {/* Front */}
           <div
-            className="flex flex-col items-center justify-center rounded-2xl bg-white shadow-md px-6 pb-16 pt-16 text-center min-h-40 dark:bg-zinc-900 dark:border dark:border-zinc-800"
+            className="flex flex-col items-center justify-center rounded-2xl bg-surface shadow-md px-6 pb-16 pt-16 text-center min-h-40 dark:border dark:border-zinc-800"
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", willChange: "transform" }}
           >
             {onEdit && (
@@ -335,7 +335,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.edit}
                 title={messages.card.edit}
-                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text"
               >
                 <Pencil size={18} aria-hidden="true" />
               </button>
@@ -343,7 +343,7 @@ export default function FlipCard({
             {categoryLabel ? (
               <span
                 title={categoryLabel}
-                className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-500 dark:bg-zinc-800 dark:text-zinc-400"
+                className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-surface-muted px-2.5 py-1 text-xs font-medium text-gray-500 dark:text-zinc-400"
               >
                 {categoryLabel}
               </span>
@@ -356,7 +356,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.readFront}
                 title={messages.card.readFront}
-                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text"
               >
                 <Volume2 size={18} aria-hidden="true" />
               </button>
@@ -371,7 +371,7 @@ export default function FlipCard({
               <button
                 onClick={generateSentences}
                 disabled={isGenerating}
-                className="flex h-9 translate-y-0.5 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+                className="flex h-9 translate-y-0.5 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-primary transition-colors hover:bg-primary-soft hover:text-primary-soft-text disabled:opacity-50"
               >
                 {isGenerating ? (
                   <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden="true" />
@@ -386,7 +386,7 @@ export default function FlipCard({
                 aria-pressed={showQuestionPanel}
                 aria-label={messages.card.askQuestion}
                 title={messages.card.askQuestion}
-                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-primary transition-colors hover:bg-primary-soft hover:text-primary-soft-text"
               >
                 <CircleHelp size={16} className="shrink-0" aria-hidden="true" />
                 <span className="leading-none">{messages.card.askQuestion}</span>
@@ -394,7 +394,7 @@ export default function FlipCard({
               <button
                 onClick={searchMeaning}
                 disabled={isSearching}
-                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-primary transition-colors hover:bg-primary-soft hover:text-primary-soft-text disabled:opacity-50"
               >
                 {isSearching ? (
                   <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden="true" />
@@ -408,7 +408,7 @@ export default function FlipCard({
 
           {/* Back */}
           <div
-            className="flex flex-col items-center justify-center rounded-2xl bg-blue-50 shadow-md px-6 pb-16 pt-16 text-center min-h-40 dark:bg-blue-950"
+            className="flex flex-col items-center justify-center rounded-2xl bg-primary-soft shadow-md px-6 pb-16 pt-16 text-center min-h-40"
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", transform: "rotateY(180deg)", willChange: "transform" }}
           >
             {onEdit && (
@@ -420,7 +420,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.edit}
                 title={messages.card.edit}
-                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:text-zinc-400 dark:hover:bg-blue-900"
               >
                 <Pencil size={18} aria-hidden="true" />
               </button>
@@ -428,7 +428,7 @@ export default function FlipCard({
             {categoryLabel ? (
               <span
                 title={categoryLabel}
-                className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-900 dark:text-blue-300"
+                className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-medium text-primary-soft-text dark:bg-blue-900"
               >
                 {categoryLabel}
               </span>
@@ -441,7 +441,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.readBack}
                 title={messages.card.readBack}
-                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-zinc-400 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:text-zinc-400 dark:hover:bg-blue-900"
               >
                 <Volume2 size={18} aria-hidden="true" />
               </button>
@@ -454,7 +454,7 @@ export default function FlipCard({
               <button
                 onClick={generateSentences}
                 disabled={isGenerating}
-                className="flex h-9 translate-y-0.5 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+                className="flex h-9 translate-y-0.5 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-primary transition-colors hover:bg-blue-100 hover:text-primary-soft-text disabled:opacity-50 dark:hover:bg-blue-900"
               >
                 {isGenerating ? (
                   <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden="true" />
@@ -469,7 +469,7 @@ export default function FlipCard({
                 aria-pressed={showQuestionPanel}
                 aria-label={messages.card.askQuestion}
                 title={messages.card.askQuestion}
-                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-primary transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:hover:bg-blue-900"
               >
                 <CircleHelp size={16} className="shrink-0" aria-hidden="true" />
                 <span className="leading-none">{messages.card.askQuestion}</span>
@@ -477,7 +477,7 @@ export default function FlipCard({
               <button
                 onClick={searchMeaning}
                 disabled={isSearching}
-                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-blue-500 transition-colors hover:bg-blue-100 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-900 dark:hover:text-blue-300"
+                className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-sm font-medium leading-none text-primary transition-colors hover:bg-blue-100 hover:text-primary-soft-text disabled:opacity-50 dark:hover:bg-blue-900"
               >
                 {isSearching ? (
                   <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden="true" />
@@ -499,7 +499,7 @@ export default function FlipCard({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="rounded-2xl border border-blue-100 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900"
+            className="rounded-2xl border border-blue-100 bg-surface p-4 dark:border-zinc-800"
           >
             <p className="mb-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-blue-500 dark:text-blue-400">
               <MessageSquareText size={12} aria-hidden="true" />
@@ -539,7 +539,7 @@ export default function FlipCard({
               </button>
             </div>
             <div className="mb-4">{questionForm}</div>
-            <div className="text-sm text-gray-700 leading-relaxed dark:text-zinc-300">
+            <div className="text-sm text-text-secondary leading-relaxed">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeKatex]}
@@ -565,7 +565,7 @@ export default function FlipCard({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="rounded-2xl bg-white border border-gray-200 p-4 dark:bg-zinc-900 dark:border-zinc-800"
+            className="rounded-2xl bg-surface border border-border p-4"
           >
             <div className="flex items-center justify-between mb-3">
               <p className="inline-flex items-center gap-1 text-xs font-semibold text-blue-500 uppercase tracking-widest dark:text-blue-400">
@@ -584,7 +584,7 @@ export default function FlipCard({
               <p className="text-sm text-red-500 dark:text-red-400">{sentencesError}</p>
             ) : (
               <>
-                <p className="mb-2 text-xs text-gray-400 dark:text-zinc-500">
+                <p className="mb-2 text-xs text-text-subtle">
                   {messages.card.practiceHint}
                 </p>
                 <ol className="list-decimal list-inside space-y-1">

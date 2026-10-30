@@ -49,7 +49,7 @@ export default async function MemoryReviewPage() {
         <h1 className="mb-4 text-xl font-bold text-gray-800 dark:text-zinc-100">
           {t.memory.review.title}
         </h1>
-        <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-border bg-surface p-8 text-center">
           <BookMarked
             size={48}
             strokeWidth={1.5}
@@ -60,13 +60,13 @@ export default async function MemoryReviewPage() {
             {t.memory.review.empty}
           </p>
           {next?.nextReviewAt && (
-            <p className="mt-2 text-xs text-gray-400 dark:text-zinc-500">
+            <p className="mt-2 text-xs text-text-subtle">
               {t.memory.review.nextDue(formatLocalizedDate(next.nextReviewAt, locale))}
             </p>
           )}
           <Link
             href="/memory"
-            className="mt-5 inline-block rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+            className="mt-5 inline-block rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
           >
             {t.memory.review.backToList}
           </Link>

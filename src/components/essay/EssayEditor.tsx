@@ -21,7 +21,7 @@ function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: st
     <button
       type="submit"
       disabled={pending}
-      className="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600 disabled:opacity-50"
+      className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-50"
     >
       {pending ? pendingLabel : label}
     </button>
@@ -41,7 +41,7 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
   const cancelHref = essayId ? `/essays/${essayId}` : "/essays"
 
   const cancelClassName =
-    "rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+    "rounded-xl border border-border-strong px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-gray-50 dark:hover:bg-zinc-800"
 
   return (
     <form action={action} className="flex flex-col gap-4">
@@ -50,11 +50,11 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
         required
         defaultValue={defaultValues?.title}
         placeholder={messages.essay.titlePlaceholder}
-        className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+        className="w-full rounded-xl border border-border-strong bg-surface px-4 py-3 text-lg font-semibold text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:placeholder:text-zinc-500"
       />
 
       {/* Mobile tab switcher */}
-      <div className="flex gap-1 rounded-xl border border-gray-200 p-1 dark:border-zinc-800 md:hidden">
+      <div className="flex gap-1 rounded-xl border border-border p-1 md:hidden">
         {(["edit", "preview"] as const).map((m) => (
           <button
             key={m}
@@ -63,8 +63,8 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
             className={cn(
               "flex-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
               mobileMode === m
-                ? "bg-blue-500 text-white"
-                : "text-gray-600 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                ? "bg-primary text-white"
+                : "text-text-muted hover:bg-surface-muted"
             )}
           >
             {m === "edit" ? messages.essay.edit : messages.essay.preview}
@@ -86,7 +86,7 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
               ? messages.essay.showPreview
               : messages.essay.hidePreview
           }
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border-strong text-text-muted transition-colors hover:bg-surface-muted hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
         >
           {isPreviewCollapsed ? (
             <PanelRightOpen size={18} aria-hidden="true" />
@@ -110,7 +110,7 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
             onChange={(e) => setContent(e.target.value)}
             placeholder={messages.essay.contentPlaceholder}
             rows={20}
-            className="h-[65vh] w-full resize-none rounded-xl border border-gray-200 bg-white p-4 font-mono text-sm leading-relaxed text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+            className="h-[65vh] w-full resize-none rounded-xl border border-border-strong bg-surface p-4 font-mono text-sm leading-relaxed text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:placeholder:text-zinc-500"
           />
         </div>
 
@@ -121,7 +121,7 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
             isPreviewCollapsed && "md:hidden"
           )}
         >
-          <div className="h-[65vh] overflow-y-auto rounded-xl border border-gray-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="h-[65vh] overflow-y-auto rounded-xl border border-border bg-surface p-4">
             <EssayContent markdown={content} />
           </div>
         </div>

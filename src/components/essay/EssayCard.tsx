@@ -19,9 +19,9 @@ export default async function EssayCard({ essay }: Props) {
   return (
     <Link
       href={`/essays/${essay.id}`}
-      className="block rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
+      className="block rounded-2xl border border-border bg-surface p-5 shadow-sm transition-shadow hover:shadow-md"
     >
-      <h3 className="truncate text-base font-semibold text-gray-900 dark:text-zinc-100">
+      <h3 className="truncate text-base font-semibold text-text">
         {essay.title}
       </h3>
       {essay.content.trim() && (
@@ -29,7 +29,7 @@ export default async function EssayCard({ essay }: Props) {
           {previewText(essay.content)}
         </p>
       )}
-      <p className="mt-3 text-xs text-gray-400 dark:text-zinc-500">
+      <p className="mt-3 text-xs text-text-subtle">
         {formatLocalizedDate(essay.updatedAt, locale)}
       </p>
     </Link>

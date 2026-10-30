@@ -80,7 +80,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
     >
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
       <div
-        className="relative w-full sm:max-w-md max-h-[90vh] flex flex-col bg-gray-50 rounded-t-2xl sm:rounded-2xl shadow-xl dark:bg-zinc-950"
+        className="relative w-full sm:max-w-md max-h-[90vh] flex flex-col bg-bg rounded-t-2xl sm:rounded-2xl shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
@@ -93,7 +93,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
           <button
             onClick={onClose}
             aria-label={messages.card.close}
-            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors dark:text-zinc-500 dark:hover:text-zinc-300 dark:hover:bg-zinc-800"
+            className="w-7 h-7 flex items-center justify-center rounded-full text-text-subtle hover:text-gray-600 hover:bg-gray-200 transition-colors dark:hover:text-zinc-300 dark:hover:bg-zinc-800"
           >
             <X size={16} aria-hidden="true" />
           </button>
@@ -130,7 +130,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="text-xs text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors dark:text-zinc-500 dark:hover:text-zinc-300 dark:border-zinc-700"
+                  className="text-xs text-text-subtle hover:text-gray-600 px-3 py-1.5 rounded-lg border border-border-strong transition-colors dark:hover:text-zinc-300"
                 >
                   {messages.essay.cancel}
                 </button>
@@ -150,11 +150,11 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
                   target={isCardFlipped ? back : front}
                 />
               </div>
-              <div className="mt-4 flex items-center justify-end gap-2 border-t border-gray-200 pt-3 dark:border-zinc-800">
+              <div className="mt-4 flex items-center justify-end gap-2 border-t border-border pt-3">
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-blue-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors dark:text-zinc-300 dark:hover:text-blue-400 dark:border-zinc-700"
+                  className="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-link px-3 py-1.5 rounded-lg border border-border-strong transition-colors dark:text-zinc-300"
                 >
                   <Pencil size={12} aria-hidden="true" />
                   {messages.card.edit}
@@ -163,7 +163,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
                   type="button"
                   onClick={handleDelete}
                   disabled={isDeleting}
-                  className="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-red-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors disabled:opacity-50 dark:text-zinc-300 dark:hover:text-red-400 dark:border-zinc-700"
+                  className="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-red-600 px-3 py-1.5 rounded-lg border border-border-strong transition-colors disabled:opacity-50 dark:text-zinc-300 dark:hover:text-red-400"
                 >
                   <Trash2 size={12} aria-hidden="true" />
                   {messages.card.delete}
@@ -188,7 +188,7 @@ export default function CardListItem({ cardId, front, back, category, isBookmark
   const [detailOpen, setDetailOpen] = useState(false)
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden h-full dark:bg-zinc-900 dark:border dark:border-zinc-800">
+    <div className="bg-surface rounded-xl shadow-sm overflow-hidden h-full dark:border dark:border-zinc-800">
       <div className="relative h-full">
         <button
           type="button"
@@ -203,7 +203,7 @@ export default function CardListItem({ cardId, front, back, category, isBookmark
           <p className="text-sm font-semibold text-gray-800 line-clamp-2 dark:text-zinc-100">
             {front}
           </p>
-          <p className="mt-1 text-xs text-gray-400 line-clamp-1 dark:text-zinc-500">
+          <p className="mt-1 text-xs text-text-subtle line-clamp-1">
             {back}
           </p>
         </button>

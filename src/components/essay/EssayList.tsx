@@ -21,7 +21,7 @@ export default async function EssayList({ essays }: Props) {
       </div>
 
       {essays.length === 0 ? (
-        <div className="py-16 text-center text-gray-400 dark:text-zinc-500">
+        <div className="py-16 text-center text-text-subtle">
           <NotebookPen size={48} strokeWidth={1.5} className="mx-auto mb-3" aria-hidden="true" />
           <p className="text-sm">{t.essay.empty}</p>
         </div>

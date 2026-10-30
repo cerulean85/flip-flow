@@ -31,14 +31,14 @@ export default function Sidebar({
   return (
     <aside
       className={cn(
-        "h-full flex-col border-r border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 transition-[width] duration-200",
+        "h-full flex-col border-r border-border bg-white dark:bg-zinc-950 transition-[width] duration-200",
         collapsed ? "w-16" : "w-64",
         className
       )}
     >
       <div
         className={cn(
-          "flex h-14 items-center border-b border-gray-200 dark:border-zinc-800",
+          "flex h-14 items-center border-b border-border",
           collapsed ? "justify-center px-2" : "justify-between px-3"
         )}
       >
@@ -50,7 +50,7 @@ export default function Sidebar({
             type="button"
             onClick={onToggleCollapse}
             aria-label={messages.nav.collapse}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary"
           >
             <ChevronLeft size={16} aria-hidden="true" />
           </button>
@@ -58,12 +58,12 @@ export default function Sidebar({
       </div>
 
       {onToggleCollapse && collapsed && (
-        <div className="flex justify-center border-b border-gray-200 py-2 dark:border-zinc-800">
+        <div className="flex justify-center border-b border-border py-2">
           <button
             type="button"
             onClick={onToggleCollapse}
             aria-label={messages.nav.expand}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-surface-muted hover:text-text-secondary"
           >
             <ChevronRight size={16} aria-hidden="true" />
           </button>
@@ -83,7 +83,7 @@ export default function Sidebar({
             )}
             <div className="min-w-0 flex-1">
               {user.name && (
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-zinc-100">{user.name}</p>
+                <p className="truncate text-sm font-medium text-text">{user.name}</p>
               )}
               {user.email && (
                 <p className="truncate text-xs text-gray-500">{user.email}</p>
@@ -112,7 +112,7 @@ export default function Sidebar({
         </div>
       )}
 
-      <div className={cn("border-t border-gray-200 dark:border-zinc-800", collapsed ? "p-2" : "p-4")}>
+      <div className={cn("border-t border-border", collapsed ? "p-2" : "p-4")}>
         <SignOutButton
           signOutAction={signOutAction}
           image={user.image}

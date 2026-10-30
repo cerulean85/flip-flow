@@ -41,7 +41,7 @@ export default function ExportToVocabularyButton({ itemId }: Props) {
         type="button"
         onClick={handleExport}
         disabled={isPending}
-        className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600 disabled:opacity-50"
+        className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-50"
       >
         {isPending ? (
           <Loader2 size={16} className="animate-spin" aria-hidden="true" />

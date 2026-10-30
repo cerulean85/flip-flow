@@ -136,7 +136,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
         <button
           onClick={() => paginate(-1)}
           disabled={index === 0}
-          className="flex items-center gap-1 text-sm font-medium text-blue-600 disabled:text-gray-300 transition-colors dark:text-blue-400 dark:disabled:text-zinc-700"
+          className="flex items-center gap-1 text-sm font-medium text-link disabled:text-gray-300 transition-colors dark:disabled:text-zinc-700"
         >
           <ChevronLeft size={16} aria-hidden="true" />
           {messages.card.previous}
@@ -149,16 +149,16 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
         <button
           onClick={() => paginate(1)}
           disabled={index === shuffled.length - 1}
-          className="flex items-center gap-1 text-sm font-medium text-blue-600 disabled:text-gray-300 transition-colors dark:text-blue-400 dark:disabled:text-zinc-700"
+          className="flex items-center gap-1 text-sm font-medium text-link disabled:text-gray-300 transition-colors dark:disabled:text-zinc-700"
         >
           {messages.card.next}
           <ChevronRight size={16} aria-hidden="true" />
         </button>
       </div>
 
-      <div className="h-1 bg-gray-100 rounded-full overflow-hidden dark:bg-zinc-800">
+      <div className="h-1 bg-surface-muted rounded-full overflow-hidden">
         <div
-          className="h-full bg-blue-500 rounded-full transition-all duration-300"
+          className="h-full bg-primary rounded-full transition-all duration-300"
           style={{ width: `${((index + 1) / shuffled.length) * 100}%` }}
         />
       </div>
@@ -168,7 +168,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-400 font-medium dark:text-zinc-500">
+        <p className="text-sm text-text-subtle font-medium">
           {index + 1} / {shuffled.length}
         </p>
         <div className="flex items-center gap-2">
@@ -178,14 +178,14 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
             aria-pressed={studyBackFirst}
             aria-label={messages.card.toggleStudySide}
             title={messages.card.toggleStudySide}
-            className="inline-flex min-h-8 items-center gap-1 rounded-xl border border-blue-100 px-2.5 text-xs font-medium text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:border-blue-900 dark:text-blue-400 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+            className="inline-flex min-h-8 items-center gap-1 rounded-xl border border-blue-100 px-2.5 text-xs font-medium text-blue-500 transition-colors hover:bg-primary-soft hover:text-primary-soft-text dark:border-blue-900 dark:text-blue-400"
           >
             <Repeat2 size={14} aria-hidden="true" />
             {studyBackFirst ? messages.card.studyBackFirst : messages.card.studyFrontFirst}
           </button>
           <button
             onClick={reshuffle}
-            className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-600 transition-colors dark:hover:text-blue-300"
+            className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-primary-soft-text transition-colors"
           >
             <Shuffle size={14} aria-hidden="true" />
             {messages.card.reshuffle}
@@ -218,7 +218,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
             {editingCardId === card.id ? (
               <form
                 action={saveCard}
-                className="flex flex-col gap-3 rounded-2xl border border-blue-100 bg-white p-4 shadow-md dark:border-blue-900 dark:bg-zinc-900"
+                className="flex flex-col gap-3 rounded-2xl border border-blue-100 bg-surface p-4 shadow-md dark:border-blue-900"
               >
                 <textarea
                   name="front"
@@ -226,7 +226,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
                   required
                   rows={3}
                   placeholder={messages.card.frontPlaceholder}
-                  className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+                  className="w-full resize-none rounded-xl border border-border-strong bg-white px-4 py-3 text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-zinc-950 dark:placeholder:text-zinc-500"
                 />
                 <textarea
                   name="back"
@@ -234,13 +234,13 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
                   required
                   rows={4}
                   placeholder={messages.card.backPlaceholder}
-                  className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+                  className="w-full resize-none rounded-xl border border-border-strong bg-white px-4 py-3 text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-zinc-950 dark:placeholder:text-zinc-500"
                 />
                 <div className="flex items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setEditingCardId(null)}
-                    className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                    className="rounded-xl border border-border-strong px-4 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
                   >
                     {messages.essay.cancel}
                   </button>

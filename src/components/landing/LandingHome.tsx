@@ -32,13 +32,13 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
           <nav className="flex items-center gap-1 text-sm font-medium text-zinc-600 dark:text-zinc-300">
             <a
               href="#how-it-works"
-              className="hidden rounded-lg px-3 py-2 hover:text-blue-600 sm:inline-flex dark:hover:text-blue-400"
+              className="hidden rounded-lg px-3 py-2 hover:text-link sm:inline-flex"
             >
               {content.nav.howItWorks}
             </a>
             <Link
               href="/support"
-              className="rounded-lg px-3 py-2 hover:text-blue-600 dark:hover:text-blue-400"
+              className="rounded-lg px-3 py-2 hover:text-link"
             >
               {content.nav.support}
             </Link>
@@ -125,7 +125,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
       <section className="bg-white px-5 py-16 sm:py-20 dark:bg-zinc-950">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
+            <p className="text-sm font-bold uppercase tracking-widest text-link">
               {content.featuresIntro.eyebrow}
             </p>
             <h2 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
@@ -141,7 +141,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
               return (
                 <article
                   key={title}
-                  className="group rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-900"
+                  className="group rounded-2xl border border-zinc-100 bg-surface p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl dark:border-zinc-800 dark:hover:border-blue-900"
                 >
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-fuchsia-500 text-white shadow-lg shadow-blue-500/20 transition group-hover:scale-110">
                     <Icon size={22} aria-hidden="true" />
@@ -163,7 +163,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
       >
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
+            <p className="text-sm font-bold uppercase tracking-widest text-link">
               {content.stepsIntro.eyebrow}
             </p>
             <h2 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
@@ -245,13 +245,13 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
             </p>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-600 dark:text-zinc-400">
-            <Link href="/terms" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <Link href="/terms" className="hover:text-link">
               {content.footer.terms}
             </Link>
-            <Link href="/privacy" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <Link href="/privacy" className="hover:text-link">
               {content.footer.privacy}
             </Link>
-            <Link href="/support" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <Link href="/support" className="hover:text-link">
               {content.footer.support}
             </Link>
           </div>

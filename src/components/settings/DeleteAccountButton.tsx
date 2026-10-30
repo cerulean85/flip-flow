@@ -38,7 +38,7 @@ export default function DeleteAccountButton() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:border-red-900 dark:bg-zinc-900 dark:text-red-400 dark:hover:bg-red-950"
+        className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-surface px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
       >
         <Trash2 size={16} aria-hidden="true" />
         {messages.settings.deleteButton}
@@ -51,20 +51,20 @@ export default function DeleteAccountButton() {
           onClick={close}
         >
           <div
-            className="flex w-full max-w-sm flex-col gap-4 rounded-2xl bg-white p-6 shadow-xl dark:border dark:border-zinc-800 dark:bg-zinc-900"
+            className="flex w-full max-w-sm flex-col gap-4 rounded-2xl bg-surface p-6 shadow-xl dark:border dark:border-zinc-800"
             onClick={(e) => e.stopPropagation()}
           >
             <div>
-              <p className="text-base font-semibold text-gray-900 dark:text-zinc-100">
+              <p className="text-base font-semibold text-text">
                 {messages.settings.deleteDialogTitle}
               </p>
-              <p className="mt-2 text-sm text-gray-600 dark:text-zinc-400">
+              <p className="mt-2 text-sm text-text-muted">
                 {messages.settings.deleteDialogBody}
               </p>
             </div>
 
             <div>
-              <label htmlFor="delete-confirm" className="mb-1.5 block text-xs font-medium text-gray-700 dark:text-zinc-300">
+              <label htmlFor="delete-confirm" className="mb-1.5 block text-xs font-medium text-text-secondary">
                 {messages.settings.deleteConfirmLabel}
               </label>
               <input
@@ -75,7 +75,7 @@ export default function DeleteAccountButton() {
                 disabled={isPending}
                 autoComplete="off"
                 placeholder={messages.settings.deleteConfirmPhrase}
-                className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-600"
+                className="w-full rounded-xl border border-border-strong bg-surface px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-50 dark:placeholder:text-zinc-600"
               />
             </div>
 
@@ -90,7 +90,7 @@ export default function DeleteAccountButton() {
                 type="button"
                 onClick={close}
                 disabled={isPending}
-                className="flex-1 rounded-xl bg-gray-100 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 disabled:opacity-50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                className="flex-1 rounded-xl bg-surface-muted py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-gray-200 disabled:opacity-50 dark:hover:bg-zinc-700"
               >
                 {messages.settings.cancel}
               </button>

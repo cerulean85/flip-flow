@@ -93,13 +93,13 @@ export default function SpeechVoiceSettings() {
         return (
           <div key={lang} className="space-y-2">
             <div className="flex items-center justify-between gap-3">
-              <label htmlFor={`voice-${lang}`} className="text-sm font-medium text-gray-700 dark:text-zinc-300">
+              <label htmlFor={`voice-${lang}`} className="text-sm font-medium text-text-secondary">
                 {label}
               </label>
               <button
                 type="button"
                 onClick={() => speak(testText, lang)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-zinc-500 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-primary-soft hover:text-primary-soft-text"
                 aria-label={`${label} ${messages.settings.voice.testSuffix}`}
                 title={`${label} ${messages.settings.voice.testSuffix}`}
               >

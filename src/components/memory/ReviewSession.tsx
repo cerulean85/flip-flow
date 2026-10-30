@@ -57,14 +57,14 @@ export default function ReviewSession({ items }: Props) {
 
   if (isDone) {
     return (
-      <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="rounded-2xl border border-border bg-surface p-8 text-center">
         <CheckCircle2
           size={48}
           strokeWidth={1.5}
           className="mx-auto mb-3 text-emerald-500"
           aria-hidden="true"
         />
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-zinc-100">
+        <h2 className="text-lg font-semibold text-text">
           {t.allDone}
         </h2>
         {completed > 0 && (
@@ -74,7 +74,7 @@ export default function ReviewSession({ items }: Props) {
         )}
         <Link
           href="/memory"
-          className="mt-5 inline-block rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+          className="mt-5 inline-block rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
         >
           {t.backToList}
         </Link>
@@ -89,8 +89,8 @@ export default function ReviewSession({ items }: Props) {
         <span>{t.progress(index + 1, total)}</span>
       </div>
 
-      <article className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-zinc-100">
+      <article className="rounded-2xl border border-border bg-surface p-8 shadow-sm">
+        <h2 className="text-center text-2xl font-bold text-text">
           {current.title}
         </h2>
 
@@ -111,20 +111,20 @@ export default function ReviewSession({ items }: Props) {
                 <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
                   {messages.memory.exampleLabel}
                 </h3>
-                <p className="whitespace-pre-wrap text-base italic text-gray-700 dark:text-zinc-300">
+                <p className="whitespace-pre-wrap text-base italic text-text-secondary">
                   {current.example}
                 </p>
               </section>
             )}
             {!current.meaning && !current.example && current.explanation && (
               <section>
-                <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-zinc-300">
+                <p className="whitespace-pre-wrap text-sm text-text-secondary">
                   {current.explanation}
                 </p>
               </section>
             )}
             {!current.meaning && !current.example && !current.explanation && (
-              <p className="text-center text-sm italic text-gray-400 dark:text-zinc-500">
+              <p className="text-center text-sm italic text-text-subtle">
                 {t.noAnswer}
               </p>
             )}
@@ -134,7 +134,7 @@ export default function ReviewSession({ items }: Props) {
             <button
               type="button"
               onClick={() => setRevealed(true)}
-              className="rounded-xl bg-blue-500 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+              className="rounded-xl bg-primary px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
             >
               {t.showAnswer}
             </button>

@@ -84,7 +84,7 @@ export default function EditCardButton({ cardId, front, back }: Props) {
         <button
           type="button"
           onClick={() => setIsEditing(false)}
-          className="text-xs text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 transition-colors dark:text-zinc-500 dark:hover:text-zinc-300 dark:border-zinc-700"
+          className="text-xs text-text-subtle hover:text-gray-600 px-3 py-1.5 rounded-lg border border-border-strong transition-colors dark:hover:text-zinc-300"
         >
           {messages.essay.cancel}
         </button>

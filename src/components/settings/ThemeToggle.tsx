@@ -30,8 +30,8 @@ export default function ThemeToggle() {
             className={cn(
               "flex-1 rounded-xl border px-3 py-2 text-sm font-medium transition-colors",
               active
-                ? "border-blue-500 bg-blue-500 text-white"
-                : "border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                ? "border-primary bg-primary text-white"
+                : "border-gray-300 text-text-muted hover:bg-gray-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
             )}
           >
             {messages.settings.themes[value]}

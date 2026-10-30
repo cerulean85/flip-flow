@@ -36,7 +36,7 @@ function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: st
     <button
       type="submit"
       disabled={pending}
-      className="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600 disabled:opacity-50"
+      className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-50"
     >
       {pending ? pendingLabel : label}
     </button>
@@ -60,13 +60,13 @@ export default function MemoryForm({ itemId, defaultValues, source }: Props) {
       {source?.cardId && <input type="hidden" name="cardId" value={source.cardId} />}
       {source?.essayId && <input type="hidden" name="essayId" value={source.essayId} />}
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-zinc-300">
+        <label className="mb-1 block text-sm font-medium text-text-secondary">
           {t.form.typeLabel}
         </label>
         <select
           name="type"
           defaultValue={defaultValues?.type ?? "WORD"}
-          className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+          className="w-full rounded-xl border border-border-strong bg-surface px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           {TYPE_OPTIONS.map((value) => (
             <option key={value} value={value}>
@@ -77,7 +77,7 @@ export default function MemoryForm({ itemId, defaultValues, source }: Props) {
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-zinc-300">
+        <label className="mb-1 block text-sm font-medium text-text-secondary">
           {t.form.titleLabel}
         </label>
         <input
@@ -85,12 +85,12 @@ export default function MemoryForm({ itemId, defaultValues, source }: Props) {
           required
           defaultValue={defaultValues?.title}
           placeholder={t.form.titlePlaceholder}
-          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          className="w-full rounded-xl border border-border-strong bg-surface px-4 py-3 text-base text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:placeholder:text-zinc-500"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-zinc-300">
+        <label className="mb-1 block text-sm font-medium text-text-secondary">
           {t.form.meaningLabel}
         </label>
         <textarea
@@ -98,12 +98,12 @@ export default function MemoryForm({ itemId, defaultValues, source }: Props) {
           rows={2}
           defaultValue={defaultValues?.meaning ?? ""}
           placeholder={t.form.meaningPlaceholder}
-          className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          className="w-full resize-none rounded-xl border border-border-strong bg-surface px-4 py-3 text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:placeholder:text-zinc-500"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-zinc-300">
+        <label className="mb-1 block text-sm font-medium text-text-secondary">
           {t.form.exampleLabel}
         </label>
         <textarea
@@ -111,12 +111,12 @@ export default function MemoryForm({ itemId, defaultValues, source }: Props) {
           rows={2}
           defaultValue={defaultValues?.example ?? ""}
           placeholder={t.form.examplePlaceholder}
-          className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          className="w-full resize-none rounded-xl border border-border-strong bg-surface px-4 py-3 text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:placeholder:text-zinc-500"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-zinc-300">
+        <label className="mb-1 block text-sm font-medium text-text-secondary">
           {t.form.explanationLabel}
         </label>
         <textarea
@@ -124,12 +124,12 @@ export default function MemoryForm({ itemId, defaultValues, source }: Props) {
           rows={3}
           defaultValue={defaultValues?.explanation ?? ""}
           placeholder={t.form.explanationPlaceholder}
-          className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          className="w-full resize-none rounded-xl border border-border-strong bg-surface px-4 py-3 text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:placeholder:text-zinc-500"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-zinc-300">
+        <label className="mb-1 block text-sm font-medium text-text-secondary">
           {t.form.contextLabel}
         </label>
         <textarea
@@ -137,7 +137,7 @@ export default function MemoryForm({ itemId, defaultValues, source }: Props) {
           rows={2}
           defaultValue={defaultValues?.contextText ?? ""}
           placeholder={t.form.contextPlaceholder}
-          className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          className="w-full resize-none rounded-xl border border-border-strong bg-surface px-4 py-3 text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue-400 dark:placeholder:text-zinc-500"
         />
       </div>
 
@@ -150,7 +150,7 @@ export default function MemoryForm({ itemId, defaultValues, source }: Props) {
       <div className="flex items-center justify-end gap-2">
         <Link
           href={cancelHref}
-          className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+          className="rounded-xl border border-border-strong px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-gray-50 dark:hover:bg-zinc-800"
         >
           {t.form.cancel}
         </Link>

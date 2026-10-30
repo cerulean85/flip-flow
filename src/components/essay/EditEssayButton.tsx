@@ -19,7 +19,7 @@ export default function EditEssayButton({ essayId, title, content }: Props) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+        className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
       >
         {messages.essay.editButton}
       </button>

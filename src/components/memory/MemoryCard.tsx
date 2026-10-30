@@ -24,7 +24,7 @@ export default function MemoryCard({ item }: Props) {
   return (
     <Link
       href={`/memory/${item.id}`}
-      className="block rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
+      className="block rounded-2xl border border-border bg-surface p-5 shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="mb-2 flex items-start justify-between gap-3">
         <MemoryTypeBadge type={item.type} />
@@ -36,7 +36,7 @@ export default function MemoryCard({ item }: Props) {
           />
         )}
       </div>
-      <h3 className="line-clamp-2 text-base font-semibold text-gray-900 dark:text-zinc-100">
+      <h3 className="line-clamp-2 text-base font-semibold text-text">
         {item.title}
       </h3>
       {item.meaning && (
@@ -44,7 +44,7 @@ export default function MemoryCard({ item }: Props) {
           {item.meaning}
         </p>
       )}
-      <p className="mt-3 text-xs text-gray-400 dark:text-zinc-500">
+      <p className="mt-3 text-xs text-text-subtle">
         {formatLocalizedDate(item.updatedAt, locale)}
       </p>
     </Link>

@@ -27,7 +27,7 @@ const GRADES: { grade: Grade; classes: string }[] = [
   {
     grade: "EASY",
     classes:
-      "bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900",
+      "bg-primary-soft text-blue-700 hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-blue-900",
   },
 ]
 

@@ -45,7 +45,7 @@ export default function MobileHelpPage() {
     <main className="min-h-screen bg-white px-6 py-12 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
       <article className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
-          <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">Flip & Flow</p>
+          <p className="text-sm font-semibold text-link">Flip & Flow</p>
           <h1 className="text-3xl font-bold">모바일 사용 도움말</h1>
           <p className="text-zinc-600 dark:text-zinc-300">
             Flip & Flow 모바일 앱에서 로그인하고 주요 학습 기능을 사용하는 방법입니다.
@@ -80,7 +80,7 @@ export default function MobileHelpPage() {
           <h2 className="text-xl font-semibold">문의</h2>
           <p className="text-zinc-700 dark:text-zinc-300">
             앱 사용 중 문제가 있으면{" "}
-            <a className="font-semibold text-blue-600 dark:text-blue-400" href="mailto:zhwan85@dycdyp.com">
+            <a className="font-semibold text-link" href="mailto:zhwan85@dycdyp.com">
               zhwan85@dycdyp.com
             </a>
             으로 문의해주세요.

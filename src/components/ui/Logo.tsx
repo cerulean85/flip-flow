@@ -48,7 +48,7 @@ export default function Logo({ size = 32, showText = true, className = "" }: Log
         />
       </svg>
       {showText && (
-        <span className="font-bold text-blue-600 leading-none dark:text-blue-400">
+        <span className="font-bold text-link leading-none">
           Flip &amp; Flow
         </span>
       )}
