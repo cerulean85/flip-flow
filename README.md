@@ -70,6 +70,9 @@ npm run ios # 또는 npm run android
 ---
 Flip-flow는 지속적으로 학습자의 피드백을 반영하여 더 나은 학습 경험을 위해 발전하고 있습니다.
 
+## 📌 서비스 개선 및 로드맵
+* 서비스 개선점, UX 전략, 유료화(Monetization) 방안에 관한 자세한 내용은 [IMPROVEMENTS.md](IMPROVEMENTS.md)를 참고하세요.
+
 ---
 
-_Last updated: 2026-05-17 KST_
+_Last updated: 2026-10-30 KST_
