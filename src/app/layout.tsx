@@ -4,6 +4,7 @@ import { headers } from "next/headers"
 import Script from "next/script"
 import Providers from "@/components/Providers"
 import { defaultLocale, isLocale, type Locale } from "@/lib/i18n"
+import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css"
 import "./globals.css"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
