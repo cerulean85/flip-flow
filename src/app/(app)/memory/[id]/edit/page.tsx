@@ -33,7 +33,7 @@ export default async function EditMemoryPage({
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-4 text-xl font-bold text-gray-800 dark:text-zinc-100">
+      <h1 className="mb-4 text-xl font-bold text-text">
         {t.memory.editItem}
       </h1>
       <MemoryForm itemId={item.id} defaultValues={item} />

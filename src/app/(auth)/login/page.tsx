@@ -59,7 +59,7 @@ export default async function LoginPage({ searchParams }: Props) {
             href={`/login?locale=${nextLocale}`}
             hrefLang={nextLocale}
             aria-label={copy.languageLabel}
-            className="inline-flex h-9 items-center justify-center rounded-xl border border-border-strong bg-surface px-3 text-xs font-black uppercase tracking-widest text-gray-500 transition-colors hover:border-blue-200 hover:text-link dark:text-zinc-400 dark:hover:border-blue-900"
+            className="inline-flex h-9 items-center justify-center rounded-xl border border-border-strong bg-surface px-3 text-xs font-black uppercase tracking-widest text-text-muted transition-colors hover:border-blue-200 hover:text-link dark:hover:border-blue-900"
           >
             {nextLocale}
           </Link>

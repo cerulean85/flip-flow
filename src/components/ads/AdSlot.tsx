@@ -31,7 +31,7 @@ export default function AdSlot({ placement, className }: AdSlotProps) {
       )}
     >
       <div className="flex h-full flex-col items-center justify-center gap-1 px-4 py-3 text-center">
-        <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-300 dark:text-zinc-600">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-text-subtle">
           {label}
         </p>
         <div className="h-2 w-16 rounded-full bg-surface-muted" aria-hidden="true" />

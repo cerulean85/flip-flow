@@ -110,7 +110,7 @@ export default function SpeechVoiceSettings() {
               id={`voice-${lang}`}
               value={selected[lang] ?? ""}
               onChange={(event) => updateVoice(lang, storageKey, event.target.value)}
-              className="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-blue-400 dark:focus:ring-blue-950"
+              className="w-full rounded-xl border border-border-strong bg-white px-3 py-2 text-sm text-text outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:bg-zinc-950 dark:focus:border-blue-400 dark:focus:ring-blue-950"
             >
               <option value="">{messages.settings.voice.defaultOption(fixedVoice)}</option>
               {languageVoices.map((voice) => (

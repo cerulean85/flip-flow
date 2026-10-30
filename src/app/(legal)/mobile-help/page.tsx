@@ -42,19 +42,19 @@ const sections = [
 
 export default function MobileHelpPage() {
   return (
-    <main className="min-h-screen bg-white px-6 py-12 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+    <main className="min-h-screen bg-white px-6 py-12 text-text dark:bg-zinc-950">
       <article className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
           <p className="text-sm font-semibold text-link">Flip & Flow</p>
           <h1 className="text-3xl font-bold">모바일 사용 도움말</h1>
-          <p className="text-zinc-600 dark:text-zinc-300">
+          <p className="text-text-secondary">
             Flip & Flow 모바일 앱에서 로그인하고 주요 학습 기능을 사용하는 방법입니다.
           </p>
         </header>
 
         <section className="rounded-lg border border-blue-200 bg-blue-50 p-5 dark:border-blue-900/60 dark:bg-blue-950/30">
           <h2 className="text-xl font-semibold">빠른 시작</h2>
-          <ol className="mt-4 list-decimal space-y-2 pl-5 text-zinc-700 dark:text-zinc-300">
+          <ol className="mt-4 list-decimal space-y-2 pl-5 text-text-secondary">
             <li>모바일 앱을 실행합니다.</li>
             <li>로그인 화면에서 로고를 다섯 번 누릅니다.</li>
             <li>나타난 로그인 버튼을 누릅니다.</li>
@@ -67,7 +67,7 @@ export default function MobileHelpPage() {
           {sections.map((section) => (
             <section className="space-y-3" key={section.title}>
               <h2 className="text-xl font-semibold">{section.title}</h2>
-              <ul className="list-disc space-y-2 pl-5 text-zinc-700 dark:text-zinc-300">
+              <ul className="list-disc space-y-2 pl-5 text-text-secondary">
                 {section.items.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -76,9 +76,9 @@ export default function MobileHelpPage() {
           ))}
         </div>
 
-        <section className="space-y-3 border-t border-zinc-200 pt-6 dark:border-zinc-800">
+        <section className="space-y-3 border-t border-border pt-6">
           <h2 className="text-xl font-semibold">문의</h2>
-          <p className="text-zinc-700 dark:text-zinc-300">
+          <p className="text-text-secondary">
             앱 사용 중 문제가 있으면{" "}
             <a className="font-semibold text-link" href="mailto:zhwan85@dycdyp.com">
               zhwan85@dycdyp.com

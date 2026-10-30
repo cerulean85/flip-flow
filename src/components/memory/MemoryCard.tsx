@@ -40,7 +40,7 @@ export default function MemoryCard({ item }: Props) {
         {item.title}
       </h3>
       {item.meaning && (
-        <p className="mt-2 line-clamp-2 text-sm text-gray-500 dark:text-zinc-400">
+        <p className="mt-2 line-clamp-2 text-sm text-text-muted">
           {item.meaning}
         </p>
       )}

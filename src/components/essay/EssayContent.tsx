@@ -25,7 +25,7 @@ export default function EssayContent({ markdown, className = "" }: Props) {
   }
 
   return (
-    <div className={`text-base leading-relaxed text-gray-800 dark:text-zinc-200 ${className}`}>
+    <div className={`text-base leading-relaxed text-text ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
@@ -46,9 +46,9 @@ export default function EssayContent({ markdown, className = "" }: Props) {
           em: ({ children }) => <em className="italic text-text-secondary">{children}</em>,
           ul: ({ children }) => <ul className="mb-4 list-inside list-disc space-y-1">{children}</ul>,
           ol: ({ children }) => <ol className="mb-4 list-inside list-decimal space-y-1">{children}</ol>,
-          li: ({ children }) => <li className="text-gray-800 dark:text-zinc-200">{children}</li>,
+          li: ({ children }) => <li className="text-text">{children}</li>,
           code: ({ children }) => (
-            <code className="rounded bg-blue-100 px-1.5 py-0.5 font-mono text-sm text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+            <code className="rounded bg-blue-100 px-1.5 py-0.5 font-mono text-sm text-primary-soft-text dark:bg-blue-900">
               {children}
             </code>
           ),
@@ -67,7 +67,7 @@ export default function EssayContent({ markdown, className = "" }: Props) {
               href={href}
               target="_blank"
               rel="noreferrer noopener"
-              className="text-link underline hover:text-blue-700 dark:hover:text-blue-300"
+              className="text-link underline hover:text-primary-soft-text"
             >
               {children}
             </a>
@@ -90,7 +90,7 @@ export default function EssayContent({ markdown, className = "" }: Props) {
             </th>
           ),
           td: ({ children }) => (
-            <td className="border-t border-gray-100 px-3 py-2 dark:border-zinc-800">{children}</td>
+            <td className="border-t border-border px-3 py-2">{children}</td>
           ),
         }}
       >

@@ -16,7 +16,7 @@ export default async function EssayList({ essays }: Props) {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-zinc-100">{t.essay.title}</h1>
+        <h1 className="text-xl font-bold text-text">{t.essay.title}</h1>
         <NewEssayButton />
       </div>
 

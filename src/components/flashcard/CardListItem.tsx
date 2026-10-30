@@ -85,7 +85,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">
+            <p className="text-sm font-semibold text-text">
               {messages.card.detail}
             </p>
             {isBookmark && <Star size={14} className="fill-yellow-400 text-yellow-400" aria-hidden="true" />}
@@ -93,7 +93,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
           <button
             onClick={onClose}
             aria-label={messages.card.close}
-            className="w-7 h-7 flex items-center justify-center rounded-full text-text-subtle hover:text-gray-600 hover:bg-gray-200 transition-colors dark:hover:text-zinc-300 dark:hover:bg-zinc-800"
+            className="w-7 h-7 flex items-center justify-center rounded-full text-text-subtle hover:text-text-secondary hover:bg-surface-muted transition-colors"
           >
             <X size={16} aria-hidden="true" />
           </button>
@@ -130,7 +130,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="text-xs text-text-subtle hover:text-gray-600 px-3 py-1.5 rounded-lg border border-border-strong transition-colors dark:hover:text-zinc-300"
+                  className="text-xs text-text-subtle hover:text-text-secondary px-3 py-1.5 rounded-lg border border-border-strong transition-colors"
                 >
                   {messages.essay.cancel}
                 </button>
@@ -154,7 +154,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-link px-3 py-1.5 rounded-lg border border-border-strong transition-colors dark:text-zinc-300"
+                  className="inline-flex items-center gap-1.5 text-xs text-text-secondary hover:text-link px-3 py-1.5 rounded-lg border border-border-strong transition-colors"
                 >
                   <Pencil size={12} aria-hidden="true" />
                   {messages.card.edit}
@@ -163,7 +163,7 @@ function CardDetailModal({ cardId, front, back, isBookmark, category, onClose }:
                   type="button"
                   onClick={handleDelete}
                   disabled={isDeleting}
-                  className="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-red-600 px-3 py-1.5 rounded-lg border border-border-strong transition-colors disabled:opacity-50 dark:text-zinc-300 dark:hover:text-red-400"
+                  className="inline-flex items-center gap-1.5 text-xs text-text-secondary hover:text-red-600 px-3 py-1.5 rounded-lg border border-border-strong transition-colors disabled:opacity-50 dark:hover:text-red-400"
                 >
                   <Trash2 size={12} aria-hidden="true" />
                   {messages.card.delete}
@@ -196,11 +196,11 @@ export default function CardListItem({ cardId, front, back, category, isBookmark
           onClick={() => setDetailOpen(true)}
         >
           {category && (
-            <p className="text-[10px] uppercase tracking-wide text-blue-500 truncate dark:text-blue-400 mb-1">
+            <p className="text-[10px] uppercase tracking-wide text-link truncate mb-1">
               {category}
             </p>
           )}
-          <p className="text-sm font-semibold text-gray-800 line-clamp-2 dark:text-zinc-100">
+          <p className="text-sm font-semibold text-text line-clamp-2">
             {front}
           </p>
           <p className="mt-1 text-xs text-text-subtle line-clamp-1">

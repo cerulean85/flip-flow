@@ -80,7 +80,7 @@ export default function MemorySwipeNav({ prevId, nextId, children }: Props) {
       <div className="mb-4 flex items-center justify-between gap-2">
         <Link
           href="/memory"
-          className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-gray-50 dark:hover:bg-zinc-800"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-muted"
         >
           <ArrowLeft size={16} aria-hidden="true" />
           <span>{t.back}</span>
@@ -92,7 +92,7 @@ export default function MemorySwipeNav({ prevId, nextId, children }: Props) {
             disabled={!prevId}
             aria-label={t.prev}
             title={t.prev}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-surface-muted hover:text-text disabled:opacity-30 dark:text-zinc-400"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-muted hover:text-text disabled:opacity-30"
           >
             <ChevronLeft size={18} aria-hidden="true" />
           </button>
@@ -102,7 +102,7 @@ export default function MemorySwipeNav({ prevId, nextId, children }: Props) {
             disabled={!nextId}
             aria-label={t.next}
             title={t.next}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-surface-muted hover:text-text disabled:opacity-30 dark:text-zinc-400"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-muted hover:text-text disabled:opacity-30"
           >
             <ChevronRight size={18} aria-hidden="true" />
           </button>

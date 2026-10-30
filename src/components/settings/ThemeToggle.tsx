@@ -31,7 +31,7 @@ export default function ThemeToggle() {
               "flex-1 rounded-xl border px-3 py-2 text-sm font-medium transition-colors",
               active
                 ? "border-primary bg-primary text-white"
-                : "border-gray-300 text-text-muted hover:bg-gray-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                : "border-border-strong text-text-muted hover:bg-surface-muted"
             )}
           >
             {messages.settings.themes[value]}

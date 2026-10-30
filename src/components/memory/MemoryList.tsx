@@ -97,7 +97,7 @@ export default function MemoryList({ items, dueCount = 0 }: Props) {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between gap-2">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-zinc-100">
+        <h1 className="text-xl font-bold text-text">
           {t.title}
         </h1>
         <div className="flex items-center gap-2">
@@ -145,13 +145,13 @@ export default function MemoryList({ items, dueCount = 0 }: Props) {
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <label className="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-zinc-400">
+        <label className="inline-flex items-center gap-1.5 text-xs text-text-muted">
           <span className="sr-only sm:not-sr-only">{t.periodLabel}</span>
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value as Period)}
             aria-label={t.periodLabel}
-            className="rounded-full border border-border-strong bg-surface px-3 py-1 text-xs font-medium text-text-secondary transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:hover:bg-zinc-800"
+            className="rounded-full border border-border-strong bg-surface px-3 py-1 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-muted focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             {PERIODS.map((p) => (
               <option key={p} value={p}>
@@ -160,13 +160,13 @@ export default function MemoryList({ items, dueCount = 0 }: Props) {
             ))}
           </select>
         </label>
-        <label className="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-zinc-400">
+        <label className="inline-flex items-center gap-1.5 text-xs text-text-muted">
           <span className="sr-only sm:not-sr-only">{t.sortLabel}</span>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
             aria-label={t.sortLabel}
-            className="rounded-full border border-border-strong bg-surface px-3 py-1 text-xs font-medium text-text-secondary transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:hover:bg-zinc-800"
+            className="rounded-full border border-border-strong bg-surface px-3 py-1 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-muted focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             {SORT_KEYS.map((s) => (
               <option key={s} value={s}>
@@ -187,7 +187,7 @@ export default function MemoryList({ items, dueCount = 0 }: Props) {
                 "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                 active
                   ? "border-primary bg-primary text-white"
-                  : "border-border-strong bg-surface text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  : "border-border-strong bg-surface text-text-secondary hover:bg-surface-muted"
               )}
             >
               {t.typeLabels[type]}
@@ -202,7 +202,7 @@ export default function MemoryList({ items, dueCount = 0 }: Props) {
             "ml-auto inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
             bookmarkedOnly
               ? "border-amber-400 bg-amber-100 text-amber-800 dark:border-amber-600 dark:bg-amber-950 dark:text-amber-200"
-              : "border-border-strong bg-surface text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              : "border-border-strong bg-surface text-text-secondary hover:bg-surface-muted"
           )}
         >
           <Star

@@ -10,7 +10,7 @@ export default function SignInButton({ label = "Google로 로그인" }: Props) {
   return (
     <button
       onClick={() => signIn("google", { callbackUrl: "/study" })}
-      className="flex items-center justify-center gap-3 w-full py-3 px-6 rounded-xl border border-border-strong bg-white hover:bg-gray-50 transition-colors font-medium text-gray-700 shadow-sm dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+      className="flex items-center justify-center gap-3 w-full py-3 px-6 rounded-xl border border-border-strong bg-white hover:bg-gray-50 transition-colors font-medium text-text-secondary shadow-sm dark:bg-zinc-800 dark:hover:bg-zinc-700"
     >
       <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
         <path

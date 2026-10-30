@@ -68,7 +68,7 @@ export default function ReviewSession({ items }: Props) {
           {t.allDone}
         </h2>
         {completed > 0 && (
-          <p className="mt-1 text-sm text-gray-500 dark:text-zinc-400">
+          <p className="mt-1 text-sm text-text-muted">
             {t.reviewedCount(completed)}
           </p>
         )}
@@ -84,7 +84,7 @@ export default function ReviewSession({ items }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between text-xs text-gray-500 dark:text-zinc-400">
+      <div className="flex items-center justify-between text-xs text-text-muted">
         <MemoryTypeBadge type={current.type} />
         <span>{t.progress(index + 1, total)}</span>
       </div>
@@ -95,20 +95,20 @@ export default function ReviewSession({ items }: Props) {
         </h2>
 
         {revealed ? (
-          <div className="mt-6 flex flex-col gap-4 border-t border-gray-100 pt-5 dark:border-zinc-800">
+          <div className="mt-6 flex flex-col gap-4 border-t border-border pt-5">
             {current.meaning && (
               <section>
-                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
+                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-subtle">
                   {messages.memory.meaningLabel}
                 </h3>
-                <p className="whitespace-pre-wrap text-base text-gray-800 dark:text-zinc-200">
+                <p className="whitespace-pre-wrap text-base text-text">
                   {current.meaning}
                 </p>
               </section>
             )}
             {current.example && (
               <section>
-                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
+                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-subtle">
                   {messages.memory.exampleLabel}
                 </h3>
                 <p className="whitespace-pre-wrap text-base italic text-text-secondary">

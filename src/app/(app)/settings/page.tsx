@@ -63,10 +63,10 @@ export default async function SettingsPage() {
         <h2 className="mb-1 text-sm font-semibold text-text">
           {t.settings.helpTitle}
         </h2>
-        <p className="mb-4 text-xs text-gray-500 dark:text-zinc-400">
+        <p className="mb-4 text-xs text-text-muted">
           {t.settings.helpDescription}
         </p>
-        <div className="divide-y divide-gray-100 rounded-xl border border-gray-100 dark:divide-zinc-800 dark:border-zinc-800">
+        <div className="divide-y divide-border rounded-xl border border-border">
           {supportLinks.map(({ href, key, Icon }) => (
             <Link
               key={href}
@@ -80,26 +80,26 @@ export default async function SettingsPage() {
                 <span className="block text-sm font-semibold text-text">
                   {t.settings.supportLinks[key].label}
                 </span>
-                <span className="mt-0.5 block text-xs leading-5 text-gray-500 dark:text-zinc-400">
+                <span className="mt-0.5 block text-xs leading-5 text-text-muted">
                   {t.settings.supportLinks[key].description}
                 </span>
               </span>
               <ChevronRight
                 size={18}
-                className="shrink-0 text-gray-300 dark:text-zinc-600"
+                className="shrink-0 text-text-subtle"
                 aria-hidden="true"
               />
             </Link>
           ))}
           <div className="flex items-center gap-3 px-4 py-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-gray-500 dark:bg-zinc-800 dark:text-zinc-400">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-muted text-text-muted">
               <Copyright size={18} aria-hidden="true" />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-semibold text-text">
                 {t.settings.copyright}
               </span>
-              <span className="mt-0.5 block text-xs leading-5 text-gray-500 dark:text-zinc-400">
+              <span className="mt-0.5 block text-xs leading-5 text-text-muted">
                 © 2026 Flip &amp; Flow. All rights reserved.
               </span>
             </span>
@@ -109,7 +109,7 @@ export default async function SettingsPage() {
 
       <section className="mt-4 rounded-2xl border border-red-200 bg-surface p-5 shadow-sm dark:border-red-900">
         <h2 className="mb-1 text-sm font-semibold text-red-600 dark:text-red-400">{t.settings.deleteTitle}</h2>
-        <p className="mb-4 text-xs text-gray-500 dark:text-zinc-400">
+        <p className="mb-4 text-xs text-text-muted">
           {t.settings.deleteDescription}
         </p>
         <DeleteAccountButton />

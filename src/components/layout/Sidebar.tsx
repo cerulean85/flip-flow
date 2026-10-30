@@ -72,7 +72,7 @@ export default function Sidebar({
 
       <div className={cn("flex-1 overflow-y-auto", collapsed ? "p-2" : "p-4")}>
         {!collapsed && (user.name || user.image) && (
-          <div className="mb-6 flex items-center gap-3 rounded-xl bg-gray-50 px-3 py-3 dark:bg-zinc-900">
+          <div className="mb-6 flex items-center gap-3 rounded-xl bg-surface-muted px-3 py-3">
             {user.image && (
               // eslint-disable-next-line @next/next/no-img-element
               <img

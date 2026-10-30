@@ -50,7 +50,7 @@ export default async function MemoryDetail({ item }: Props) {
             href={`/memory/${item.id}/edit`}
             aria-label={t.memory.edit}
             title={t.memory.edit}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-surface-muted hover:text-text dark:text-zinc-400"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-muted hover:text-text"
           >
             <Pencil size={16} aria-hidden="true" />
           </Link>
@@ -61,10 +61,10 @@ export default async function MemoryDetail({ item }: Props) {
 
       {item.meaning && (
         <section className="mt-5">
-          <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
+          <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-subtle">
             {t.memory.meaningLabel}
           </h2>
-          <p className="whitespace-pre-wrap text-base text-gray-800 dark:text-zinc-200">
+          <p className="whitespace-pre-wrap text-base text-text">
             {item.meaning}
           </p>
         </section>
@@ -72,7 +72,7 @@ export default async function MemoryDetail({ item }: Props) {
 
       {item.example && (
         <section className="mt-5">
-          <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
+          <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-subtle">
             {t.memory.exampleLabel}
           </h2>
           <p className="whitespace-pre-wrap text-base italic text-text-secondary">
@@ -83,7 +83,7 @@ export default async function MemoryDetail({ item }: Props) {
 
       {item.explanation && (
         <section className="mt-5">
-          <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
+          <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-subtle">
             {t.memory.explanationLabel}
           </h2>
           <p className="whitespace-pre-wrap text-sm text-text-secondary">
@@ -94,7 +94,7 @@ export default async function MemoryDetail({ item }: Props) {
 
       {item.contextText && (
         <section className="mt-5">
-          <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-zinc-500">
+          <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-subtle">
             {t.memory.contextLabel}
           </h2>
           <blockquote className="border-l-4 border-blue-300 pl-4 text-sm italic text-text-muted dark:border-blue-700">
@@ -103,11 +103,11 @@ export default async function MemoryDetail({ item }: Props) {
         </section>
       )}
 
-      <section className="mt-6 border-t border-gray-100 pt-5 dark:border-zinc-800">
+      <section className="mt-6 border-t border-border pt-5">
         <SpeakingCardPractice target={item.title} />
       </section>
 
-      <section className="mt-6 border-t border-gray-100 pt-5 dark:border-zinc-800">
+      <section className="mt-6 border-t border-border pt-5">
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-link">
           {t.memory.ai.sectionTitle}
         </h2>
@@ -119,14 +119,14 @@ export default async function MemoryDetail({ item }: Props) {
         <AIQuestionForm itemId={item.id} />
       </section>
 
-      <section className="mt-6 border-t border-gray-100 pt-5 dark:border-zinc-800">
+      <section className="mt-6 border-t border-border pt-5">
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-link">
           {t.memory.export.sectionTitle}
         </h2>
         <ExportToVocabularyButton itemId={item.id} />
       </section>
 
-      <footer className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-zinc-800">
+      <footer className="mt-6 flex items-center justify-between border-t border-border pt-4">
         <p className="text-xs text-text-subtle">
           {formatLocalizedDate(item.updatedAt, locale)}
         </p>

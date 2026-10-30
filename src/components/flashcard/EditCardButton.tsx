@@ -36,7 +36,7 @@ export default function EditCardButton({ cardId, front, back }: Props) {
     return (
       <button
         onClick={() => setIsEditing(true)}
-        className="text-gray-300 hover:text-blue-400 transition-colors dark:text-zinc-600"
+        className="text-text-subtle hover:text-blue-400 transition-colors"
         aria-label={messages.card.edit}
       >
         <Pencil size={14} aria-hidden="true" />
@@ -84,7 +84,7 @@ export default function EditCardButton({ cardId, front, back }: Props) {
         <button
           type="button"
           onClick={() => setIsEditing(false)}
-          className="text-xs text-text-subtle hover:text-gray-600 px-3 py-1.5 rounded-lg border border-border-strong transition-colors dark:hover:text-zinc-300"
+          className="text-xs text-text-subtle hover:text-text-secondary px-3 py-1.5 rounded-lg border border-border-strong transition-colors"
         >
           {messages.essay.cancel}
         </button>

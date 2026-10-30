@@ -46,17 +46,17 @@ export default async function MemoryReviewPage() {
 
     return (
       <div className="mx-auto max-w-2xl">
-        <h1 className="mb-4 text-xl font-bold text-gray-800 dark:text-zinc-100">
+        <h1 className="mb-4 text-xl font-bold text-text">
           {t.memory.review.title}
         </h1>
         <div className="rounded-2xl border border-border bg-surface p-8 text-center">
           <BookMarked
             size={48}
             strokeWidth={1.5}
-            className="mx-auto mb-3 text-gray-300 dark:text-zinc-600"
+            className="mx-auto mb-3 text-text-subtle"
             aria-hidden="true"
           />
-          <p className="text-sm text-gray-500 dark:text-zinc-400">
+          <p className="text-sm text-text-muted">
             {t.memory.review.empty}
           </p>
           {next?.nextReviewAt && (
@@ -77,7 +77,7 @@ export default async function MemoryReviewPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-4 text-xl font-bold text-gray-800 dark:text-zinc-100">
+      <h1 className="mb-4 text-xl font-bold text-text">
         {t.memory.review.title}
       </h1>
       <ReviewSession items={due as ReviewItem[]} />

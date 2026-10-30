@@ -77,7 +77,7 @@ export default function VocabularyList({ cards }: Props) {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between gap-2">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-zinc-100">
+        <h1 className="text-xl font-bold text-text">
           {messages.nav.vocabulary}
         </h1>
         <Link
@@ -125,7 +125,7 @@ export default function VocabularyList({ cards }: Props) {
                 "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                 activeCategory === null
                   ? "border-primary bg-primary text-white"
-                  : "border-border-strong bg-surface text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  : "border-border-strong bg-surface text-text-secondary hover:bg-surface-muted"
               )}
             >
               {messages.memory.periods.all}
@@ -142,7 +142,7 @@ export default function VocabularyList({ cards }: Props) {
                     "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                     active
                       ? "border-primary bg-primary text-white"
-                      : "border-border-strong bg-surface text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                      : "border-border-strong bg-surface text-text-secondary hover:bg-surface-muted"
                   )}
                 >
                   {category}
@@ -159,7 +159,7 @@ export default function VocabularyList({ cards }: Props) {
             "ml-auto inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
             bookmarkedOnly
               ? "border-amber-400 bg-amber-100 text-amber-800 dark:border-amber-600 dark:bg-amber-950 dark:text-amber-200"
-              : "border-border-strong bg-surface text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              : "border-border-strong bg-surface text-text-secondary hover:bg-surface-muted"
           )}
         >
           <Star
@@ -205,7 +205,7 @@ export default function VocabularyList({ cards }: Props) {
             <div
               ref={sentinelRef}
               aria-hidden="true"
-              className="h-8 flex items-center justify-center text-[10px] text-gray-300 dark:text-zinc-600"
+              className="h-8 flex items-center justify-center text-[10px] text-text-subtle"
             >
               ...
             </div>

@@ -41,7 +41,7 @@ export default function EssayEditor({ essayId, defaultValues, onCancel }: Props)
   const cancelHref = essayId ? `/essays/${essayId}` : "/essays"
 
   const cancelClassName =
-    "rounded-xl border border-border-strong px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-gray-50 dark:hover:bg-zinc-800"
+    "rounded-xl border border-border-strong px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-surface-muted"
 
   return (
     <form action={action} className="flex flex-col gap-4">

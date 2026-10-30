@@ -136,7 +136,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
         <button
           onClick={() => paginate(-1)}
           disabled={index === 0}
-          className="flex items-center gap-1 text-sm font-medium text-link disabled:text-gray-300 transition-colors dark:disabled:text-zinc-700"
+          className="flex items-center gap-1 text-sm font-medium text-link disabled:text-text-subtle transition-colors"
         >
           <ChevronLeft size={16} aria-hidden="true" />
           {messages.card.previous}
@@ -149,7 +149,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
         <button
           onClick={() => paginate(1)}
           disabled={index === shuffled.length - 1}
-          className="flex items-center gap-1 text-sm font-medium text-link disabled:text-gray-300 transition-colors dark:disabled:text-zinc-700"
+          className="flex items-center gap-1 text-sm font-medium text-link disabled:text-text-subtle transition-colors"
         >
           {messages.card.next}
           <ChevronRight size={16} aria-hidden="true" />
@@ -178,7 +178,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
             aria-pressed={studyBackFirst}
             aria-label={messages.card.toggleStudySide}
             title={messages.card.toggleStudySide}
-            className="inline-flex min-h-8 items-center gap-1 rounded-xl border border-blue-100 px-2.5 text-xs font-medium text-blue-500 transition-colors hover:bg-primary-soft hover:text-primary-soft-text dark:border-blue-900 dark:text-blue-400"
+            className="inline-flex min-h-8 items-center gap-1 rounded-xl border border-blue-100 px-2.5 text-xs font-medium text-link transition-colors hover:bg-primary-soft hover:text-primary-soft-text dark:border-blue-900"
           >
             <Repeat2 size={14} aria-hidden="true" />
             {studyBackFirst ? messages.card.studyBackFirst : messages.card.studyFrontFirst}
@@ -240,7 +240,7 @@ export default function CardSlider({ cards, controlsPosition = "bottom" }: CardS
                   <button
                     type="button"
                     onClick={() => setEditingCardId(null)}
-                    className="rounded-xl border border-border-strong px-4 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                    className="rounded-xl border border-border-strong px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-surface-muted"
                   >
                     {messages.essay.cancel}
                   </button>

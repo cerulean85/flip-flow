@@ -86,7 +86,7 @@ export default function SentenceFlip({ ko, en, category }: Props) {
           }
         }}
         aria-label={messages.card.sentenceFlip}
-        className="relative flex w-full cursor-pointer items-start gap-2 rounded-lg px-2 py-2 text-sm leading-relaxed transition-colors hover:bg-gray-50 dark:hover:bg-zinc-800"
+        className="relative flex w-full cursor-pointer items-start gap-2 rounded-lg px-2 py-2 text-sm leading-relaxed transition-colors hover:bg-surface-muted"
         style={{ perspective: "800px" }}
       >
         <motion.div
@@ -97,13 +97,13 @@ export default function SentenceFlip({ ko, en, category }: Props) {
         >
           <span
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden" }}
-            className="text-left text-blue-700 dark:text-blue-300"
+            className="text-left text-primary-soft-text"
           >
             {en}
           </span>
           <span
             style={{ gridArea: "1 / 1", backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-            className="text-left text-gray-800 dark:text-zinc-200"
+            className="text-left text-text"
           >
             {ko}
           </span>

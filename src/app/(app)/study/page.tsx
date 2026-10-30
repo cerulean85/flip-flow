@@ -29,7 +29,7 @@ export default async function StudyAllPage() {
   return (
     <div className="mx-auto max-w-md">
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-zinc-100">{t.card.allStudy}</h1>
+        <h1 className="text-xl font-bold text-text">{t.card.allStudy}</h1>
         <p className="text-xs text-text-subtle mt-0.5">
           {t.card.allStudyCount(cards.length)}
         </p>

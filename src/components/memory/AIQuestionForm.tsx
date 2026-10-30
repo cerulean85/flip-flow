@@ -142,12 +142,12 @@ export default function AIQuestionForm({ itemId }: { itemId: string }) {
           {answers.map((entry, index) => (
             <div
               key={index}
-              className="rounded-xl border border-border bg-gray-50 p-3 dark:bg-zinc-900"
+              className="rounded-xl border border-border bg-surface-muted p-3"
             >
-              <p className="mb-1 text-xs font-semibold text-gray-500 dark:text-zinc-500">
+              <p className="mb-1 text-xs font-semibold text-text-subtle">
                 Q. {entry.question}
               </p>
-              <p className="whitespace-pre-wrap text-sm text-gray-800 dark:text-zinc-200">
+              <p className="whitespace-pre-wrap text-sm text-text">
                 {entry.answer}
               </p>
             </div>

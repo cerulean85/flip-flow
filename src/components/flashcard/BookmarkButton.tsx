@@ -45,7 +45,7 @@ export default function BookmarkButton({ cardId, isBookmark }: BookmarkButtonPro
             "transition-colors",
             optimisticBookmark
               ? "fill-yellow-400 text-yellow-400"
-              : "text-gray-300 dark:text-zinc-600"
+              : "text-text-subtle"
           )}
         />
       </button>

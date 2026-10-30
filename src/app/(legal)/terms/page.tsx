@@ -13,12 +13,12 @@ export default async function TermsPage() {
   const content = legalContent[locale]
 
   return (
-    <main className="min-h-screen bg-white px-6 py-12 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+    <main className="min-h-screen bg-white px-6 py-12 text-text dark:bg-zinc-950">
       <article className="mx-auto max-w-3xl space-y-8">
         <header className="space-y-3">
           <p className="text-sm font-semibold text-link">Flip & Flow</p>
           <h1 className="text-3xl font-bold">{content.terms.title}</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">{content.effectiveDate}</p>
+          <p className="text-sm text-text-muted">{content.effectiveDate}</p>
         </header>
 
         {content.terms.sections.map((section) => (

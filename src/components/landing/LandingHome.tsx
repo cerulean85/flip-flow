@@ -29,7 +29,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
       <header className="sticky top-0 z-30 border-b border-white/40 bg-white/80 px-5 py-4 backdrop-blur-xl dark:border-zinc-800/70 dark:bg-zinc-950/70">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
           <Logo size={36} />
-          <nav className="flex items-center gap-1 text-sm font-medium text-zinc-600 dark:text-zinc-300">
+          <nav className="flex items-center gap-1 text-sm font-medium text-text-secondary">
             <a
               href="#how-it-works"
               className="hidden rounded-lg px-3 py-2 hover:text-link sm:inline-flex"
@@ -74,7 +74,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
               <Sparkles size={16} aria-hidden="true" />
               {content.hero.badge}
             </div>
-            <h1 className="text-5xl font-black leading-[1.05] tracking-tight text-zinc-950 sm:text-6xl lg:text-7xl dark:text-white">
+            <h1 className="text-5xl font-black leading-[1.05] tracking-tight text-text sm:text-6xl lg:text-7xl">
               {content.hero.titlePrefix}
               <br />
               {content.hero.titleMiddle}{" "}
@@ -82,7 +82,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
                 {content.hero.titleAccent}
               </span>
             </h1>
-            <p className="max-w-xl text-lg font-medium leading-8 text-zinc-700 sm:text-xl dark:text-zinc-200">
+            <p className="max-w-xl text-lg font-medium leading-8 text-text-secondary sm:text-xl">
               {content.hero.description}
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -100,7 +100,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
                 {content.hero.secondaryCta}
               </a>
             </div>
-            <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+            <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-sm font-semibold text-text-secondary">
               {content.hero.bullets.map((bullet) => (
                 <li key={bullet} className="inline-flex items-center gap-1.5">
                   <span className="text-emerald-500">✓</span> {bullet}
@@ -131,7 +131,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
             <h2 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
               {content.featuresIntro.title}
             </h2>
-            <p className="mt-4 text-base leading-7 text-zinc-600 dark:text-zinc-300">
+            <p className="mt-4 text-base leading-7 text-text-secondary">
               {content.featuresIntro.description}
             </p>
           </div>
@@ -147,7 +147,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
                     <Icon size={22} aria-hidden="true" />
                   </span>
                   <h3 className="mt-5 text-lg font-black">{title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
+                  <p className="mt-2 text-sm leading-7 text-text-secondary">
                     {body}
                   </p>
                 </article>
@@ -185,13 +185,13 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
                     <h3 className="text-2xl font-black leading-tight sm:text-3xl">
                       {step.title}
                     </h3>
-                    <p className="text-base leading-7 text-zinc-600 dark:text-zinc-300">
+                    <p className="text-base leading-7 text-text-secondary">
                       {step.body}
                     </p>
                   </div>
                   <div className="relative">
                     <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-gradient-to-br from-blue-200/50 via-fuchsia-200/40 to-amber-200/40 blur-2xl dark:from-blue-700/30 dark:via-fuchsia-800/20 dark:to-amber-800/10" />
-                    <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-950 p-2 shadow-2xl shadow-blue-950/20 dark:border-zinc-800">
+                    <div className="overflow-hidden rounded-3xl border border-border bg-zinc-950 p-2 shadow-2xl shadow-blue-950/20">
                       <Image
                         src={step.image}
                         alt={step.alt}
@@ -244,7 +244,7 @@ export default function LandingHome({ locale, appBaseUrl = "https://flip-flow.dy
               {content.footer.copyright}
             </p>
           </div>
-          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-text-muted">
             <Link href="/terms" className="hover:text-link">
               {content.footer.terms}
             </Link>

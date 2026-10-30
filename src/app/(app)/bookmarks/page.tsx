@@ -18,7 +18,7 @@ export default async function BookmarksPage() {
 
   return (
     <div className="mx-auto max-w-md">
-      <h1 className="text-xl font-bold text-gray-800 mb-4 dark:text-zinc-100">
+      <h1 className="text-xl font-bold text-text mb-4">
         {t.card.bookmarks}
       </h1>
 

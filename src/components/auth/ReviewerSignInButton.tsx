@@ -14,7 +14,7 @@ export default function ReviewerSignInButton({
   return (
     <form action={signInAsReviewer} className="flex flex-col gap-2 rounded-2xl border border-dashed border-blue-200 bg-blue-50/70 p-3 dark:border-blue-900/70 dark:bg-blue-950/30">
       <div>
-        <p className="text-xs font-bold text-blue-700 dark:text-blue-300">
+        <p className="text-xs font-bold text-primary-soft-text">
           {title}
         </p>
         <p className="mt-1 text-xs leading-5 text-blue-700/70 dark:text-blue-200/70">

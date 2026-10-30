@@ -243,8 +243,8 @@ export default function FlipCard({
     li: ({ children }: { children?: React.ReactNode }) => <li className="text-text-secondary">{children}</li>,
     h1: ({ children }: { children?: React.ReactNode }) => <h1 className="text-base font-bold text-text mb-1">{children}</h1>,
     h2: ({ children }: { children?: React.ReactNode }) => <h2 className="text-sm font-bold text-text mb-1">{children}</h2>,
-    h3: ({ children }: { children?: React.ReactNode }) => <h3 className="text-sm font-semibold text-gray-800 mb-1 dark:text-zinc-200">{children}</h3>,
-    code: ({ children }: { children?: React.ReactNode }) => <code className="bg-blue-100 text-blue-700 rounded px-1 py-0.5 text-xs font-mono dark:bg-blue-900 dark:text-blue-300">{children}</code>,
+    h3: ({ children }: { children?: React.ReactNode }) => <h3 className="text-sm font-semibold text-text mb-1">{children}</h3>,
+    code: ({ children }: { children?: React.ReactNode }) => <code className="bg-blue-100 text-primary-soft-text rounded px-1 py-0.5 text-xs font-mono dark:bg-blue-900">{children}</code>,
     blockquote: ({ children }: { children?: React.ReactNode }) => <blockquote className="border-l-2 border-blue-300 pl-3 text-gray-500 italic my-1 dark:border-blue-700">{children}</blockquote>,
   }
 
@@ -253,7 +253,7 @@ export default function FlipCard({
       {items.map((item, followUpIndex) => (
         <div key={`${item.question}-${followUpIndex}`} className="space-y-2">
           <div className="flex min-h-11 items-center gap-2 rounded-xl bg-white/70 px-3 py-2 dark:bg-zinc-950">
-            <p className="min-w-0 flex-1 self-center text-sm font-medium leading-normal text-gray-800 dark:text-zinc-100">
+            <p className="min-w-0 flex-1 self-center text-sm font-medium leading-normal text-text">
               {item.question}
             </p>
             {options?.canDelete && (
@@ -265,7 +265,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.deleteQuestionHistory}
                 title={messages.card.deleteQuestionHistory}
-                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-gray-300 transition-colors hover:bg-red-50 hover:text-red-500 dark:text-zinc-600 dark:hover:bg-red-950 dark:hover:text-red-400"
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-text-subtle transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950 dark:hover:text-red-400"
               >
                 <X size={14} aria-hidden="true" />
               </button>
@@ -343,7 +343,7 @@ export default function FlipCard({
             {categoryLabel ? (
               <span
                 title={categoryLabel}
-                className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-surface-muted px-2.5 py-1 text-xs font-medium text-gray-500 dark:text-zinc-400"
+                className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-lg bg-surface-muted px-2.5 py-1 text-xs font-medium text-text-muted"
               >
                 {categoryLabel}
               </span>
@@ -362,10 +362,10 @@ export default function FlipCard({
               </button>
             )}
 
-            <p className="text-xl font-semibold text-gray-800 leading-relaxed whitespace-pre-wrap w-full dark:text-zinc-100">
+            <p className="text-xl font-semibold text-text leading-relaxed whitespace-pre-wrap w-full">
               {front}
             </p>
-            <p className="text-xs text-gray-300 mt-4 dark:text-zinc-600">{messages.card.tapToFlip}</p>
+            <p className="text-xs text-text-subtle mt-4">{messages.card.tapToFlip}</p>
 
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-1">
               <button
@@ -420,7 +420,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.edit}
                 title={messages.card.edit}
-                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:text-zinc-400 dark:hover:bg-blue-900"
+                className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:hover:bg-blue-900"
               >
                 <Pencil size={18} aria-hidden="true" />
               </button>
@@ -441,7 +441,7 @@ export default function FlipCard({
                 }}
                 aria-label={messages.card.readBack}
                 title={messages.card.readBack}
-                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:text-zinc-400 dark:hover:bg-blue-900"
+                className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl text-text-subtle transition-colors hover:bg-blue-100 hover:text-primary-soft-text dark:hover:bg-blue-900"
               >
                 <Volume2 size={18} aria-hidden="true" />
               </button>
@@ -501,7 +501,7 @@ export default function FlipCard({
             transition={{ duration: 0.2 }}
             className="rounded-2xl border border-blue-100 bg-surface p-4 dark:border-zinc-800"
           >
-            <p className="mb-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-blue-500 dark:text-blue-400">
+            <p className="mb-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-link">
               <MessageSquareText size={12} aria-hidden="true" />
               {messages.card.askQuestion}
             </p>
@@ -526,14 +526,14 @@ export default function FlipCard({
             className="rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-100 p-4 dark:bg-zinc-900 dark:from-zinc-900 dark:to-zinc-900 dark:border-zinc-800"
           >
             <div className="flex items-center justify-between mb-2">
-              <p className="inline-flex items-center gap-1 text-xs font-semibold text-blue-500 uppercase tracking-widest dark:text-blue-400">
+              <p className="inline-flex items-center gap-1 text-xs font-semibold text-link uppercase tracking-widest">
                 <Sparkles size={12} aria-hidden="true" />
                 {messages.card.aiResult}
               </p>
               <button
                 onClick={() => setShowResult(false)}
                 aria-label={messages.card.close}
-                className="text-gray-300 hover:text-gray-500 transition-colors dark:text-zinc-600 dark:hover:text-zinc-400"
+                className="text-text-subtle hover:text-text-muted transition-colors"
               >
                 <X size={14} aria-hidden="true" />
               </button>
@@ -568,14 +568,14 @@ export default function FlipCard({
             className="rounded-2xl bg-surface border border-border p-4"
           >
             <div className="flex items-center justify-between mb-3">
-              <p className="inline-flex items-center gap-1 text-xs font-semibold text-blue-500 uppercase tracking-widest dark:text-blue-400">
+              <p className="inline-flex items-center gap-1 text-xs font-semibold text-link uppercase tracking-widest">
                 <MessageSquareText size={12} aria-hidden="true" />
                 {messages.card.practice}
               </p>
               <button
                 onClick={() => setShowSentences(false)}
                 aria-label={messages.card.close}
-                className="text-gray-300 hover:text-gray-500 transition-colors dark:text-zinc-600 dark:hover:text-zinc-400"
+                className="text-text-subtle hover:text-text-muted transition-colors"
               >
                 <X size={14} aria-hidden="true" />
               </button>
@@ -589,7 +589,7 @@ export default function FlipCard({
                 </p>
                 <ol className="list-decimal list-inside space-y-1">
                   {sentences!.map((s, i) => (
-                    <li key={i} className="text-sm text-gray-400 dark:text-zinc-600">
+                    <li key={i} className="text-sm text-text-subtle">
                       <span className="inline-block w-[calc(100%-1.5rem)] align-top">
                         <SentenceFlip ko={s.ko} en={s.en} category={categoryLabel ?? null} />
                       </span>

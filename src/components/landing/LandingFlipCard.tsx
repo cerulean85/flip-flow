@@ -86,7 +86,7 @@ export default function LandingFlipCard({
 
   return (
     <div className="relative w-full max-w-sm">
-      <span className="absolute -top-11 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/70 bg-white/85 px-3 py-1.5 text-xs font-semibold text-zinc-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-zinc-950/60 dark:text-zinc-200">
+      <span className="absolute -top-11 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/70 bg-white/85 px-3 py-1.5 text-xs font-semibold text-text-secondary shadow-sm backdrop-blur dark:border-white/10 dark:bg-zinc-950/60">
         <Sparkles size={12} aria-hidden="true" />
         {hint}
       </span>
@@ -116,19 +116,19 @@ export default function LandingFlipCard({
               <span className="text-xs font-bold uppercase tracking-widest text-link">
                 FRONT
               </span>
-              <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
+              <span className="rounded-md bg-surface-muted px-2 py-0.5 text-xs font-semibold text-text-secondary">
                 {card.pos}
               </span>
             </div>
             <div>
-              <p className="text-4xl font-black leading-none text-zinc-950 sm:text-5xl dark:text-white">
+              <p className="text-4xl font-black leading-none text-text sm:text-5xl">
                 {card.front}
               </p>
-              <p className="mt-4 text-sm leading-6 text-zinc-500 dark:text-zinc-400">
+              <p className="mt-4 text-sm leading-6 text-text-muted">
                 {card.example}
               </p>
             </div>
-            <div className="flex items-center justify-between text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+            <div className="flex items-center justify-between text-xs font-semibold text-text-muted">
               <span className="inline-flex items-center gap-1.5">
                 <MessageSquareText size={14} aria-hidden="true" />
                 {practiceLabel}
@@ -153,15 +153,15 @@ export default function LandingFlipCard({
               <span className="text-xs font-bold uppercase tracking-widest text-fuchsia-600 dark:text-fuchsia-300">
                 BACK
               </span>
-              <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
+              <span className="rounded-md bg-surface-muted px-2 py-0.5 text-xs font-semibold text-text-secondary">
                 {card.pos}
               </span>
             </div>
             <div>
-              <p className="text-3xl font-black leading-tight text-zinc-950 sm:text-4xl dark:text-white">
+              <p className="text-3xl font-black leading-tight text-text sm:text-4xl">
                 {card.back}
               </p>
-              <p className="mt-4 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+              <p className="mt-4 text-sm leading-6 text-text-secondary">
                 {card.note}
               </p>
             </div>

@@ -198,7 +198,7 @@ export function SpeakingCardPractice({ target }: SpeakingCardPracticeProps) {
   return (
     <section className="rounded-2xl border border-border bg-surface p-4">
       <div className="mb-3 flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-widest text-blue-500 dark:text-blue-400">
+        <p className="text-xs font-semibold uppercase tracking-widest text-link">
           {messages.speaking.title}
         </p>
       </div>
@@ -206,7 +206,7 @@ export function SpeakingCardPractice({ target }: SpeakingCardPracticeProps) {
         <button
           type="button"
           onClick={() => speak(target, lang)}
-          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-border-strong px-4 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
+          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-border-strong px-4 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-muted"
         >
           <Volume2 size={17} aria-hidden="true" />
           {messages.speaking.listen}

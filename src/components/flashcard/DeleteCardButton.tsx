@@ -31,7 +31,7 @@ export default function DeleteCardButton({ cardId }: Props) {
           })
         }}
         disabled={isPending}
-        className="text-gray-300 hover:text-red-400 disabled:opacity-50 transition-colors dark:text-zinc-600"
+        className="text-text-subtle hover:text-red-400 disabled:opacity-50 transition-colors"
         aria-label={messages.card.delete}
       >
         <Trash2 size={14} aria-hidden="true" />

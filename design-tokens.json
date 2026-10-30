@@ -1,19 +1,22 @@
 {
-  "$description": "Single source of design tokens for web and mobile. Edit here, then run `npm run tokens`. Values match the pre-token UI (DESIGN-RENEWAL.md step 1: no visual change).",
+  "$description": "Single source of design tokens for web and mobile. Edit here, then run `npm run tokens`. Web and mobile share these exact values (DESIGN-RENEWAL.md step 2).",
   "color": {
     "light": {
       "bg": "#f9fafb",
       "surface": "#ffffff",
       "surface-muted": "#f3f4f6",
       "border": "#e5e7eb",
+      "border-strong": "#e5e7eb",
       "text": "#111827",
+      "text-secondary": "#374151",
       "text-muted": "#4b5563",
-      "text-subtle": "#9ca3af",
+      "text-subtle": "#6b7280",
       "primary": "#3b82f6",
       "primary-hover": "#2563eb",
       "primary-fg": "#ffffff",
       "primary-soft": "#eff6ff",
       "primary-soft-text": "#2563eb",
+      "link": "#2563eb",
       "accent": "#1d4ed8",
       "danger": "#ef4444",
       "danger-fg": "#ffffff",
@@ -27,14 +30,17 @@
       "surface": "#18181b",
       "surface-muted": "#27272a",
       "border": "#27272a",
+      "border-strong": "#3f3f46",
       "text": "#fafafa",
+      "text-secondary": "#d4d4d8",
       "text-muted": "#a1a1aa",
-      "text-subtle": "#52525b",
+      "text-subtle": "#71717a",
       "primary": "#3b82f6",
       "primary-hover": "#2563eb",
       "primary-fg": "#ffffff",
       "primary-soft": "#172554",
       "primary-soft-text": "#93c5fd",
+      "link": "#60a5fa",
       "accent": "#1d4ed8",
       "danger": "#f87171",
       "danger-fg": "#ffffff",
@@ -43,25 +49,27 @@
       "star": "#facc15",
       "shadow": "rgba(0, 0, 0, 0.5)"
     },
-    "category": ["#3b82f6", "#ec4899", "#f59e0b", "#10b981", "#06b6d4", "#8b5cf6"],
-    "$webDescription": "Web uses Tailwind v4 palette colors ([light, dark]) so tokenized classes render exactly like the classes they replace. Tokens missing here fall back to the hex values above. Aligning web and mobile values is DESIGN-RENEWAL.md step 2.",
-    "web": {
-      "bg": ["gray-50", "zinc-950"],
-      "surface": ["white", "zinc-900"],
-      "surface-muted": ["gray-100", "zinc-800"],
-      "border": ["gray-200", "zinc-800"],
-      "border-strong": ["gray-200", "zinc-700"],
-      "text": ["gray-900", "zinc-100"],
-      "text-secondary": ["gray-700", "zinc-300"],
-      "text-muted": ["gray-600", "zinc-400"],
-      "text-subtle": ["gray-400", "zinc-500"],
-      "primary": ["blue-500", "blue-500"],
-      "primary-hover": ["blue-600", "blue-600"],
-      "primary-soft": ["blue-50", "blue-950"],
-      "primary-soft-text": ["blue-600", "blue-300"],
-      "link": ["blue-600", "blue-400"]
-    }
+    "category": [
+      "#3b82f6",
+      "#ec4899",
+      "#f59e0b",
+      "#10b981",
+      "#06b6d4",
+      "#8b5cf6"
+    ]
   },
-  "radius": { "sm": 8, "md": 12, "lg": 16 },
-  "space": [4, 8, 12, 16, 20, 24, 32]
+  "radius": {
+    "sm": 8,
+    "md": 12,
+    "lg": 16
+  },
+  "space": [
+    4,
+    8,
+    12,
+    16,
+    20,
+    24,
+    32
+  ]
 }

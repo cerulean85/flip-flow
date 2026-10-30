@@ -35,7 +35,7 @@ export default function SignOutButton({ signOutAction, image, name, compact = fa
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 dark:hover:text-zinc-200"
+          className="flex items-center gap-2 text-sm text-gray-500 hover:text-text"
         >
           {image && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -56,17 +56,17 @@ export default function SignOutButton({ signOutAction, image, name, compact = fa
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-center">
-              <p className="font-semibold text-gray-800 dark:text-zinc-100">
+              <p className="font-semibold text-text">
                 {messages.auth.signOutConfirmTitle}
               </p>
-              <p className="text-sm text-gray-500 mt-1 dark:text-zinc-400">
+              <p className="text-sm text-text-muted mt-1">
                 {messages.auth.signOutConfirmBody}
               </p>
             </div>
             <div className="flex gap-2">
               <button
                 onClick={() => setOpen(false)}
-                className="flex-1 py-2.5 rounded-xl text-sm font-medium bg-surface-muted text-gray-600 hover:bg-gray-200 transition-colors dark:text-zinc-300 dark:hover:bg-zinc-700"
+                className="flex-1 py-2.5 rounded-xl text-sm font-medium bg-surface-muted text-text-secondary hover:bg-gray-200 transition-colors dark:hover:bg-zinc-700"
               >
                 {messages.auth.cancel}
               </button>
