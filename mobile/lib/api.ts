@@ -1,5 +1,6 @@
 import * as SecureStore from "expo-secure-store"
 import { API_URL } from "./constants"
+import { DEMO_MODE, demoRequest } from "./demo"
 import type { Card, Essay, Sentence, User } from "./types"
 
 const TOKEN_KEY = "flipflow_token"
@@ -25,6 +26,7 @@ async function request<T>(
   options: { method?: string; body?: unknown; auth?: boolean } = {}
 ): Promise<T> {
   const { method = "GET", body, auth = true } = options
+  if (DEMO_MODE) return demoRequest<T>(path, method, body)
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   }

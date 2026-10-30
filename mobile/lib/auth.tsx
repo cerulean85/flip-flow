@@ -4,6 +4,7 @@ import * as AppleAuthentication from "expo-apple-authentication"
 import * as Google from "expo-auth-session/providers/google"
 import * as WebBrowser from "expo-web-browser"
 import { api, getStoredToken, setStoredToken } from "./api"
+import { DEMO_MODE, DEMO_USER } from "./demo"
 import type { User } from "./types"
 
 WebBrowser.maybeCompleteAuthSession()
@@ -39,9 +40,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAppleSignInChecked, setIsAppleSignInChecked] = useState(false)
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
-    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    // The provider throws without a client ID for the platform; demo mode never opens it
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? (DEMO_MODE ? "demo" : undefined),
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID ?? (DEMO_MODE ? "demo" : undefined),
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? (DEMO_MODE ? "demo" : undefined),
   })
 
   useEffect(() => {
@@ -65,6 +67,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false
     ;(async () => {
+      if (DEMO_MODE) {
+        setUser(DEMO_USER)
+        setIsLoading(false)
+        return
+      }
       const token = await getStoredToken()
       if (cancelled) return
       if (token) {
@@ -96,6 +103,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [response])
 
   const signInWithGoogle = async () => {
+    if (DEMO_MODE) {
+      setUser(DEMO_USER)
+      return
+    }
     if (!request) {
       Alert.alert("로그인 준비 중", "잠시 뒤 다시 시도해주세요.")
       return
@@ -108,6 +119,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signInWithApple = async () => {
+    if (DEMO_MODE) {
+      setUser(DEMO_USER)
+      return
+    }
     if (Platform.OS !== "ios") {
       Alert.alert("Apple 로그인", "Apple 로그인은 iOS 앱 빌드에서 사용할 수 있습니다.")
       return
